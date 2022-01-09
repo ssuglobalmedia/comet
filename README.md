@@ -1,7 +1,5 @@
-# lambda-svelte-skeleton
-
-Full-stack example using AWS SAM, DynamoDB for backend, Svelte, AWS S3 for frontend.
-Used AWS CloudFront and API Gateway to combine all services.
+# Mirinae COMET
+Combined Operation and Management Engaging Tools
 
 # How to run
 

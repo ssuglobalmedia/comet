@@ -1,7 +1,7 @@
 {
-  "name": "lambda-svelte-skeleton",
+  "name": "mirinae-comet",
   "version": "0.0.1",
-  "description": "Template for Lambda, S3 Full-stack example with Svelte.",
+  "description": "Combined Operation and Management Engaging Tools for SSU Globalmedia student union.",
   "private": true,
   "scripts": {
     "build": "pnpm build -r --stream",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EATSTEAK/lambda-svelte-skeleton.git"
+    "url": "git+https://github.com/EATSTEAK/mirinae-comet.git"
   },
   "workspaces": [
     "packages/*"
@@ -19,7 +19,7 @@
   "author": "EATSTEAK <me@eatsteak.dev>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EATSTEAK/lambda-svelte-skeleton/issues"
+    "url": "https://github.com/EATSTEAK/mirinae-comet/issues"
   },
-  "homepage": "https://github.com/EATSTEAK/lambda-svelte-skeleton#readme"
+  "homepage": "https://github.com/EATSTEAK/mirinae-comet#readme"
 }

@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  lambda-svelte-skeleton
+  mirinae-comet
 
   Template for Lambda, S3 Full-stack example with Svelte.
 
@@ -160,6 +160,8 @@ Resources:
     Properties:
       DistributionConfig:
         Comment: 'A simple distribution with an S3 origin'
+        Aliases:
+          - 'comet.eatsteak.dev'
         DefaultCacheBehavior:
           AllowedMethods:
             - 'HEAD'
