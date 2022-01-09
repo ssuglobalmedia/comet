@@ -1,0 +1,25 @@
+{
+  "name": "lambda-svelte-skeleton",
+  "version": "0.0.1",
+  "description": "Template for Lambda, S3 Full-stack example with Svelte.",
+  "private": true,
+  "scripts": {
+    "build": "pnpm build -r --stream",
+    "dev": "pnpm dev -r --stream",
+    "delete": "pnpm delete --filter=client && pnpm delete --filter=server --stream",
+    "deploy": "pnpm deploy --filter=server && pnpm deploy --filter=client --stream"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EATSTEAK/lambda-svelte-skeleton.git"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "EATSTEAK <me@eatsteak.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EATSTEAK/lambda-svelte-skeleton/issues"
+  },
+  "homepage": "https://github.com/EATSTEAK/lambda-svelte-skeleton#readme"
+}

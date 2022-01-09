@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lambda-svelte-skeleton"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-86fbdo2n5oe4"
+s3_prefix = "lambda-svelte-skeleton"
+region = "ap-northeast-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []

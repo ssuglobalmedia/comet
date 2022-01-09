@@ -1,0 +1,225 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda-svelte-skeleton
+
+  Template for Lambda, S3 Full-stack example with Svelte.
+
+Parameters:
+  TableName:
+    Type: String
+    Description: DynamoDB Table name.
+    Default: 'ExampleTable'
+  AwsSamLocal:
+    Type: String
+    Default: ''
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 5
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref TableName
+        AWS_SAM_LOCAL: !Ref AwsSamLocal
+Conditions:
+  IsSamLocal: !Equals
+    - !Ref AwsSamLocal
+    - true
+Resources:
+  LocalCorsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: common.localCorsHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        Example:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/example
+            Method: options
+  DependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: nodejs14.x
+    Properties:
+      LayerName: "dependencies"
+      ContentUri: dependencies/
+      CompatibleRuntimes:
+        - nodejs14.x
+  # Backend Lambda Resources
+  ExampleFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: common.exampleHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/example
+            Method: get
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: 'Retain'
+    UpdateReplacePolicy: 'Retain'
+    Properties:
+      TableName: !Ref TableName
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: lockerId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: lockerIdIndex
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+            - AttributeName: lockerId
+              KeyType: RANGE
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - claimedUntil
+      BillingMode: 'PAY_PER_REQUEST'
+  FrontS3Bucket:
+    DeletionPolicy: 'Delete'
+    Metadata:
+      Comment: 'Bucket to store some data'
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+    Type: 'AWS::S3::Bucket'
+  FrontS3BucketPolicy:
+    Metadata:
+      Comment: 'Bucket policy to allow cloudfront to access the data'
+    Properties:
+      Bucket: !Ref FrontS3Bucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: 'Allow'
+            Principal: '*'
+            Resource:
+              - !Sub 'arn:aws:s3:::${FrontS3Bucket}/*'
+    Type: 'AWS::S3::BucketPolicy'
+  CfApiCachePolicy:
+    Properties:
+      CachePolicyConfig:
+        Name: 'ApiCachePolicy'
+        DefaultTTL: 3600
+        MaxTTL: 31536000
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: 'all'
+          HeadersConfig:
+            HeaderBehavior: 'whitelist'
+            Headers:
+              - 'Authorization'
+          QueryStringsConfig:
+            QueryStringBehavior: 'all'
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+    Type: 'AWS::CloudFront::CachePolicy'
+  CfFrontCachePolicy:
+    Properties:
+      CachePolicyConfig:
+        Name: 'FrontCachePolicy'
+        DefaultTTL: 86400
+        MaxTTL: 31536000
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: 'all'
+          HeadersConfig:
+            HeaderBehavior: 'none'
+          QueryStringsConfig:
+            QueryStringBehavior: 'all'
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+    Type: 'AWS::CloudFront::CachePolicy'
+  CfDistribution:
+    Properties:
+      DistributionConfig:
+        Comment: 'A simple distribution with an S3 origin'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - 'HEAD'
+            - 'GET'
+          CachedMethods:
+            - 'HEAD'
+            - 'GET'
+          CachePolicyId: !Ref CfFrontCachePolicy
+          TargetOriginId: !Sub 's3-origin-${FrontS3Bucket}'
+          ViewerProtocolPolicy: 'redirect-to-https'
+        CacheBehaviors:
+          - AllowedMethods:
+              - 'HEAD'
+              - 'DELETE'
+              - 'POST'
+              - 'GET'
+              - 'OPTIONS'
+              - 'PUT'
+              - 'PATCH'
+            CachedMethods:
+              - 'HEAD'
+              - 'GET'
+            CachePolicyId: !Ref CfApiCachePolicy
+            PathPattern: 'api/*'
+            TargetOriginId: !Sub 'api-origin-${ServerlessRestApi}'
+            ViewerProtocolPolicy: 'redirect-to-https'
+        DefaultRootObject: 'index.html'
+        Enabled: true
+        HttpVersion: 'http1.1'
+        IPV6Enabled: false
+        Origins:
+          - DomainName: !Sub '${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com'
+            Id: !Sub 'api-origin-${ServerlessRestApi}'
+            OriginPath: '/Prod'
+            CustomOriginConfig:
+              OriginProtocolPolicy: 'https-only'
+          - DomainName: !Sub '${FrontS3Bucket}.s3-website.${AWS::Region}.amazonaws.com'
+            Id: !Sub 's3-origin-${FrontS3Bucket}'
+            OriginPath: ''
+            CustomOriginConfig:
+              OriginProtocolPolicy: 'http-only'
+        PriceClass: 'PriceClass_All'
+    Type: 'AWS::CloudFront::Distribution'
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  SsuLockerApi:
+    Description: "API Gateway endpoint URL for Prod stage for Lambda function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+  FrontS3BucketName:
+    Description: 'Bucket name'
+    Value: !Ref FrontS3Bucket
+  FrontS3BucketWebsiteURL:
+    Description: 'Bucket website url'
+    Value: !GetAtt FrontS3Bucket.WebsiteURL
+  CfDistributionId:
+    Description: 'Id for cloudfront distribution'
+    Value: !Ref CfDistribution
+  CfDistributionDomainName:
+    Description: 'Domain name for cloudfront distribution'
+    Value: !GetAtt CfDistribution.DomainName
