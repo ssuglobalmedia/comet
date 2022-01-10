@@ -1,16 +1,12 @@
 {
-  "TableName": "LockerTable",
+  "TableName": "CometTable",
   "AttributeDefinitions": [
     {
       "AttributeName": "id",
       "AttributeType": "S"
     },
     {
-      "AttributeName": "lockerFloor",
-      "AttributeType": "S"
-    },
-    {
-      "AttributeName": "lockerId",
+      "AttributeName": "module",
       "AttributeType": "S"
     }
   ],
@@ -22,22 +18,15 @@
   ],
   "GlobalSecondaryIndexes": [
     {
-      "IndexName": "lockerIdIndex",
+      "IndexName": "moduleIndex",
       "KeySchema": [
         {
-          "AttributeName": "lockerFloor",
+          "AttributeName": "module",
           "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "lockerId",
-          "KeyType": "RANGE"
         }
       ],
       "Projection": {
-        "ProjectionType": "INCLUDE",
-        "NonKeyAttributes": [
-          "claimedUntil"
-        ]
+        "ProjectionType": "KEYS_ONLY"
       }
     }
   ],

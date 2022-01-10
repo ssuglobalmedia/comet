@@ -1,6 +1,7 @@
 <script lang='ts'>
     import {variables} from "$lib/variables";
     import {onMount} from "svelte";
+    import {Button} from "carbon-components-svelte";
 
     const baseUrl = variables.baseUrl ?? '';
     let api
@@ -27,5 +28,7 @@
     {:else}
         <p>Waiting...</p>
     {/if}
+    <h1>CarbonTest</h1>
+    <Button>버튼 스타일 테스트</Button>
 </div>
 

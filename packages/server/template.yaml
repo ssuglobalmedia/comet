@@ -9,7 +9,7 @@ Parameters:
   TableName:
     Type: String
     Description: DynamoDB Table name.
-    Default: 'ExampleTable'
+    Default: 'CometTable'
   AwsSamLocal:
     Type: String
     Default: ''
@@ -79,22 +79,18 @@ Resources:
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
-        - AttributeName: lockerId
+        - AttributeName: module
           AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
       GlobalSecondaryIndexes:
-        - IndexName: lockerIdIndex
+        - IndexName: moduleIndex
           KeySchema:
-            - AttributeName: id
+            - AttributeName: module
               KeyType: HASH
-            - AttributeName: lockerId
-              KeyType: RANGE
           Projection:
-            ProjectionType: INCLUDE
-            NonKeyAttributes:
-              - claimedUntil
+            ProjectionType: KEYS_ONLY
       BillingMode: 'PAY_PER_REQUEST'
   FrontS3Bucket:
     DeletionPolicy: 'Delete'
