@@ -1,6 +1,0 @@
-/* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
-@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-family';
-$sans-kr: unquote("'IBM Plex Sans KR', 'Helvetica Neue', Arial, sans-serif");
-$carbon--font-families: map-merge($carbon--font-families, ('sans': $sans-kr));
-@import 'carbon-components/scss/globals/scss/styles.scss';
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600;700&display=swap');

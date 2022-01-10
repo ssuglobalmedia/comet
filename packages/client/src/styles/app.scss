@@ -1,0 +1,47 @@
+/* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+html, body {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+html {
+  box-sizing: border-box;
+  border-collapse: collapse;
+}
+
+#svelte {
+  height: 100%;
+}
+
+@import "../../node_modules/carbon-components/scss/globals/scss/theme";
+$carbon--theme: map-merge($carbon--theme--g100, (
+        interactive-01: $ssu-blue-50,
+        interactive-03: $ssu-blue-50,
+        interactive-04: $ssu-blue-50,
+        link-01: $ssu-blue-50,
+        link-02: $ssu-blue-70,
+        inverse-link: $ssu-blue-30,
+        support-04: $ssu-blue-70,
+        focus: $ssu-blue-70,
+        hover-primary: $ssu-blue-70,
+        hover-primary-text: $ssu-blue-70,
+        hover-tertiary: $ssu-blue-70,
+        active-primary: $ssu-blue-70,
+        active-tertiary: $ssu-blue-70
+));
+@include carbon--theme();
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600;700&display=swap');
+$sans-kr: unquote("'IBM Plex Sans KR', 'Helvetica Neue', Arial, sans-serif");
+$carbon--font-families: map-merge($carbon--font-families, ('sans': $sans-kr));
+
+$feature-flags: (
+        ui-shell: true,
+        grid-columns-16: true
+);
+$css--font-face: true;
+$css--plex: true;
+
+@import "../../node_modules/carbon-components/scss/globals/scss/css--font-face";
+@import "../../node_modules/carbon-components/scss/globals/grid/grid";
+@import "../../node_modules/carbon-components/scss/globals/scss/styles";
