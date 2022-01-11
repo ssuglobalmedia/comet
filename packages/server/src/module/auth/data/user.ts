@@ -48,21 +48,27 @@ const assertAdmin = async function (modId: string, token: string) {
     }
 };
 
+type UserInfoUpdateRequest = {
+    id: string;
+    name?: string;
+    group?: string;
+}
+
 export const updateUserInfo = async function (
     modId: string,
     token: string,
-    info: { id: string; isAdmin?: boolean; department?: string }
-): Promise<{ id: string; isAdmin?: boolean; department?: string }> {
+    info: UserInfoUpdateRequest
+): Promise<UserInfoUpdateRequest> {
     await assertAdmin(modId, token);
     const attributes: ExpressionAttributeValueMap = {};
     let updateExp = '';
-    if (info.isAdmin !== undefined) {
-        attributes[':isAdmin'] = { BOOL: info.isAdmin };
-        updateExp = 'SET isAdmin = :isAdmin';
+    if (info.group !== undefined) {
+        attributes[':group'] = { S: info.group };
+        updateExp = 'SET group = :group';
     }
-    if (info.department) {
-        attributes[':department'] = { S: info.department };
-        updateExp += `${updateExp ? ',' : 'SET'} department = :department`;
+    if (info.name) {
+        attributes[':name'] = { S: info.name };
+        updateExp += `${updateExp ? ',' : 'SET'} name = :name`;
     }
     const req: UpdateItemInput = {
         TableName,
@@ -73,17 +79,17 @@ export const updateUserInfo = async function (
         ExpressionAttributeValues: attributes
     };
     await dynamoDB.updateItem(req).promise();
-    const ret: { id: string; isAdmin?: boolean; department?: string } = { id: info.id };
-    if (info.isAdmin !== undefined) ret.isAdmin = info.isAdmin;
-    if (info.department) ret.department = info.department;
+    const ret: UserInfoUpdateRequest = { id: info.id };
+    if (info.group) ret.group = info.group;
+    if (info.name) ret.name = info.name;
     return ret;
 };
 
 export const batchCreateUserInfo = async function (
     modId: string,
     token: string,
-    infos: Array<{ id: string; department: string; isAdmin?: boolean }>
-): Promise<Array<{ id: string; department: string; isAdmin?: boolean }>> {
+    infos: Array<UserInfo>
+): Promise<Array<UserInfo>> {
     if (infos.length === 0) return infos;
     if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
     const authReq: GetItemInput = {
@@ -102,8 +108,8 @@ export const batchCreateUserInfo = async function (
         PutRequest: {
             Item: {
                 id: { S: v.id },
-                department: { S: v.department },
-                isAdmin: { BOOL: v.isAdmin === undefined ? false : v.isAdmin }
+                group: { S: v.group },
+                name: { S: v.name }
             }
         }
     }));

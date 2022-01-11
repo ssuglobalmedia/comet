@@ -35,10 +35,10 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        Example:
+        ModuleAuthCallback:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /api/example
+            Path: /api/module/auth/callback
             Method: options
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -50,11 +50,11 @@ Resources:
       CompatibleRuntimes:
         - nodejs14.x
   # Backend Lambda Resources
-  ExampleFunction:
+  ModuleAuthCallbackFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./dist
-      Handler: common.exampleHandler
+      Handler: handler.auth.callbackHandler
       Runtime: nodejs14.x
       Layers:
         - !Ref DependenciesLayer
@@ -68,7 +68,7 @@ Resources:
         AuthCallback:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /api/example
+            Path: /api/module/auth/callback
             Method: get
   DynamoDBTable:
     Type: AWS::DynamoDB::Table

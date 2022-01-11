@@ -33,7 +33,7 @@ async function obtainId(result: string) {
     return body.substring(body.indexOf('pseudonym_session_unique_id') + 36).split('"')[0];
 }
 
-export const callbackHandler: APIGatewayProxyHandler = async (event) => {
+export const handler: APIGatewayProxyHandler = async (event) => {
     try {
         const result = event?.queryStringParameters?.result;
         if (result) {
