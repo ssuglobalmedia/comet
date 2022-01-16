@@ -8,11 +8,17 @@ import { variables } from '$lib/variables';
 import { browser } from '$app/env';
 
 export const userInfo: Readable<UserInfo> = readable<UserInfo>(undefined, (set) => {
-    fetchWithAuth(variables.baseUrl + '/api/module/auth/user/get')
-        .then((res) => res.json())
-        .then((info: UserInfo) => set(info))
-        .catch((err) => console.error(err));
-    return function stop() {
-        set(undefined);
-    }
+	if (browser) {
+		set(undefined);
+		fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/get`)
+			.then((res) => res.json())
+			.then((info: UserInfo) => set(info))
+			.catch((err) => {
+				console.error(err);
+				set(null);
+			});
+	}
+	return function stop() {
+		set(undefined);
+	};
 });
