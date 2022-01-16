@@ -10,7 +10,7 @@
         id = fetch(variables.baseUrl + '/api/module/auth/callback?result=' + encodeURIComponent(result)).then((res) => res.json());
         id.then((data) => {
             document.cookie = `comet_session=${encodeURIComponent(data.access_token)}; path=/; domain=${window.location.hostname}; max-age=${data.expires_in}; samesite=lax`;
-            window.location.href = '/modules';
+            window.location.href = '/module/dashboard';
         });
     });
 </script>
@@ -29,7 +29,7 @@
                 {:then data}
                     {#if id}
                         <InlineLoading status="finished" description="로그인에 성공하였습니다."/>
-                        <Button href="/modules" kind="ghost">자동으로 이동되지 않는 경우 클릭</Button>
+                        <Button href="/module/dashboard" kind="ghost">자동으로 이동되지 않는 경우 클릭</Button>
                     {:else}
                         <InlineLoading status="inactive" description="로드 중..."/>
                     {/if}

@@ -10,7 +10,7 @@
     onMount(() => {
         loginCookie = getAuthorization();
         if (loginCookie) {
-            window.location.href = '/modules';
+            window.location.href = '/module/dashboard';
         }
         callbackUrl = window.location.protocol + '//' + window.location.host + '/callback/';
     });
