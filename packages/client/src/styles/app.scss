@@ -1,20 +1,6 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
-html, body {
-  inline-size: 100%;
-  block-size: 100%;
-}
-
-html {
-  box-sizing: border-box;
-  border-collapse: collapse;
-}
-
-#svelte {
-  height: 100%;
-}
-
 @import "../../node_modules/carbon-components/scss/globals/scss/theme";
-$carbon--theme: map-merge($carbon--theme--g100, (
+$soongsil--theme--white: map-merge($carbon--theme--white, (
         interactive-01: $ssu-blue-50,
         interactive-03: $ssu-blue-50,
         interactive-04: $ssu-blue-50,
@@ -29,7 +15,74 @@ $carbon--theme: map-merge($carbon--theme--g100, (
         active-primary: $ssu-blue-70,
         active-tertiary: $ssu-blue-70
 ));
+$soongsil--theme--g10: map-merge($carbon--theme--g10, (
+        interactive-01: $ssu-blue-50,
+        interactive-03: $ssu-blue-50,
+        interactive-04: $ssu-blue-50,
+        link-01: $ssu-blue-50,
+        link-02: $ssu-blue-70,
+        inverse-link: $ssu-blue-30,
+        support-04: $ssu-blue-70,
+        focus: $ssu-blue-70,
+        hover-primary: $ssu-blue-70,
+        hover-primary-text: $ssu-blue-70,
+        hover-tertiary: $ssu-blue-70,
+        active-primary: $ssu-blue-70,
+        active-tertiary: $ssu-blue-70
+));
+$soongsil--theme--g80: map-merge($carbon--theme--g80, (
+        interactive-01: $ssu-blue-50,
+        interactive-03: $ssu-blue-50,
+        interactive-04: $ssu-blue-50,
+        link-01: $ssu-blue-50,
+        link-02: $ssu-blue-70,
+        inverse-link: $ssu-blue-30,
+        support-04: $ssu-blue-70,
+        focus: $ssu-blue-70,
+        hover-primary: $ssu-blue-70,
+        hover-primary-text: $ssu-blue-70,
+        hover-tertiary: $ssu-blue-70,
+        active-primary: $ssu-blue-70,
+        active-tertiary: $ssu-blue-70
+));
+$soongsil--theme--g90: map-merge($carbon--theme--g90, (
+        interactive-01: $ssu-blue-50,
+        interactive-03: $ssu-blue-50,
+        interactive-04: $ssu-blue-50,
+        link-01: $ssu-blue-50,
+        link-02: $ssu-blue-70,
+        inverse-link: $ssu-blue-30,
+        support-04: $ssu-blue-70,
+        focus: $ssu-blue-70,
+        hover-primary: $ssu-blue-70,
+        hover-primary-text: $ssu-blue-70,
+        hover-tertiary: $ssu-blue-70,
+        active-primary: $ssu-blue-70,
+        active-tertiary: $ssu-blue-70
+));
+$soongsil--theme--g100: map-merge($carbon--theme--g100, (
+        interactive-01: $ssu-blue-50,
+        interactive-03: $ssu-blue-50,
+        interactive-04: $ssu-blue-50,
+        link-01: $ssu-blue-50,
+        link-02: $ssu-blue-70,
+        inverse-link: $ssu-blue-30,
+        support-04: $ssu-blue-70,
+        focus: $ssu-blue-70,
+        hover-primary: $ssu-blue-70,
+        hover-primary-text: $ssu-blue-70,
+        hover-tertiary: $ssu-blue-70,
+        active-primary: $ssu-blue-70,
+        active-tertiary: $ssu-blue-70
+));
+
+$carbon--theme: $soongsil--theme--g100;
+
 @include carbon--theme();
+
+:root {
+  @include carbon--theme($soongsil--theme--g100, true);
+}
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600;700&display=swap');
 $sans-kr: unquote("'IBM Plex Sans KR', 'Helvetica Neue', Arial, sans-serif");
@@ -42,6 +95,11 @@ $feature-flags: (
 $css--font-face: true;
 $css--plex: true;
 
+
 @import "../../node_modules/carbon-components/scss/globals/scss/css--font-face";
 @import "../../node_modules/carbon-components/scss/globals/grid/grid";
 @import "../../node_modules/carbon-components/scss/globals/scss/styles";
+
+#main-content[black] {
+  background-color: $carbon--gray-100;
+}
