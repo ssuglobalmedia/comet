@@ -2,7 +2,7 @@
     import {Button, Column, Content, Grid, ImageLoader, Tile} from "carbon-components-svelte";
     import Soongsil from "../icons/Soongsil.svelte";
     import {onMount} from "svelte";
-    import {getAuthorization} from "$lib/utils";
+    import {getAuthorization} from "$lib/module/auth";
     import EntryCard from "../components/entry/EntryCard.svelte";
 
     let callbackUrl;
