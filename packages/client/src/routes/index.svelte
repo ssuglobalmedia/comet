@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import {Button, Column, Content, Grid, ImageLoader, Tile} from "carbon-components-svelte";
+    import {Button, Column, Content, Grid} from "carbon-components-svelte";
     import Soongsil from "../icons/Soongsil.svelte";
     import {onMount} from "svelte";
     import {getAuthorization} from "$lib/module/auth";
@@ -20,8 +20,8 @@
     <title>미리내 COMET</title>
 </svelte:head>
 
-<Content class="g100 full">
-    <Grid class="g100" style="height: 100%;">
+<Content class="full">
+    <Grid class="background" style="height: 100%;">
         <Column sm={12} md={5} lg={4} class="full"
                 style="display: flex; flex-direction: column; justify-content: center;">
             <EntryCard>
@@ -34,16 +34,4 @@
     </Grid>
 
 </Content>
-
-<style lang="scss">
-  :global(.g100) {
-    background-color: $carbon--gray-100;
-  }
-
-  :global(.full) {
-    min-height: 100%;
-    inline-size: 100%;
-    block-size: 100%;
-  }
-</style>
 
