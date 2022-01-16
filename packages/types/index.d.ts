@@ -1,5 +1,15 @@
+/* Module */
+
+export type ModuleData = {
+  module: string;
+  dataId: string;
+};
+
+/* Auth Module */
+export type UserInfoData = ModuleData & UserInfoData;
+
 export type UserInfo = {
-    id: string;
-    name: string;
-    group: string;
-}
+  userId: string;
+  name: string;
+  group: string;
+};
