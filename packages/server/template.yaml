@@ -40,6 +40,16 @@ Resources:
           Properties:
             Path: /api/module/auth/callback
             Method: options
+        ModuleAuthUserGet:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/get
+            Method: options
+        ModuleAuthUserUpdate:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/update
+            Method: options
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Metadata:
@@ -70,6 +80,46 @@ Resources:
           Properties:
             Path: /api/module/auth/callback
             Method: get
+  ModuleAuthUserGetFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.auth.user.getUserInfoHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/get
+            Method: get
+  ModuleAuthUserUpdateFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.auth.user.updateUserInfoHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/update
+            Method: post
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: 'Retain'
@@ -77,20 +127,15 @@ Resources:
     Properties:
       TableName: !Ref TableName
       AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
         - AttributeName: module
           AttributeType: S
+        - AttributeName: dataId
+          AttributeType: S
       KeySchema:
-        - AttributeName: id
+        - AttributeName: module
           KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: moduleIndex
-          KeySchema:
-            - AttributeName: module
-              KeyType: HASH
-          Projection:
-            ProjectionType: KEYS_ONLY
+        - AttributeName: dataId
+          KeyType: RANGE
       BillingMode: 'PAY_PER_REQUEST'
   FrontS3Bucket:
     DeletionPolicy: 'Delete'
@@ -156,8 +201,6 @@ Resources:
     Properties:
       DistributionConfig:
         Comment: 'A simple distribution with an S3 origin'
-        Aliases:
-          - 'comet.eatsteak.dev'
         DefaultCacheBehavior:
           AllowedMethods:
             - 'HEAD'
@@ -219,5 +262,5 @@ Outputs:
     Description: 'Id for cloudfront distribution'
     Value: !Ref CfDistribution
   CfDistributionDomainName:
-    Description: 'Domain name for cloudfront distribution'
-    Value: !GetAtt CfDistribution.DomainName
+    Description: 'Domain URL for cloudfront distribution'
+    Value: !Sub "https://${CfDistribution.DomainName}"

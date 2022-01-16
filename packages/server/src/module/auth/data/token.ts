@@ -10,7 +10,7 @@ export const revokeToken = async function (
 ): Promise<{ accessToken: string }> {
     const req: UpdateItemInput = {
         TableName,
-        Key: { id: { S: id } },
+        Key: { module: { S: 'auth' }, dataId: { S: `user-${id}` } },
         UpdateExpression: 'REMOVE accessToken',
         ConditionExpression: 'accessToken = :token',
         ExpressionAttributeValues: {
@@ -33,7 +33,7 @@ export const issueToken = async function (
     const expires = Date.now() + 3600 * 1000;
     const req: UpdateItemInput = {
         TableName,
-        Key: { id: { S: id } },
+        Key: { module: { S: 'auth' }, dataId: { S: `user-${id}` } },
         UpdateExpression: 'SET accessToken = :token, expiresOn = :expiresOn',
         ExpressionAttributeValues: {
             ':token': { S: token },

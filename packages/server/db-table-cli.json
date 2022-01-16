@@ -2,32 +2,22 @@
   "TableName": "CometTable",
   "AttributeDefinitions": [
     {
-      "AttributeName": "id",
+      "AttributeName": "module",
       "AttributeType": "S"
     },
     {
-      "AttributeName": "module",
+      "AttributeName": "dataId",
       "AttributeType": "S"
     }
   ],
   "KeySchema": [
     {
-      "AttributeName": "id",
+      "AttributeName": "module",
       "KeyType": "HASH"
-    }
-  ],
-  "GlobalSecondaryIndexes": [
+    },
     {
-      "IndexName": "moduleIndex",
-      "KeySchema": [
-        {
-          "AttributeName": "module",
-          "KeyType": "HASH"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "KEYS_ONLY"
-      }
+      "AttributeName": "dataId",
+      "KeyType": "RANGE"
     }
   ],
   "BillingMode": "PAY_PER_REQUEST",
