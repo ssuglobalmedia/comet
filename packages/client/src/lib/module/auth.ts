@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import { getCookieValue } from '$lib/utils';
+import type {UserInfo} from "types";
 
 export const getAuthorization = () => getCookieValue('comet_session');
 
@@ -11,3 +12,21 @@ export const fetchWithAuth = (resource: RequestInfo, init?: RequestInit) =>
 			...init?.headers
 		}
 	});
+
+export function isAccessible(user: UserInfo, group: string): boolean {
+	const permissionLevel = {
+		everyone: 0,
+		certificated: 1,
+		executive: 2,
+		admin: 3
+	}
+	if(permissionLevel[group] === undefined) return false;
+	return permissionLevel[user.userGroup] >= permissionLevel[group];
+}
+
+export const groupDisplayName = {
+	everyone: "학부생",
+	certificated: "학부생 (납부자)",
+	executive: "집행부원",
+	admin: "관리자"
+}

@@ -10,6 +10,7 @@ export type UserInfoData = ModuleData & UserInfoData;
 
 export type UserInfo = {
   userId: string;
-  name: string;
-  group: string;
+  userName: string;
+  userGroup: string;
+  phone?: string;
 };

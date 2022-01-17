@@ -1,20 +1,30 @@
 <script>
     import '../../styles/app.css';
     import {
-        Breadcrumb, BreadcrumbItem,
-        Button, Column,
-        Content, Grid,
-        Header, HeaderAction,
-        HeaderNav, HeaderPanelDivider, HeaderPanelLink, HeaderPanelLinks, HeaderUtilities, InlineLoading,
+        Breadcrumb,
+        BreadcrumbItem,
+        Button,
+        Column,
+        Content,
+        Grid,
+        Header,
+        HeaderAction,
+        HeaderNav,
+        HeaderUtilities,
+        InlineLoading,
         InlineNotification,
         SkipToContent
     } from "carbon-components-svelte";
-    import { expoIn } from "svelte/easing";
+    import {expoIn} from "svelte/easing";
     import {getAuthorization} from "$lib/module/auth";
     import {userInfo} from "$lib/stores";
-    import { onMount } from "svelte";
-    import { UserAvatarFilledAlt20 } from "carbon-icons-svelte";
-    import { findPageByPath } from "$lib/modules";
+    import {onMount} from "svelte";
+    import {UserAvatarFilledAlt20} from "carbon-icons-svelte";
+    import {findPageByPath, modules} from "$lib/modules";
+    import UserMenu from "../../components/headeraction/UserMenu.svelte";
+    import ModuleSwitcher from "../../components/headeraction/ModuleSwitcher.svelte";
+    import {afterNavigate} from "$app/navigation";
+
     let isSideNavOpen;
     let isAuthorized = false;
     let isModuleSwitcherOpen = false;
@@ -24,11 +34,11 @@
     let transitions = {
         "0": {
             text: "Default (duration: 200ms)",
-            value: { duration: 200 },
+            value: {duration: 200},
         },
         "1": {
             text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
-            value: { duration: 600, delay: 50, easing: expoIn },
+            value: {duration: 600, delay: 50, easing: expoIn},
         },
         "2": {
             text: "Disabled",
@@ -36,10 +46,10 @@
         },
     };
     onMount(() => {
-        if(getAuthorization()) {
+        if (getAuthorization()) {
             isAuthorized = true;
         }
-        if(!isAuthorized || $userInfo === null) {
+        if (!isAuthorized || $userInfo === null) {
             document.cookie = `comet_session=; max-age=-99999999;`;
         }
         breadcrumb = window.location.pathname.replace("/module", "").split("/").filter((v) => v.length > 0).reduce((arr, v) => {
@@ -50,53 +60,49 @@
             }]
         }, []);
     });
+    afterNavigate(({ from, to }) => {
+        breadcrumb = window.location.pathname.replace("/module", "").split("/").filter((v) => v.length > 0).reduce((arr, v) => {
+            let href = (arr.length ? arr.at(-1).path : '') + `/${v}`;
+            return [...arr, {
+                href,
+                title: findPageByPath(href).title
+            }]
+        }, []);
+    });
 </script>
+
+<svelte:head>
+    <title>미리내 COMET - {isAuthorized && $userInfo ? (breadcrumb ?? ['로드 중']).at(-1).title : '인증 중'}</title>
+</svelte:head>
 
 <Header company="미리내" platformName="COMET" bind:isSideNavOpen>
     <svelte:fragment slot="skip-to-content">
-        <SkipToContent />
+        <SkipToContent/>
     </svelte:fragment>
     <HeaderNav>
-        {#if $userInfo === undefined}
-            <InlineLoading description="사용자 정보를 가져오는 중..." />
+        {#if isAuthorized && $userInfo === undefined}
+            <InlineLoading description="사용자 정보를 가져오는 중..."/>
         {/if}
+        <slot name="headerNav" />
     </HeaderNav>
     {#if isAuthorized && $userInfo}
         <HeaderUtilities>
             <HeaderAction
-              bind:isOpen={isUserInfoOpen}
-              icon={UserAvatarFilledAlt20}
-              closeIcon={UserAvatarFilledAlt20}
-              text="{$userInfo.name}"
+                    bind:isOpen={isUserInfoOpen}
+                    icon={UserAvatarFilledAlt20}
+                    closeIcon={UserAvatarFilledAlt20}
+                    text="{$userInfo.userName}"
+                    transition={transitions[selected].value}
             >
-                <HeaderPanelLinks>
-                    <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-                    <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
-                    <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-                    <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-                    <HeaderPanelDivider>Switcher subject 3</HeaderPanelDivider>
-                    <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-                </HeaderPanelLinks>
+                <UserMenu/>
             </HeaderAction>
-            <HeaderAction bind:isModuleSwitcherOpen transition={transitions[selected].value}>
-                <HeaderPanelLinks>
-                    <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-                    <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-                    <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-                    <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
-                    <HeaderPanelLink>Switcher item 5</HeaderPanelLink>
-                </HeaderPanelLinks>
+            <HeaderAction bind:isOpen={isModuleSwitcherOpen} transition={transitions[selected].value}>
+                <ModuleSwitcher {modules}/>
             </HeaderAction>
         </HeaderUtilities>
     {/if}
 </Header>
+<slot name="sidebar" />
 <Content black>
     {#if isAuthorized && $userInfo}
         <Grid class="my-4">
@@ -104,19 +110,20 @@
                 {#if breadcrumb}
                     <Breadcrumb noTrailingSlash>
                         {#each breadcrumb as item, i}
-                            <BreadcrumbItem href="/module{item.href}" isCurrentPage="{i === breadcrumb.length - 1}">{item.title}</BreadcrumbItem>
+                            <BreadcrumbItem href="/module{item.href}"
+                                            isCurrentPage="{i === breadcrumb.length - 1}">{item.title}</BreadcrumbItem>
                         {/each}
                     </Breadcrumb>
                 {:else}
                     <Breadcrumb noTrailingSlash>
-                        <BreadcrumbItem skeleton />
+                        <BreadcrumbItem skeleton/>
                     </Breadcrumb>
                 {/if}
             </Column>
         </Grid>
         <Grid>
             <Column>
-                <slot />
+                <slot/>
             </Column>
         </Grid>
 
@@ -131,7 +138,7 @@
         {#if !isAuthorized || $userInfo === null}
             <h1>인증 필요</h1>
             <p>이 페이지를 볼 수 있는 권한이 없습니다. 로그인하여 페이지를 열람하세요.</p>
-            <Button href="/" kind="danger" >메인 페이지로 돌아가기</Button>
+            <Button href="/" kind="danger">메인 페이지로 돌아가기</Button>
         {/if}
     {/if}
 </Content>

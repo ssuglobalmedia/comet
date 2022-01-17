@@ -12,6 +12,12 @@ export const userInfo: Readable<UserInfo> = readable<UserInfo>(undefined, (set) 
 		set(undefined);
 		fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/get`)
 			.then((res) => res.json())
+			.then((res: { success: boolean, result?: any, error?: number, error_description?: string }) => {
+				if(res.success) {
+					return res.result as UserInfo;
+				}
+				throw new Error(`Request error ${res.error}: ${res.error_description}`)
+			})
 			.then((info: UserInfo) => set(info))
 			.catch((err) => {
 				console.error(err);
