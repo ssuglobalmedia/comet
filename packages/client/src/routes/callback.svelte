@@ -19,7 +19,7 @@
     <title>미리내 COMET</title>
 </svelte:head>
 
-<Content class="full">
+<Content class="full background">
     <Grid class="background" style="height: 100%;">
         <Column sm={12} md={5} lg={4} class="full"
                 style="display: flex; flex-direction: column; justify-content: center;">
