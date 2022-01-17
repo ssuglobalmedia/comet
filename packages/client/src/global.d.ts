@@ -9,9 +9,11 @@ interface ImportMetaEnv {
 /* Module */
 export type ModuleDefinition = {
 	module: string;
+} & ModulePageDefinition;
+
+export type ModulePageDefinition = {
 	title: string;
-	pictogram: typeof SvelteComponent;
-	icon: typeof SvelteComponent;
-	accessibleGroup: string;
 	description: string;
+	accessibleGroup: string;
+	pages?: Record<string, ModulePageDefinition>;
 };
