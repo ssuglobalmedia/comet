@@ -25,8 +25,8 @@ export const getUserInfo = async function (id: string): Promise<UserInfo> {
 	}
 	return {
 		userId: id,
-		name: res.Item.name?.S ?? '',
-		group: res.Item.group?.S ?? 'unregistered'
+		userName: res.Item.userName?.S ?? '',
+		userGroup: res.Item.userGroup?.S ?? 'unregistered'
 	};
 };
 
@@ -44,7 +44,7 @@ const assertAdmin = async function (modId: string, token: string) {
 	if (
 		authRes.Item.dataId.S !== `user-${modId}` ||
 		authRes.Item.accessToken?.S !== token ||
-		(authRes.Item.isAdmin?.BOOL !== true && modId !== adminId)
+		(authRes.Item.userGroup?.S !== "admin" && modId !== adminId)
 	) {
 		throw new UnauthorizedError('Unauthorized');
 	}
@@ -52,8 +52,9 @@ const assertAdmin = async function (modId: string, token: string) {
 
 type UserInfoUpdateRequest = {
 	userId: string;
-	name?: string;
-	group?: string;
+	userName?: string;
+	userGroup?: string;
+	phone?: string;
 };
 
 export const updateUserInfo = async function (
@@ -64,13 +65,13 @@ export const updateUserInfo = async function (
 	await assertAdmin(modId, token);
 	const attributes: ExpressionAttributeValueMap = {};
 	let updateExp = '';
-	if (info.group !== undefined) {
-		attributes[':group'] = { S: info.group };
-		updateExp = 'SET group = :group';
+	if (info.userGroup !== undefined) {
+		attributes[':userGroup'] = { S: info.userGroup };
+		updateExp = 'SET userGroup = :userGroup';
 	}
-	if (info.name) {
-		attributes[':name'] = { S: info.name };
-		updateExp += `${updateExp ? ',' : 'SET'} name = :name`;
+	if (info.userName) {
+		attributes[':userName'] = { S: info.userName };
+		updateExp += `${updateExp ? ',' : 'SET'} userName = :userName`;
 	}
 	const req: UpdateItemInput = {
 		TableName,
@@ -83,8 +84,8 @@ export const updateUserInfo = async function (
 	};
 	await dynamoDB.updateItem(req).promise();
 	const ret: UserInfoUpdateRequest = { userId: info.userId };
-	if (info.group) ret.group = info.group;
-	if (info.name) ret.name = info.name;
+	if (info.userGroup) ret.userGroup = info.userGroup;
+	if (info.userName) ret.userName = info.userName;
 	return ret;
 };
 
@@ -112,8 +113,8 @@ export const batchCreateUserInfo = async function (
 		PutRequest: {
 			Item: {
 				dataId: { S: `user-${v.userId}` },
-				group: { S: v.group },
-				name: { S: v.name }
+				userGroup: { S: v.userGroup },
+				userName: { S: v.userName }
 			}
 		}
 	}));

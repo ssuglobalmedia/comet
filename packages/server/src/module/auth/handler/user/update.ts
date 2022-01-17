@@ -10,7 +10,6 @@ import { ResponsibleError } from '../../../../util/error';
 export const handler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
 	let data: UserInfo;
-
 	try {
 		data = JSON.parse(event.body) as UserInfo;
 	} catch {
@@ -20,7 +19,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 			error_description: 'Data body is malformed JSON'
 		});
 	}
-	if (!data.userId) {
+	if (!data || !data.userId) {
 		return createResponse(500, {
 			success: false,
 			error: 500,
@@ -40,11 +39,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 	}
 	try {
 		const id = payload.aud as string;
-		const res = await updateUserInfo(id, token, {
-			userId: data.userId,
-			name: data.name,
-			group: data.group
-		});
+		const res = await updateUserInfo(id, token, data);
 		return createResponse(200, { success: true, ...res });
 	} catch (e) {
 		if (!(e instanceof ResponsibleError)) {

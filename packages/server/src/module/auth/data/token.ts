@@ -42,7 +42,7 @@ export const issueToken = async function (
         ReturnValues: 'UPDATED_NEW'
     };
     if (id !== adminId) {
-        req.ConditionExpression = 'attribute_exists(is_admin) OR attribute_exists(department)';
+        req.ConditionExpression = 'attribute_exists(group)';
     }
     const res = await dynamoDB.updateItem(req).promise();
     if (res.Attributes.hasOwnProperty('accessToken')) {
