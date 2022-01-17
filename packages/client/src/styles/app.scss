@@ -1,4 +1,18 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+$ssu-blue-30: #64ccc9;
+$ssu-blue-50: #008eaa;
+$ssu-blue-70: #00587c;
+
+$ssu-black-50: #8a8d8f;
+$ssu-black-70: #53565a;
+$ssu-black-100: #000000;
+
+@import '../../node_modules/carbon-components/scss/globals/scss/typography';
+@import '../../node_modules/carbon-components/scss/globals/scss/colors';
+@import '../../node_modules/carbon-components/scss/globals/scss/layout';
+
+@import 'spacing-utils';
+
 @import "../../node_modules/carbon-components/scss/globals/scss/theme";
 $soongsil--theme--white: map-merge($carbon--theme--white, (
         interactive-01: $ssu-blue-50,

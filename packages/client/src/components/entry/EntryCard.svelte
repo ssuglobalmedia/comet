@@ -12,7 +12,6 @@
 </Tile>
 
 <style lang="scss">
-  @import 'src/styles/spacing-utils';
   :global(.logo-img) {
     max-width: 140px;
     filter: unquote('invert()');

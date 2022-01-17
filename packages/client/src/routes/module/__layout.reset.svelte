@@ -1,9 +1,9 @@
 <script>
-    import '../../styles/app.scss';
+    import '../../styles/app.css';
     import {
         Breadcrumb, BreadcrumbItem,
-        Button,
-        Content,
+        Button, Column,
+        Content, Grid,
         Header, HeaderAction,
         HeaderNav, HeaderPanelDivider, HeaderPanelLink, HeaderPanelLinks, HeaderUtilities, InlineLoading,
         InlineNotification,
@@ -14,11 +14,13 @@
     import {userInfo} from "$lib/stores";
     import { onMount } from "svelte";
     import { UserAvatarFilledAlt20 } from "carbon-icons-svelte";
+    import { findPageByPath } from "$lib/modules";
     let isSideNavOpen;
     let isAuthorized = false;
     let isModuleSwitcherOpen = false;
     let isUserInfoOpen = false;
     let selected = "0";
+    let breadcrumb = undefined;
     let transitions = {
         "0": {
             text: "Default (duration: 200ms)",
@@ -40,6 +42,13 @@
         if(!isAuthorized || $userInfo === null) {
             document.cookie = `comet_session=; max-age=-99999999;`;
         }
+        breadcrumb = window.location.pathname.replace("/module", "").split("/").filter((v) => v.length > 0).reduce((arr, v) => {
+            let href = (arr.length ? arr.at(-1).path : '') + `/${v}`;
+            return [...arr, {
+                href,
+                title: findPageByPath(href).title
+            }]
+        }, []);
     });
 </script>
 
@@ -90,11 +99,27 @@
 </Header>
 <Content black>
     {#if isAuthorized && $userInfo}
-        <Breadcrumb noTrailingSlash>
-            <BreadcrumbItem href="/">Home</BreadcrumbItem>
-            <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
-        </Breadcrumb>
-        <slot />
+        <Grid class="my-4">
+            <Column>
+                {#if breadcrumb}
+                    <Breadcrumb noTrailingSlash>
+                        {#each breadcrumb as item, i}
+                            <BreadcrumbItem href="/module{item.href}" isCurrentPage="{i === breadcrumb.length - 1}">{item.title}</BreadcrumbItem>
+                        {/each}
+                    </Breadcrumb>
+                {:else}
+                    <Breadcrumb noTrailingSlash>
+                        <BreadcrumbItem skeleton />
+                    </Breadcrumb>
+                {/if}
+            </Column>
+        </Grid>
+        <Grid>
+            <Column>
+                <slot />
+            </Column>
+        </Grid>
+
     {:else}
         {#if isAuthorized && $userInfo === null}
             <InlineNotification

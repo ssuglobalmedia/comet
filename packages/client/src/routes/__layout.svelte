@@ -1,5 +1,5 @@
 <script>
-	import '../styles/app.scss';
+  import "../styles/app.css";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   $: if (typeof window !== "undefined") {
