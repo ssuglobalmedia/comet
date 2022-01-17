@@ -33,6 +33,8 @@ importers:
       types: link:../types
       typescript: ^4.5.4
     dependencies:
+      carbon-icons-svelte: 10.44.3
+      carbon-pictograms-svelte: 12.0.2
       types: link:../types
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.10
@@ -42,8 +44,6 @@ importers:
       '@typescript-eslint/parser': 5.9.0_eslint@8.6.0+typescript@4.5.4
       carbon-components: 10.50.0
       carbon-components-svelte: 0.51.1
-      carbon-icons-svelte: 10.44.3
-      carbon-pictograms-svelte: 12.0.2
       carbon-preprocess-svelte: 0.6.0_sass@1.47.0+svelte@3.45.0
       cross-env: 7.0.3
       eslint: 8.6.0
@@ -1015,11 +1015,11 @@ packages:
 
   /carbon-icons-svelte/10.44.3:
     resolution: {integrity: sha512-vLBy3T5Dnv68vjTJEtwL7DKHX4VqXHeJ6DwPtiO9zTwoMOU3eLx/exzR6KTISuUMqfEPmrOy4dOwZc5sPWuxLA==}
-    dev: true
+    dev: false
 
   /carbon-pictograms-svelte/12.0.2:
     resolution: {integrity: sha512-PxaUDjKkTss9q8m3Bf7mU9rObEwTb0cfaMzflfS90wgdA7XJOf7jE4ay3R4x0m/KkTuIakSXKLjVS/bQR4Gp0w==}
-    dev: true
+    dev: false
 
   /carbon-preprocess-svelte/0.6.0_sass@1.47.0+svelte@3.45.0:
     resolution: {integrity: sha512-z/SOcB1jqrodshM87YPWdTcLdQzCKKLiWueM4RPfTIz9EIo7DgJSn0gbnVtEOk8Vy/xOZ0EnnAu5fY8ualzngQ==}
