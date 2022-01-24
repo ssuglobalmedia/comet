@@ -12,7 +12,7 @@
 
     export let modules: Record<string, ModuleDefinition>;
 
-    $: modulesByGroup = Object.entries(modules).reduce<Record<string, ModuleDefinition[]>>((map, value) => {
+    let modulesByGroup = Object.entries(modules).reduce<Record<string, ModuleDefinition[]>>((map, value) => {
         const groupMembers = map[value[1].accessibleGroup] ?? [];
         let ret = {...map}
         ret[value[1].accessibleGroup] = [...groupMembers, value[1]]
