@@ -1,6 +1,6 @@
 <script>
     import ModuleDashboard from "../../../components/module/dashboard/ModuleDashboard.svelte";
-    import {modules} from "$lib/modules.js";
+    import {modules} from "$lib/modules";
     const filteredModules = {...modules};
     delete filteredModules.dashboard;
 </script>
