@@ -30,7 +30,18 @@ export const getUserInfo = async function (id: string): Promise<UserInfo> {
 	};
 };
 
-const assertAdmin = async function (modId: string, token: string) {
+export function isAccessible(userGroup: string, group: string): boolean {
+	const permissionLevel = {
+		everyone: 0,
+		certificated: 1,
+		executive: 2,
+		admin: 3
+	};
+	if (permissionLevel[group] === undefined) return false;
+	return permissionLevel[userGroup] >= permissionLevel[group];
+}
+
+const assertAccessible = async function (modId: string, token: string, group: string) {
 	const authReq: GetItemInput = {
 		TableName,
 		Key: {
@@ -44,7 +55,7 @@ const assertAdmin = async function (modId: string, token: string) {
 	if (
 		authRes.Item.dataId.S !== `user-${modId}` ||
 		authRes.Item.accessToken?.S !== token ||
-		(authRes.Item.userGroup?.S !== "admin" && modId !== adminId)
+		(!isAccessible(authRes.Item.userGroup?.S, group) && modId !== adminId)
 	) {
 		throw new UnauthorizedError('Unauthorized');
 	}
@@ -62,7 +73,7 @@ export const updateUserInfo = async function (
 	token: string,
 	info: UserInfoUpdateRequest
 ): Promise<UserInfoUpdateRequest> {
-	await assertAdmin(modId, token);
+	await assertAccessible(modId, token, 'admin');
 	const attributes: ExpressionAttributeValueMap = {};
 	let updateExp = '';
 	if (info.userGroup !== undefined) {

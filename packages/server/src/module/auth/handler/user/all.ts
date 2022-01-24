@@ -6,7 +6,7 @@ import { getUserInfo } from '../../data/user';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
 
-export const userGetHandler: APIGatewayProxyHandler = async (event) => {
+export const userAllHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
 	try {
 		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;

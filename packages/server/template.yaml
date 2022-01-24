@@ -40,6 +40,11 @@ Resources:
           Properties:
             Path: /api/module/auth/callback
             Method: options
+        ModuleAuthLogout:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/logout
+            Method: options
         ModuleAuthUserGet:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
@@ -79,6 +84,26 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /api/module/auth/callback
+            Method: get
+  ModuleAuthLogoutFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.auth.logoutHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/logout
             Method: get
   ModuleAuthUserGetFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

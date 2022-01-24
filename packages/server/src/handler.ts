@@ -1,11 +1,17 @@
-import { handler as callbackHandler } from './module/auth/handler/callback';
-import { handler as getUserInfoHandler } from './module/auth/handler/user/get';
-import { handler as updateUserInfoHandler } from './module/auth/handler/user/update';
+import { callbackHandler } from './module/auth/handler/callback';
+import { userGetHandler } from './module/auth/handler/user/get';
+import { userUpdateHandler } from './module/auth/handler/user/update';
+import { logoutHandler } from './module/auth/handler/logout';
 
 export const auth = {
 	callbackHandler,
+	logoutHandler,
 	user: {
-		getUserInfoHandler,
-		updateUserInfoHandler
+		userGetHandler,
+		userUpdateHandler,
+		userAllHandler,
+		batchPutHandler,
+		batchDeleteHandler,
+		batchUpdateHandler
 	}
 };
