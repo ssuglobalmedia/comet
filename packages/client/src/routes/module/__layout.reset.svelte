@@ -16,7 +16,7 @@
         SkipToContent
     } from "carbon-components-svelte";
     import {expoIn} from "svelte/easing";
-    import {getAuthorization} from "$lib/module/auth";
+    import { getAuthorization, isAccessible } from "$lib/module/auth";
     import {userInfo} from "$lib/stores";
     import {onMount} from "svelte";
     import {UserAvatarFilledAlt20} from "carbon-icons-svelte";
@@ -25,12 +25,14 @@
     import ModuleSwitcher from "../../components/headeraction/ModuleSwitcher.svelte";
     import {afterNavigate} from "$app/navigation";
 
+    let isMounted = false;
     let isSideNavOpen;
     let isAuthorized = false;
     let isModuleSwitcherOpen = false;
     let isUserInfoOpen = false;
     let selected = "0";
     let breadcrumb = undefined;
+    let currentPage = undefined;
     let transitions = {
         "0": {
             text: "Default (duration: 200ms)",
@@ -46,12 +48,14 @@
         },
     };
     onMount(() => {
+        isMounted = true;
         if (getAuthorization()) {
             isAuthorized = true;
         }
         if (!isAuthorized || $userInfo === null) {
             document.cookie = `comet_session=; max-age=-99999999;`;
         }
+        currentPage = findPageByPath(window.location.pathname.replace("/module", ""));
         breadcrumb = window.location.pathname.replace("/module", "").split("/").filter((v) => v.length > 0).reduce((arr, v) => {
             let href = (arr.length ? arr.at(-1).path : '') + `/${v}`;
             return [...arr, {
@@ -60,7 +64,7 @@
             }]
         }, []);
     });
-    afterNavigate(({ from, to }) => {
+    afterNavigate(() => {
         breadcrumb = window.location.pathname.replace("/module", "").split("/").filter((v) => v.length > 0).reduce((arr, v) => {
             let href = (arr.length ? arr.at(-1).path : '') + `/${v}`;
             return [...arr, {
@@ -104,7 +108,7 @@
 </Header>
 <slot name="sidebar" />
 <Content black>
-    {#if isAuthorized && $userInfo}
+    {#if isAuthorized && $userInfo && isAccessible($userInfo, currentPage?.accessibleGroup)}
         <Grid class="my-4">
             <Column>
                 {#if breadcrumb}
@@ -128,17 +132,21 @@
         </Grid>
 
     {:else}
-        {#if isAuthorized && $userInfo === null}
+        {#if isMounted && isAuthorized && $userInfo === null}
             <InlineNotification
                     hideCloseButton
                     title="오류:"
                     subtitle="인증 토큰을 이용하여 유저 정보를 가져오지 못했습니다. 다시 로그인하세요."
             />
         {/if}
-        {#if !isAuthorized || $userInfo === null}
+        {#if isMounted && (!isAuthorized || $userInfo === null)}
             <h1>인증 필요</h1>
             <p>이 페이지를 볼 수 있는 권한이 없습니다. 로그인하여 페이지를 열람하세요.</p>
             <Button href="/" kind="danger">메인 페이지로 돌아가기</Button>
+        {:else if isMounted && $userInfo !== undefined && !isAccessible($userInfo, currentPage?.accessibleGroup)}
+            <h1>권한 부족</h1>
+            <p>이 페이지를 볼 수 있는 권한이 없습니다.</p>
+            <Button href="/module/dashboard" kind="danger">대시보드로 돌아가기</Button>
         {/if}
     {/if}
 </Content>
