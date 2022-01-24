@@ -5,7 +5,14 @@ export const modules: Record<string, ModuleDefinition> = {
 		module: 'auth',
 		accessibleGroup: 'executive',
 		title: '사용자(학부생) 열람/관리',
-		description: '사용자(학부생)의 정보를 보고 관리합니다.'
+		description: '사용자(학부생)의 정보를 보고 관리합니다.',
+		pages: {
+			upload: {
+				title: '파일으로부터 업로드',
+				description: '.xlsx, .csv 등의 파일으로부터 데이터를 가져옵니다.',
+				accessibleGroup: 'admin'
+			}
+		}
 	},
 	rental: {
 		module: 'rental',
