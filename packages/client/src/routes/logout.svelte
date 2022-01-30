@@ -1,17 +1,14 @@
 <script lang='ts'>
     import {Button, Column, Content, Grid, InlineLoading} from "carbon-components-svelte";
-    import Soongsil from "../icons/Soongsil.svelte";
     import {onMount} from "svelte";
     import {getAuthorization} from "$lib/module/auth";
     import EntryCard from "../components/entry/EntryCard.svelte";
-
-    let loginCookie;
     let isAuthorized = false;
     onMount(() => {
         if(getAuthorization()) {
             isAuthorized = true;
         }
-        document.cookie = `comet_session=; path=/; max-age=-99999999;`;
+        document.cookie = `comet_session=; path=/; domain=${window.location.hostname}; max-age=-99999999; samesite=lax;`;
     });
 </script>
 

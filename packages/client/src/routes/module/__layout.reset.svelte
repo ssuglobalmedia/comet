@@ -24,6 +24,7 @@
     import UserMenu from "../../components/headeraction/UserMenu.svelte";
     import ModuleSwitcher from "../../components/headeraction/ModuleSwitcher.svelte";
     import {afterNavigate} from "$app/navigation";
+    import {browser} from "$app/env";
 
     let isMounted = false;
     let isSideNavOpen;
@@ -47,13 +48,18 @@
             value: false,
         },
     };
+    $: if($userInfo === null) {
+        if(browser) {
+            document.cookie = `comet_session=; path=/; domain=${window.location.hostname}; max-age=-99999999; samesite=lax;`;
+        }
+    }
     onMount(() => {
         isMounted = true;
         if (getAuthorization()) {
             isAuthorized = true;
         }
         if (!isAuthorized || $userInfo === null) {
-            document.cookie = `comet_session=; max-age=-99999999;`;
+            document.cookie = `comet_session=; path=/; domain=${window.location.hostname}; max-age=-99999999; samesite=lax;`;
         }
         currentPage = findPageByPath(window.location.pathname.replace("/module", ""));
         breadcrumb = window.location.pathname.replace("/module", "").split("/").filter((v) => v.length > 0).reduce((arr, v) => {
