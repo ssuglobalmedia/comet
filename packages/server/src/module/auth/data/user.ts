@@ -7,7 +7,7 @@ import type {
 	WriteRequest
 } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
-import { NotFoundError, ResponsibleError, UnauthorizedError } from '../../../util/error';
+import { NotFoundError, ResponsibleError} from '../../../util/error';
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 
@@ -30,37 +30,6 @@ export const getUserInfo = async function (id: string): Promise<UserInfo> {
 	};
 };
 
-export function isAccessible(userGroup: string, group: string): boolean {
-	const permissionLevel = {
-		everyone: 0,
-		certificated: 1,
-		executive: 2,
-		admin: 3
-	};
-	if (permissionLevel[group] === undefined) return false;
-	return permissionLevel[userGroup] >= permissionLevel[group];
-}
-
-const assertAccessible = async function (modId: string, token: string, group: string) {
-	const authReq: GetItemInput = {
-		TableName,
-		Key: {
-			module: { S: 'auth' },
-			dataId: {
-				S: `user-${modId}`
-			}
-		}
-	};
-	const authRes = await dynamoDB.getItem(authReq).promise();
-	if (
-		authRes.Item.dataId.S !== `user-${modId}` ||
-		authRes.Item.accessToken?.S !== token ||
-		(!isAccessible(authRes.Item.userGroup?.S, group) && modId !== adminId)
-	) {
-		throw new UnauthorizedError('Unauthorized');
-	}
-};
-
 type UserInfoUpdateRequest = {
 	userId: string;
 	userName?: string;
@@ -69,11 +38,8 @@ type UserInfoUpdateRequest = {
 };
 
 export const updateUserInfo = async function (
-	modId: string,
-	token: string,
 	info: UserInfoUpdateRequest
 ): Promise<UserInfoUpdateRequest> {
-	await assertAccessible(modId, token, 'admin');
 	const attributes: ExpressionAttributeValueMap = {};
 	let updateExp = '';
 	if (info.userGroup !== undefined) {
@@ -101,25 +67,10 @@ export const updateUserInfo = async function (
 };
 
 export const batchCreateUserInfo = async function (
-	modId: string,
-	token: string,
 	infos: Array<UserInfo>
 ): Promise<Array<UserInfo>> {
 	if (infos.length === 0) return infos;
 	if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
-	const authReq: GetItemInput = {
-		TableName,
-		Key: {
-			module: { S: 'auth' },
-			dataId: {
-				S: `user-${modId}`
-			}
-		}
-	};
-	const authRes = await dynamoDB.getItem(authReq).promise();
-	if (authRes.Item.dataId.S !== `user-${modId}` || authRes.Item.accessToken?.S !== token) {
-		throw new UnauthorizedError('Unauthorized');
-	}
 	const requests: WriteRequest[] = infos.map((v: UserInfo) => ({
 		PutRequest: {
 			Item: {
