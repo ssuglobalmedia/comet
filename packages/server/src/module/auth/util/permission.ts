@@ -15,21 +15,21 @@ export function isAccessible(userGroup: string, group: string): boolean {
     return permissionLevel[userGroup] >= permissionLevel[group];
 }
 
-export async function assertAccessible(modId: string, token: string, group: string) {
+export async function assertAccessible(id: string, token: string, group: string) {
     const authReq: GetItemInput = {
         TableName,
         Key: {
             module: { S: 'auth' },
             dataId: {
-                S: `user-${modId}`
+                S: `user-${id}`
             }
         }
     };
     const authRes = await dynamoDB.getItem(authReq).promise();
     if (
-        authRes.Item.dataId.S !== `user-${modId}` ||
+        authRes.Item.dataId.S !== `user-${id}` ||
         authRes.Item.accessToken?.S !== token ||
-        (!isAccessible(authRes.Item.userGroup?.S, group) && modId !== adminId)
+        (!isAccessible(authRes.Item.userGroup?.S, group) && id !== adminId)
     ) {
         throw new UnauthorizedError('Unauthorized');
     }
