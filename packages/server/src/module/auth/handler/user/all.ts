@@ -2,15 +2,17 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../../env';
 import type { JwtPayload } from 'jsonwebtoken';
-import { getUserInfo } from '../../data/user';
+import { getAllUserInfo } from '../../data/user';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
+import {assertAccessible} from "../../util/permission";
 
 export const userAllHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
 	try {
 		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
-		const result = await getUserInfo(id);
+		await assertAccessible(id, token, 'executive');
+		const result = await getAllUserInfo();
 		return createResponse(200, {
 			success: true,
 			result
