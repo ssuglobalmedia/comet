@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button, Column, DataTable, Grid } from "carbon-components-svelte";
 </script>
 
@@ -19,7 +19,8 @@
   { key: "group", value: "구분" },
   { key: "phone", value: "전화번호" },
   { key: "lastSemester", value: "마지막 재학 학기" },
-  { key: "edit", value: "수정" }
+  { key: "edit", value: "수정" },
+  { key: "select", value: "선택" }
   ]}
   rows={[
     {
