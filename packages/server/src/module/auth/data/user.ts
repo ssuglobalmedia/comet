@@ -29,6 +29,10 @@ export const getUserInfo = async function (id: string): Promise<UserInfo> {
 		userGroup: res.Item.userGroup?.S ?? 'unregistered'
 	};
 };
+export const getAllUserInfo = async function (): Promise<Array<UserInfo>> {
+	// TODO: Add Actual User Info getter.
+	return [];
+};
 
 type UserInfoUpdateRequest = {
 	userId: string;
@@ -66,7 +70,7 @@ export const updateUserInfo = async function (
 	return ret;
 };
 
-export const batchCreateUserInfo = async function (
+export const batchPutUserInfo = async function (
 	infos: Array<UserInfo>
 ): Promise<Array<UserInfo>> {
 	if (infos.length === 0) return infos;
@@ -79,6 +83,40 @@ export const batchCreateUserInfo = async function (
 				userName: { S: v.userName }
 			}
 		}
+	}));
+	const req: BatchWriteItemInput = {
+		RequestItems: {
+			TableName: requests
+		}
+	};
+	await dynamoDB.batchWriteItem(req).promise();
+	return infos;
+};
+
+export const batchDeleteUserInfo = async function (
+	infos: Array<UserInfo>
+): Promise<Array<UserInfo>> {
+	if (infos.length === 0) return infos;
+	if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
+	const requests: WriteRequest[] = infos.map((v: UserInfo) => ({
+		// TODO: Create Batch Delete Request
+	}));
+	const req: BatchWriteItemInput = {
+		RequestItems: {
+			TableName: requests
+		}
+	};
+	await dynamoDB.batchWriteItem(req).promise();
+	return infos;
+};
+
+export const batchUpdateUserInfo = async function (
+	infos: Array<UserInfo>
+): Promise<Array<UserInfo>> {
+	if (infos.length === 0) return infos;
+	if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
+	const requests: WriteRequest[] = infos.map((v: UserInfo) => ({
+		// TODO: Create Batch Update Request
 	}));
 	const req: BatchWriteItemInput = {
 		RequestItems: {
