@@ -4,33 +4,54 @@ import { JWT_SECRET } from '../../../../env';
 import type { JwtPayload } from 'jsonwebtoken';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
-import {JsonWebTokenError, TokenExpiredError} from "jsonwebtoken";
-import {assertAccessible} from "../../util/permission";
+import { assertAccessible } from '../../util/permission';
+import { batchDeleteUserInfo } from '../../data/user';
 
-export const batchDeleteHandler: APIGatewayProxyHandler = async (event) => {
-    const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-    try {
-        const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
-        await assertAccessible(id, token, "admin");
-        // TODO: Create Actual batch delete handler.
-        return createResponse(200, {
-            success: true
-        });
-    } catch (e) {
-        if (e instanceof ResponsibleError) {
-            return e.response();
-        }
-        if(e instanceof JsonWebTokenError || e instanceof TokenExpiredError) {
-            return createResponse(401, {
-                success: false,
-                error: 401,
-                description: 'Unauthorized'
-            })
-        }
-        return createResponse(500, {
-            success: false,
-            error: 500,
-            description: 'Internal Error'
-        });
-    }
+export const userBatchDeleteHandler: APIGatewayProxyHandler = async (event) => {
+	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
+	let data: string[];
+	try {
+		data = JSON.parse(event.body) as string[];
+	} catch {
+		return createResponse(500, {
+			success: false,
+			error: 500,
+			error_description: 'Data body is malformed JSON'
+		});
+	}
+	if (!data || !Array.isArray(data)) {
+		return createResponse(500, {
+			success: false,
+			error: 500,
+			error_description: 'Internal error'
+		});
+	}
+	let payload: JwtPayload;
+	try {
+		payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+	} catch {
+		console.debug('malformed token');
+		return createResponse(401, {
+			success: false,
+			error: 401,
+			error_description: 'Unauthorized'
+		});
+	}
+	try {
+		const id = payload.aud as string;
+		await assertAccessible(id, token, 'admin');
+		const res = await batchDeleteUserInfo(data);
+		return createResponse(200, { success: true, ...res });
+	} catch (e) {
+		if (!(e instanceof ResponsibleError)) {
+			console.error(e);
+			const res = {
+				success: false,
+				error: 500,
+				error_description: 'Internal error'
+			};
+			return createResponse(500, res);
+		}
+		return e.response();
+	}
 };

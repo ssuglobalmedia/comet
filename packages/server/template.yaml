@@ -55,6 +55,21 @@ Resources:
           Properties:
             Path: /api/module/auth/user/update
             Method: options
+        ModuleAuthUserQuery:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/query
+            Method: options
+        ModuleAuthUserBatchPut:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/batch/put
+            Method: options
+        ModuleAuthUserBatchDelete:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/batch/delete
+            Method: options
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Metadata:
@@ -125,6 +140,26 @@ Resources:
           Properties:
             Path: /api/module/auth/user/get
             Method: get
+  ModuleAuthUserQueryFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.auth.user.userQueryHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/query
+            Method: get
   ModuleAuthUserUpdateFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -144,6 +179,46 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /api/module/auth/user/update
+            Method: post
+  ModuleAuthUserBatchPutFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.auth.user.userBatchPutHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/batch/put
+            Method: post
+  ModuleAuthUserBatchDeleteFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.auth.user.userBatchDeleteHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        AuthCallback:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/auth/user/batch/delete
             Method: post
   DynamoDBTable:
     Type: AWS::DynamoDB::Table

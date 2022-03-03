@@ -5,14 +5,15 @@ import type { JwtPayload } from 'jsonwebtoken';
 import { getAllUserInfo } from '../../data/user';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
-import {assertAccessible} from "../../util/permission";
+import { assertAccessible } from '../../util/permission';
 
-export const userAllHandler: APIGatewayProxyHandler = async (event) => {
+export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
 	try {
 		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
 		await assertAccessible(id, token, 'executive');
-		const result = await getAllUserInfo();
+		console.log(event);
+		const result = await getAllUserInfo('');
 		return createResponse(200, {
 			success: true,
 			result
@@ -21,6 +22,7 @@ export const userAllHandler: APIGatewayProxyHandler = async (event) => {
 		if (e instanceof ResponsibleError) {
 			return e.response();
 		}
+		console.log(e);
 		return createResponse(500, {
 			success: false,
 			error: 500,
