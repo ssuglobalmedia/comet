@@ -1,3 +1,11 @@
+/* Response */
+export type CometResponse = {
+  success: boolean;
+  result?: any;
+  error?: number;
+  error_description?: string;
+};
+
 /* Module */
 
 export type ModuleData = {
@@ -12,5 +20,6 @@ export type UserInfo = {
   userId: string;
   userName: string;
   userGroup: string;
+  lastSemester?: string;
   phone?: string;
 };
