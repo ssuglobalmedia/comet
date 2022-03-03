@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../../env';
 import { updateUserInfo } from '../../data/user';
 import { ResponsibleError } from '../../../../util/error';
+import {assertAccessible} from "../../util/permission";
 
 export const userUpdateHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -39,7 +40,8 @@ export const userUpdateHandler: APIGatewayProxyHandler = async (event) => {
 	}
 	try {
 		const id = payload.aud as string;
-		const res = await updateUserInfo(id, token, data);
+		await assertAccessible(id, token, "admin");
+		const res = await updateUserInfo(data);
 		return createResponse(200, { success: true, ...res });
 	} catch (e) {
 		if (!(e instanceof ResponsibleError)) {
