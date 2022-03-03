@@ -1,5 +1,22 @@
 <script lang="ts">
   import { Button, Column, DataTable, Grid } from "carbon-components-svelte";
+  import { browser } from "$app/env";
+  import { variables } from "$lib/variables";
+  import { fetchWithAuth } from "$lib/module/auth";
+  import type { CometResponse, UserInfo } from "types";
+
+  let users: Array<UserInfo> = [];
+
+  if(browser) {
+    fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`).then((res) => res.json()).then((res: CometResponse) => {
+      if(res.success) {
+        users = res.result as Array<UserInfo>;
+      }
+      throw new Error(`Request error ${res.error}: ${res.error_description}`)
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
 </script>
 
 <Grid noGutter condensed>
