@@ -3,11 +3,12 @@ import type {
 	BatchWriteItemInput,
 	ExpressionAttributeValueMap,
 	GetItemInput,
+	QueryInput,
 	UpdateItemInput,
 	WriteRequest
 } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
-import { NotFoundError, ResponsibleError} from '../../../util/error';
+import { NotFoundError, ResponsibleError } from '../../../util/error';
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 
@@ -23,15 +24,47 @@ export const getUserInfo = async function (id: string): Promise<UserInfo> {
 	if (res.Item === undefined) {
 		throw new NotFoundError(`Cannot find user info of id ${id}`);
 	}
-	return {
+	const ret: UserInfo = {
 		userId: id,
 		userName: res.Item.userName?.S ?? '',
 		userGroup: res.Item.userGroup?.S ?? 'unregistered'
 	};
+	if (res.Item.lastSemester?.S) {
+		ret.lastSemester = res.Item.lastSemester?.S;
+	}
+	if (res.Item.phone?.S) {
+		ret.phone = res.Item.phone?.S;
+	}
+	return ret;
 };
-export const getAllUserInfo = async function (): Promise<Array<UserInfo>> {
-	// TODO: Add Actual User Info getter.
-	return [];
+export const getAllUserInfo = async function (startsWith: string): Promise<Array<UserInfo>> {
+	const req: QueryInput = {
+		TableName,
+		KeyConditionExpression: '#module = :v1 AND begins_with(#dataId, :v2)',
+		ExpressionAttributeNames: {
+			'#module': 'module',
+			'#dataId': 'dataId'
+		},
+		ExpressionAttributeValues: {
+			':v1': { S: 'auth' },
+			':v2': { S: `user-${startsWith}` }
+		}
+	};
+	const res = await dynamoDB.query(req).promise();
+	return res.Items.map((v) => {
+		const info: UserInfo = {
+			userId: v.dataId.S.substr(5),
+			userName: v.userName.S,
+			userGroup: v.userGroup.S ?? 'unregistered'
+		};
+		if (v.lastSemester?.S) {
+			info.lastSemester = v.lastSemester?.S;
+		}
+		if (v.phone?.S) {
+			info.phone = v.phone?.S;
+		}
+		return info;
+	});
 };
 
 type UserInfoUpdateRequest = {
@@ -70,9 +103,7 @@ export const updateUserInfo = async function (
 	return ret;
 };
 
-export const batchPutUserInfo = async function (
-	infos: Array<UserInfo>
-): Promise<Array<UserInfo>> {
+export const batchPutUserInfo = async function (infos: Array<UserInfo>): Promise<Array<UserInfo>> {
 	if (infos.length === 0) return infos;
 	if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
 	const requests: WriteRequest[] = infos.map((v: UserInfo) => ({
@@ -93,13 +124,20 @@ export const batchPutUserInfo = async function (
 	return infos;
 };
 
-export const batchDeleteUserInfo = async function (
-	infos: Array<UserInfo>
-): Promise<Array<UserInfo>> {
-	if (infos.length === 0) return infos;
-	if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
-	const requests: WriteRequest[] = infos.map((v: UserInfo) => ({
-		// TODO: Create Batch Delete Request
+export const batchDeleteUserInfo = async function (ids: Array<string>): Promise<Array<string>> {
+	if (ids.length === 0) return ids;
+	if (ids.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
+	const requests: WriteRequest[] = ids.map((v: string) => ({
+		DeleteRequest: {
+			Key: {
+				module: {
+					S: 'auth'
+				},
+				dataId: {
+					S: `user-${v}`
+				}
+			}
+		}
 	}));
 	const req: BatchWriteItemInput = {
 		RequestItems: {
@@ -107,22 +145,5 @@ export const batchDeleteUserInfo = async function (
 		}
 	};
 	await dynamoDB.batchWriteItem(req).promise();
-	return infos;
-};
-
-export const batchUpdateUserInfo = async function (
-	infos: Array<UserInfo>
-): Promise<Array<UserInfo>> {
-	if (infos.length === 0) return infos;
-	if (infos.length > 25) throw new ResponsibleError('Maximum amount of batch creation is 25');
-	const requests: WriteRequest[] = infos.map((v: UserInfo) => ({
-		// TODO: Create Batch Update Request
-	}));
-	const req: BatchWriteItemInput = {
-		RequestItems: {
-			TableName: requests
-		}
-	};
-	await dynamoDB.batchWriteItem(req).promise();
-	return infos;
+	return ids;
 };
