@@ -109,7 +109,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./dist
-      Handler: handler.auth.user.getUserInfoHandler
+      Handler: handler.auth.user.userGetHandler
       Runtime: nodejs14.x
       Layers:
         - !Ref DependenciesLayer
@@ -129,7 +129,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./dist
-      Handler: handler.auth.user.updateUserInfoHandler
+      Handler: handler.auth.user.userUpdateHandler
       Runtime: nodejs14.x
       Layers:
         - !Ref DependenciesLayer
