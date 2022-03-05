@@ -36,6 +36,6 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "types": "link:../types"
+    "@types/mirinae-comet": "link:../types"
   }
 }

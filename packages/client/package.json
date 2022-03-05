@@ -42,6 +42,6 @@
 		"carbon-icons-svelte": "^10.44.3",
 		"carbon-pictograms-svelte": "^12.0.2",
 		"sheetjs": "^2.0.0",
-		"types": "link:../types"
+		"@types/mirinae-comet": "link:../types"
 	}
 }
