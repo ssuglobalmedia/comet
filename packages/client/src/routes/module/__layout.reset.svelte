@@ -64,7 +64,7 @@
   }
 
   const constructBreadcrumb = (path: string) => path.split("/").filter((v) => v.length > 0).reduce((arr, v) => {
-    let href = (arr.length ? arr.at(-1).path : "") + `/${v}`;
+    let href = (arr.length ? arr[arr.length - 1].path : "") + `/${v}`;
     return [...arr, {
       path: href,
       title: findPageByPath(href).title
