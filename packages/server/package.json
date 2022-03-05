@@ -16,26 +16,26 @@
     "deploy": "sam deploy --no-confirm-changeset --no-fail-on-empty-changeset"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.89",
-    "@types/jsonwebtoken": "^8.5.6",
-    "@typescript-eslint/eslint-plugin": "^5.8.1",
-    "@typescript-eslint/parser": "^5.8.1",
-    "aws-sdk": "^2.1048.0",
-    "chai": "^4.3.4",
+    "@types/aws-lambda": "^8.10.93",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "aws-sdk": "^2.1087.0",
+    "chai": "^4.3.6",
     "concurrently": "^6.5.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.5.0",
+    "eslint": "^8.10.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^8.4.0",
     "prettier": "^2.5.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.6.2"
   },
   "dependencies": {
-    "@types/mirinae-comet": "link:../types"
+    "@types/mirinae-comet": "link:..\\types"
   }
 }
