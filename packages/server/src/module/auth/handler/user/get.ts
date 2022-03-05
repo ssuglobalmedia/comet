@@ -2,7 +2,7 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../../env';
 import type { JwtPayload } from 'jsonwebtoken';
-import { getUserInfo } from '../../data/user';
+import { getUser } from '../../data/user';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
 import {JsonWebTokenError, TokenExpiredError} from "jsonwebtoken";
@@ -11,7 +11,7 @@ export const userGetHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
 	try {
 		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
-		const result = await getUserInfo(id);
+		const result = await getUser(id);
 		return createResponse(200, {
 			success: true,
 			result
@@ -27,6 +27,7 @@ export const userGetHandler: APIGatewayProxyHandler = async (event) => {
 				description: 'Unauthorized'
 			})
 		}
+		console.error(e);
 		return createResponse(500, {
 			success: false,
 			error: 500,

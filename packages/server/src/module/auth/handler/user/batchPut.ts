@@ -5,14 +5,14 @@ import type { JwtPayload } from 'jsonwebtoken';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
-import type { UserInfo } from 'types';
-import { batchPutUserInfo } from '../../data/user';
+import { batchPutUser } from '../../data/user';
+import type {User} from "mirinae-comet";
 
 export const userBatchPutHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-	let data: UserInfo[];
+	let data: User[];
 	try {
-		data = JSON.parse(event.body) as UserInfo[];
+		data = JSON.parse(event.body) as User[];
 	} catch {
 		return createResponse(500, {
 			success: false,
@@ -41,18 +41,18 @@ export const userBatchPutHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'admin');
-		const res = await batchPutUserInfo(data);
+		const res = await batchPutUser(data);
 		return createResponse(200, { success: true, ...res });
 	} catch (e) {
-		if (!(e instanceof ResponsibleError)) {
-			console.error(e);
-			const res = {
-				success: false,
-				error: 500,
-				error_description: 'Internal error'
-			};
-			return createResponse(500, res);
+		if (e instanceof ResponsibleError) {
+			return e.response();
 		}
-		return e.response();
+		console.error(e);
+		const res = {
+			success: false,
+			error: 500,
+			error_description: 'Internal error'
+		};
+		return createResponse(500, res);
 	}
 };

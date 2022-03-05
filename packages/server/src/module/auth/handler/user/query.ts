@@ -2,7 +2,7 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../../env';
 import type { JwtPayload } from 'jsonwebtoken';
-import { getAllUserInfo } from '../../data/user';
+import { queryUser } from '../../data/user';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
@@ -13,7 +13,7 @@ export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
 		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
 		await assertAccessible(id, token, 'executive');
 		console.log(event);
-		const result = await getAllUserInfo('');
+		const result = await queryUser('');
 		return createResponse(200, {
 			success: true,
 			result
@@ -22,7 +22,7 @@ export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
 		if (e instanceof ResponsibleError) {
 			return e.response();
 		}
-		console.log(e);
+		console.error(e);
 		return createResponse(500, {
 			success: false,
 			error: 500,

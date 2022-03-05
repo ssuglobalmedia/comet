@@ -5,7 +5,7 @@ import type { JwtPayload } from 'jsonwebtoken';
 import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
-import { batchDeleteUserInfo } from '../../data/user';
+import { batchDeleteUser } from '../../data/user';
 
 export const userBatchDeleteHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -40,18 +40,18 @@ export const userBatchDeleteHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'admin');
-		const res = await batchDeleteUserInfo(data);
+		const res = await batchDeleteUser(data);
 		return createResponse(200, { success: true, ...res });
 	} catch (e) {
-		if (!(e instanceof ResponsibleError)) {
-			console.error(e);
-			const res = {
-				success: false,
-				error: 500,
-				error_description: 'Internal error'
-			};
-			return createResponse(500, res);
+		if (e instanceof ResponsibleError) {
+			return e.response();
 		}
-		return e.response();
+		console.error(e);
+		const res = {
+			success: false,
+			error: 500,
+			error_description: 'Internal error'
+		};
+		return createResponse(500, res);
 	}
 };

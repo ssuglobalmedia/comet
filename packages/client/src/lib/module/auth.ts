@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { getCookieValue } from '$lib/utils';
-import type {UserInfo} from "types";
+import type {User} from "mirinae-comet";
 
 export const getAuthorization = () => getCookieValue('comet_session');
 
@@ -13,7 +13,7 @@ export const fetchWithAuth = (resource: RequestInfo, init?: RequestInit) =>
 		}
 	});
 
-export function isAccessible(user: UserInfo, group: string): boolean {
+export function isAccessible(user: User, group: string): boolean {
 	const permissionLevel = {
 		everyone: 0,
 		certificated: 1,

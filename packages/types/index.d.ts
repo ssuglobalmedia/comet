@@ -1,6 +1,7 @@
 /* Response */
 export type CometResponse = {
   success: boolean;
+  // eslint-disable-next-line
   result?: any;
   error?: number;
   error_description?: string;
@@ -8,15 +9,20 @@ export type CometResponse = {
 
 /* Module */
 
-export type ModuleData = {
-  module: string;
-  dataId: string;
+export type ModuleDao = {
+  module: { S: string; };
+  dataId: { S: string; }
 };
 
 /* Auth Module */
-export type UserInfoData = ModuleData & UserInfoData;
+export type UserDao = {
+  userName: { S: string },
+  userGroup: { S: string },
+  lastSemester?: { N: number },
+  phone?: { S: string }
+} & ModuleDao;
 
-export type UserInfo = {
+export type User = {
   userId: string;
   userName: string;
   userGroup: string;
