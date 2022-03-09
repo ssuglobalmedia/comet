@@ -75,8 +75,8 @@
     currentPage = findPageByPath(window.location.pathname.replace("/module", ""));
     breadcrumb = constructBreadcrumb(window.location.pathname.replace("/module", ""));
   });
-  afterNavigate(() => {
-    breadcrumb = constructBreadcrumb(window.location.pathname.replace("/module", ""))
+  afterNavigate(({ to }) => {
+    breadcrumb = constructBreadcrumb(to.pathname.replace("/module", ""))
   });
 </script>
 
@@ -84,7 +84,7 @@
   <title>{isAuthorized && $userInfo ? (breadcrumb ?? ['로드 중']).at(-1).title ?? '찾을 수 없음' : '인증 중'} - 미리내 COMET</title>
 </svelte:head>
 
-<Header company="미리내" platformName="COMET" bind:isSideNavOpen>
+<Header company="미리내" platformName="COMET" href="/module/dashboard" bind:isSideNavOpen>
   <svelte:fragment slot="skip-to-content">
     <SkipToContent />
   </svelte:fragment>
