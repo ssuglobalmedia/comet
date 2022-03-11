@@ -12,7 +12,7 @@
         if (loginCookie) {
             window.location.href = '/module/dashboard';
         }
-        callbackUrl = window.location.protocol + '//' + window.location.host + '/callback/';
+        callbackUrl = window.location.protocol + '//' + window.location.host + '/callback';
     });
 </script>
 
