@@ -111,6 +111,7 @@
     title="파일 업로드"
     description="csv 혹은 xls, xlsx 파일을 업로드하세요. 첫번째 열은 제목으로 간주되며, 여러 시트가 있을 경우 첫번째 시트만 인식합니다."
   >
+    <p style="color: var(--cds-danger-02)">이미 존재하는 사용자의 정보를 업로드할 경우 기존 정보가 전부 덮어씌워지므로 주의하세요!</p>
     <FileUploader
       buttonLabel="업로드"
       accept={[".csv", ".xls", ".xlsx"]}
