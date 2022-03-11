@@ -10,16 +10,16 @@ export type CometResponse = {
 /* Module */
 
 export type ModuleDao = {
-  module: { S: string; };
-  dataId: { S: string; }
+  module: { S: string };
+  dataId: { S: string };
 };
 
 /* Auth Module */
 export type UserDao = {
-  userName: { S: string },
-  userGroup: { S: string },
-  lastSemester?: { N: number },
-  phone?: { S: string }
+  userName: { S: string };
+  userGroup: { S: string };
+  lastSemester?: { N: string };
+  phone?: { S: string };
 } & ModuleDao;
 
 export type User = {
