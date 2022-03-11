@@ -68,6 +68,18 @@
     if(!debouncedSearchValue) return true;
     return `${v.userId}`.includes(debouncedSearchValue) || v.userName.includes(debouncedSearchValue) || (groupDisplayName[v.userGroup ?? 'unregistered'] ?? '').includes(debouncedSearchValue) || (v.lastSemester ?? '').includes(debouncedSearchValue) || `${v.phone ?? ''}`.includes(debouncedSearchValue);
   }) : [];
+
+  let updateModalOpen = false;
+  let batchUpdateModalOpen = false;
+  let updateTargetUser: User = undefined;
+  function openUpdateModal(row) {
+    updateTargetUser = row;
+    updateModalOpen = true;
+  }
+
+  function openBatchUpdateModal() {
+    batchUpdateModalOpen = true;
+  }
 </script>
 {#if users}
   <DataTable
@@ -83,12 +95,13 @@
   >
     <Toolbar>
       <ToolbarBatchActions>
+        <Button icon={Edit16} on:click={openBatchUpdateModal}>일괄 수정</Button>
         <Button icon={Delete16}>삭제</Button>
       </ToolbarBatchActions>
       <ToolbarContent>
         <ToolbarSearch bind:value={searchValue} />
-        <Button>XLSX로 내보내기</Button>
-        <Button href="/module/auth/upload">파일으로부터 업로드</Button>
+        <Button icon={Download16}>XLSX로 내보내기</Button>
+        <Button href="/module/auth/upload" icon={Upload16}>파일으로부터 업로드</Button>
       </ToolbarContent>
     </Toolbar>
     <svelte:fragment slot="cell" let:row let:cell>
@@ -111,3 +124,5 @@
   <DataTableSkeleton {headers} />
   <PaginationSkeleton />
 {/if}
+<UpdateModal bind:open={updateModalOpen} bind:targetUser={updateTargetUser} on:close={() => (updateModalOpen = false)} />
+<BatchUpdateModal bind:open={batchUpdateModalOpen} userSupplier={users} selectedUserIds={selectedUsers} on:close={() => (batchUpdateModalOpen = false)} />
