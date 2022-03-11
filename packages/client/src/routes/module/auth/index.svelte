@@ -2,7 +2,7 @@
   import {
     Button,
     DataTable,
-    DataTableSkeleton,
+    DataTableSkeleton, Pagination, PaginationSkeleton,
     Toolbar, ToolbarBatchActions, ToolbarContent,
     ToolbarSearch
   } from "carbon-components-svelte";
@@ -22,7 +22,7 @@
     { key: "userGroup", value: "구분" },
     { key: "phone", value: "전화번호" },
     { key: "lastSemester", value: "마지막 재학 학기" },
-    { key: "edit", value: "수정" }
+    { key: "edit", value: "수정", empty: true }
   ];
   let users: Array<UserCell> = undefined;
 
@@ -42,22 +42,49 @@
       console.error(err);
     });
   }
+
+  let pageSize = 25;
+  let page = 1;
+
+  let debouncer;
+  function debounce(func: () => void) {
+    clearTimeout(debouncer);
+    debouncer = setTimeout(() => {
+      func();
+    }, 750);
+  }
+
+  let searchValue;
+  let debouncedSearchValue;
+  $: if(searchValue || debouncedSearchValue) {
+    debounce(() => {
+      debouncedSearchValue = searchValue;
+    });
+  }
+
+  $: filteredUsers = users ? users.filter((v) => {
+    if(!debouncedSearchValue) return true;
+    return `${v.userId}`.includes(debouncedSearchValue) || v.userName.includes(debouncedSearchValue) || (groupDisplayName[v.userGroup ?? 'unregistered'] ?? '').includes(debouncedSearchValue) || (v.lastSemester ?? '').includes(debouncedSearchValue) || `${v.phone ?? ''}`.includes(debouncedSearchValue);
+  }) : [];
 </script>
 {#if users}
   <DataTable
+    sortable
     batchSelection
     bind:selectedRowIds={selectedUsers}
     title="학부생 목록"
     description="학부생 목록을 열람하고 관리합니다."
     {headers}
-    rows={users}
+    rows={filteredUsers}
+    pageSize={pageSize}
+    page={page}
   >
     <Toolbar>
       <ToolbarBatchActions>
         <Button icon={Delete16}>삭제</Button>
       </ToolbarBatchActions>
       <ToolbarContent>
-        <ToolbarSearch />
+        <ToolbarSearch bind:value={searchValue} />
         <Button>XLSX로 내보내기</Button>
         <Button href="/module/auth/upload">파일으로부터 업로드</Button>
       </ToolbarContent>
@@ -70,6 +97,13 @@
       {/if}
     </svelte:fragment>
   </DataTable>
+  <Pagination
+    pageSizes={[25, 50, 100, 200]}
+    bind:pageSize={pageSize}
+    bind:page={page}
+    totalItems={(filteredUsers).length}
+  />
 {:else}
   <DataTableSkeleton {headers} />
+  <PaginationSkeleton />
 {/if}
