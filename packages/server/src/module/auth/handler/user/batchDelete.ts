@@ -37,20 +37,26 @@ export const userBatchDeleteHandler: APIGatewayProxyHandler = async (event) => {
 			error_description: 'Unauthorized'
 		});
 	}
+	let i = 0;
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'admin');
-		const res = await batchDeleteUser(data);
-		return createResponse(200, { success: true, ...res });
+		for (i = 0; i < data.length; i += 25) {
+			const partialData = data.slice(i, i + 25);
+			await batchDeleteUser(partialData);
+		}
+		return createResponse(200, { success: true });
 	} catch (e) {
 		if (e instanceof ResponsibleError) {
+			e.additionalInfo.failed_data = data.slice(i, data.length);
 			return e.response();
 		}
 		console.error(e);
 		const res = {
 			success: false,
 			error: 500,
-			error_description: 'Internal error'
+			error_description: 'Internal error',
+			failed_data: JSON.stringify(data.slice(i, data.length))
 		};
 		return createResponse(500, res);
 	}
