@@ -15,6 +15,9 @@
 - `/module/auth`
 - `/module/auth/upload`
 
+## Known Todos
+- If size of user records exceeds query limit, there's no other way to query leftovers.
+
 # Rental
 
 ## Server endpoints
