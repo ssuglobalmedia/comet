@@ -18,6 +18,7 @@
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import { browser } from "$app/env";
   import { variables } from "$lib/variables";
+  import { getCurrentFullSemester } from "$lib/utils";
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -63,8 +64,7 @@
         userName: v[conversion.userName],
         userGroup: convertGroup(conversion.userGroupConv, v[conversion.userGroup]),
         ...(conversion.phone && { phone: v[conversion.phone].replace(/\D/g, "") }),
-        // TODO: Replace hardcoded latest semester.
-        ...(conversion.lastSemester && { lastSemester: conversion.lastSemester === ":latest" ? "2022-1" : v[conversion.lastSemester] })
+        ...(conversion.lastSemester && { lastSemester: conversion.lastSemester === ":latest" ? getCurrentFullSemester() : v[conversion.lastSemester] })
       }));
     })();
   }
