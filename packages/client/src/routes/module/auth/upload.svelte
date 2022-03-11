@@ -80,6 +80,7 @@
         body: JSON.stringify(convertedData)
       }).then((res) => res.json()).then((resJson) => {
       response = resJson;
+      responseSuccess = true;
     }).catch((e) => {
       response = e;
       console.error(e);
