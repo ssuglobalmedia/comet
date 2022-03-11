@@ -18,9 +18,26 @@ export const fromUserDao = (dao: UserDao): User => ({
 	userGroup: dao.userGroup?.S ?? 'unregistered',
 	...(dao.lastSemester?.N && {
 		lastSemester:
-			dao.lastSemester.N < 0 ? `${dao.lastSemester.N * -1}-1` : `${dao.lastSemester.N}-2`
+			parseInt(dao.lastSemester.N) < 0
+				? `${parseInt(dao.lastSemester.N) * -1}-1`
+				: `${dao.lastSemester.N}-2`
 	}),
 	...(dao.phone?.S && { phone: dao.phone.S })
+});
+export const toUserDao = (user: User): UserDao => ({
+	module: { S: 'auth' },
+	dataId: { S: `user-${user.userId}` },
+	userName: { S: user.userName },
+	userGroup: { S: user.userGroup },
+	...(user.lastSemester && {
+		lastSemester: {
+			N: `${
+				parseInt(user.lastSemester.split('-')[0]) *
+				(user.lastSemester.split('-')[1] === '1' ? -1 : 1)
+			}`
+		}
+	}),
+	...(user.phone && { phone: { S: user.phone } })
 });
 
 export const getUser = async function (id: string): Promise<User> {
@@ -111,12 +128,7 @@ export const batchPutUser = async function (infos: Array<User>): Promise<Array<U
 	const requests: WriteRequest[] = infos.map((v: User) => ({
 		PutRequest: {
 			Item: {
-				module: { S: 'auth' },
-				dataId: { S: `user-${v.userId}` },
-				userGroup: { S: v.userGroup },
-				userName: { S: v.userName },
-				...(v.lastSemester && { lastSemester: { S: v.lastSemester } }),
-				...(v.phone && { phone: { S: v.phone } })
+				...toUserDao(v)
 			}
 		}
 	}));
