@@ -21,7 +21,7 @@
 		"@typescript-eslint/eslint-plugin": "5.8.1",
 		"@typescript-eslint/parser": "^5.13.0",
 		"carbon-components": "^10.54.0",
-		"carbon-components-svelte": "^0.51.3",
+		"carbon-components-svelte": "0.60.0",
 		"carbon-preprocess-svelte": "^0.6.0",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.10.0",
