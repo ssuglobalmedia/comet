@@ -7,9 +7,8 @@
 - GET `/api/module/auth/user/get`
 - POST `/api/module/auth/user/update`
 - GET `/api/module/auth/user/all`
-- POST `/api/module/auth/user/batchPut`
-- POST `/api/module/auth/user/batchDelete`
-- POST `/api/module/auth/user/batchUpdate`
+- POST `/api/module/auth/user/batch/put`
+- POST `/api/module/auth/user/batch/delete`
 
 ## Client routes
 

@@ -6,7 +6,7 @@ import { createResponse } from '../../../../common';
 import { ResponsibleError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
 import { batchPutUser } from '../../data/user';
-import type {User} from "mirinae-comet";
+import type { User } from 'mirinae-comet';
 
 export const userBatchPutHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -41,6 +41,7 @@ export const userBatchPutHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'admin');
+		// TODO: Split Request by 25 and do job partially
 		const res = await batchPutUser(data);
 		return createResponse(200, { success: true, ...res });
 	} catch (e) {
