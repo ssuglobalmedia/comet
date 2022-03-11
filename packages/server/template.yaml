@@ -236,7 +236,10 @@ Resources:
           KeyType: HASH
         - AttributeName: dataId
           KeyType: RANGE
-      BillingMode: 'PAY_PER_REQUEST'
+      BillingMode: 'PROVISIONED'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 25
+        WriteCapacityUnits: 25
   FrontS3Bucket:
     DeletionPolicy: 'Delete'
     Metadata:
