@@ -10,7 +10,9 @@
   import { variables } from "$lib/variables";
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import type { CometResponse, User } from "mirinae-comet";
-  import { Delete16 } from "carbon-icons-svelte";
+  import { Delete16, Download16, Edit16, Upload16 } from "carbon-icons-svelte";
+  import UpdateModal from "../../../components/module/auth/UpdateModal.svelte";
+  import BatchUpdateModal from "../../../components/module/auth/BatchUpdateModal.svelte";
 
   type UserCell = {
     id: string;
@@ -26,12 +28,12 @@
   ];
   let users: Array<UserCell> = undefined;
 
-  let selectedUsers = [];
+  let selectedUsers: Array<UserCell> = [];
 
   const transformUser = (user: User): UserCell => ({
     id: user.userId,
     ...user,
-    userGroup: groupDisplayName[user.userGroup] ?? user.userGroup
+    userGroup: user.userGroup
   });
 
   if (browser) {
@@ -91,7 +93,9 @@
     </Toolbar>
     <svelte:fragment slot="cell" let:row let:cell>
       {#if cell.key === "edit"}
-        <Button>수정</Button>
+        <Button icon={Edit16} on:click={() => openUpdateModal(row)}>수정</Button>
+      {:else if cell.key === "userGroup"}
+        {groupDisplayName[cell.value] ?? cell.value}
       {:else}
         {cell.value ?? "정보 없음"}
       {/if}
