@@ -17,8 +17,8 @@
   } & User;
 
   const headers = [
-    { key: "userName", value: "사용자 이름" },
     { key: "userId", value: "학번" },
+    { key: "userName", value: "사용자 이름" },
     { key: "userGroup", value: "구분" },
     { key: "phone", value: "전화번호" },
     { key: "lastSemester", value: "마지막 재학 학기" },
@@ -31,7 +31,7 @@
   const transformUser = (user: User): UserCell => ({
     id: user.userId,
     ...user,
-    userGroup: groupDisplayName[user.userGroup] ?? "알 수 없음"
+    userGroup: groupDisplayName[user.userGroup] ?? user.userGroup
   });
 
   if (browser) {
@@ -66,7 +66,7 @@
       {#if cell.key === "edit"}
         <Button>수정</Button>
       {:else}
-        {cell.value}
+        {cell.value ?? "정보 없음"}
       {/if}
     </svelte:fragment>
   </DataTable>
