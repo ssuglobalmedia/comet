@@ -268,8 +268,8 @@ Resources:
     Properties:
       CachePolicyConfig:
         Name: 'ApiCachePolicy'
-        DefaultTTL: 3600
-        MaxTTL: 31536000
+        DefaultTTL: 1
+        MaxTTL: 1
         MinTTL: 0
         ParametersInCacheKeyAndForwardedToOrigin:
           CookiesConfig:
