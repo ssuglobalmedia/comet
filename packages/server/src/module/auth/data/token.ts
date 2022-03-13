@@ -34,15 +34,13 @@ export const issueToken = async function (
 		TableName,
 		Key: { module: { S: 'auth' }, dataId: { S: `user-${id}` } },
 		UpdateExpression: 'SET accessToken = :token, expiresOn = :expiresOn',
+		...(id !== adminId && { ConditionExpression: 'attribute_exists(userGroup)' }),
 		ExpressionAttributeValues: {
 			':token': { S: token },
 			':expiresOn': { N: `${expires}` }
 		},
 		ReturnValues: 'UPDATED_NEW'
 	};
-	if (id !== adminId) {
-		req.ConditionExpression = 'attribute_exists(group)';
-	}
 	const res = await dynamoDB.updateItem(req).promise();
 	if (res.Attributes.hasOwnProperty('accessToken')) {
 		return { id, expires };
