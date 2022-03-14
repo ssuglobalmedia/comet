@@ -4,13 +4,15 @@
     import EntryCard from "../components/entry/EntryCard.svelte";
     import {variables} from "$lib/variables";
     let result;
+    let redirect;
     let id;
     onMount(() => {
         result = new URLSearchParams(window.location.search).get('result');
+        redirect = new URLSearchParams(window.location.search).get('redirect');
         id = fetch(variables.baseUrl + '/api/module/auth/callback?result=' + encodeURIComponent(result)).then((res) => res.json());
         id.then((data) => {
             document.cookie = `comet_session=${encodeURIComponent(data.access_token)}; path=/; domain=${window.location.hostname}; max-age=${data.expires_in}; samesite=lax`;
-            window.location.href = '/module/dashboard';
+            window.location.href = redirect ? redirect : '/module/dashboard';
         });
     });
 </script>

@@ -34,6 +34,7 @@
   let selected = "0";
   let breadcrumb = undefined;
   let currentPage = undefined;
+  $: currentPath = (browser ? window.location.pathname : undefined);
   let transitions = {
     "0": {
       text: "Default (duration: 200ms)",
@@ -147,7 +148,7 @@
     {#if isMounted && (!isAuthorized || $userInfo === null)}
       <h1>인증 필요</h1>
       <p>이 페이지를 볼 수 있는 권한이 없습니다. 로그인하여 페이지를 열람하세요.</p>
-      <Button href="/" kind="danger">메인 페이지로 돌아가기</Button>
+      <Button href={`/${currentPath ? '?redirect=' + currentPath : ''}`} kind="danger">메인 페이지로 돌아가기</Button>
     {:else if isMounted && $userInfo !== undefined && !isAccessible($userInfo, currentPage?.accessibleGroup)}
       <h1>권한 부족</h1>
       <p>이 페이지를 볼 수 있는 권한이 없습니다.</p>

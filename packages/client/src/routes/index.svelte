@@ -7,12 +7,14 @@
 
     let callbackUrl;
     let loginCookie;
+    let redirect;
     onMount(() => {
         loginCookie = getAuthorization();
         if (loginCookie) {
             window.location.href = '/module/dashboard';
         }
-        callbackUrl = window.location.protocol + '//' + window.location.host + '/callback';
+        redirect = new URLSearchParams(window.location.search).get('redirect');
+        callbackUrl = window.location.protocol + '//' + window.location.host + '/callback' + (redirect ? `?redirect=${redirect}` : '');
     });
 </script>
 
