@@ -71,6 +71,8 @@
     return valueSet.size === desiredSize;
   }
 
+  let noOverwrite = false;
+
   export let conversion;
   $: {
     if (formValidation()) {
@@ -96,6 +98,7 @@
             keyword: groupAdminValue ? groupAdminValue : undefined
           }
         },
+        noOverwrite,
         ...(includeLastSemester && { lastSemester: lastSemesterCol >= dropdownItems.length ? ":latest" : dropdownItems[lastSemesterCol].text }),
         ...(includePhone && { phone: dropdownItems[phoneCol].text })
       };
@@ -206,5 +209,8 @@
       invalidText="다른 권한에 동일한 값을 선택할 수 없습니다."
       {shouldFilterItem}
     />
+  </FormGroup>
+  <FormGroup legendText="기타 옵션">
+    <Checkbox labelText="존재하는 사용자 덮어쓰지 않기" bind:checked={noOverwrite} />
   </FormGroup>
 </div>

@@ -7,14 +7,14 @@
     Grid,
     Column,
     Button,
-    InlineLoading, DataTable, Pagination
+    InlineLoading, DataTable, Pagination, DataTableSkeleton
   } from "carbon-components-svelte";
   import type { WorkBook } from "xlsx";
   import { read, utils } from "xlsx";
   import { NextFilled16, SendToBack16, Upload16 } from "carbon-icons-svelte";
   import StepTile from "../../../components/molcule/StepTile.svelte";
   import DataTransformer from "../../../components/module/auth/DataTransformer.svelte";
-  import type { User } from "@types/mirinae-comet";
+  import type { CometResponse, User } from "@types/mirinae-comet";
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import { browser } from "$app/env";
   import { variables } from "$lib/variables";
@@ -56,9 +56,9 @@
     return defaultGroup;
   }
 
-  $: if (currentIndex === 2 && conversion) {
+  $: if (currentIndex === 2 && conversion && !convertedData) {
     (async () => {
-      convertedData = data.map((v) => ({
+      const converted: Array<User> = data.map((v) => ({
         id: v[conversion.userId],
         userId: v[conversion.userId],
         userName: v[conversion.userName],
@@ -66,6 +66,18 @@
         ...(conversion.phone && { phone: v[conversion.phone].replace(/\D/g, "") }),
         ...(conversion.lastSemester && { lastSemester: conversion.lastSemester === ":latest" ? getCurrentFullSemester() : v[conversion.lastSemester] })
       }));
+      if (conversion.noOverwrite) {
+        const res = await (await fetchWithAuth(variables.baseUrl + "/api/module/auth/user/query")).json() as CometResponse;
+        if (res.success) {
+          const originalUsers = res.result as Array<User>;
+          convertedData = converted.filter((newUser) => originalUsers.every((org) => `${org.userId}` !== `${newUser.userId}`));
+        } else {
+          console.error(res.error_description);
+          convertedData = [];
+        }
+      } else {
+        convertedData = converted;
+      }
     })();
   }
 
@@ -97,7 +109,7 @@
 
   let convertTablePageSize = 25;
   let convertTablePage = 1;
-  $: loadingDesc = response && responseSuccess ? '데이터 등록이 완료되었습니다.' : response ? '데이터 등록에 실패했습니다.' : '데이터베이스에 등록 중입니다...';
+  $: loadingDesc = response && responseSuccess ? "데이터 등록이 완료되었습니다." : response ? "데이터 등록에 실패했습니다." : "데이터베이스에 등록 중입니다...";
 </script>
 
 <ProgressIndicator preventChangeOnClick={currentIndex > 2} spaceEqually class="my-4" bind:currentIndex>
@@ -134,6 +146,7 @@
     title="데이터 확인/변환"
     description="업로드한 데이터를 확인하고 변환하세요."
   >
+
     <DataTable
       title="데이터 확인"
       description="업로드한 데이터의 샘플(첫 5개)을 확인합니다."
@@ -152,23 +165,27 @@
     title="데이터 적용"
     description='등록할 데이터를 확인하고 "다음으로"를 눌러 적용하세요.'
   >
-    <DataTable
-      sortable
-      title="데이터 확인"
-      description="등록할 데이터를 확인합니다."
-      headers={convertedHeaders}
-      rows={convertedData ?? []}
-      pageSize={convertTablePageSize}
-      page={convertTablePage}
-    >
-      <svelte:fragment slot="cell" let:row let:cell>
-        {#if cell.key === "userGroup"}
-          {groupDisplayName[cell.value]}
-        {:else}
-          {cell.value ?? "정보 없음"}
-        {/if}
-      </svelte:fragment>
-    </DataTable>
+    {#if convertedData}
+      <DataTable
+        sortable
+        title="데이터 확인"
+        description="등록할 데이터를 확인합니다."
+        headers={convertedHeaders}
+        rows={convertedData ?? []}
+        pageSize={convertTablePageSize}
+        page={convertTablePage}
+      >
+        <svelte:fragment slot="cell" let:row let:cell>
+          {#if cell.key === "userGroup"}
+            {groupDisplayName[cell.value]}
+          {:else}
+            {cell.value ?? "정보 없음"}
+          {/if}
+        </svelte:fragment>
+      </DataTable>
+    {:else}
+      <DataTableSkeleton headers={convertedHeaders} />
+    {/if}
     <Pagination
       bind:pageSize={convertTablePageSize}
       bind:page={convertTablePage}
