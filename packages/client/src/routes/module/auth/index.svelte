@@ -8,6 +8,7 @@
   } from "carbon-components-svelte";
   import { browser } from "$app/env";
   import { variables } from "$lib/variables";
+  import { userInfo } from "$lib/stores";
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import type { CometResponse, User } from "mirinae-comet";
   import { Delete16, Download16, Edit16, Upload16 } from "carbon-icons-svelte";
@@ -95,18 +96,18 @@
   >
     <Toolbar>
       <ToolbarBatchActions>
-        <Button icon={Edit16} on:click={openBatchUpdateModal}>일괄 수정</Button>
-        <Button icon={Delete16}>삭제</Button>
+        <Button icon={Edit16} on:click={openBatchUpdateModal} disabled={$userInfo.userGroup !== "admin"}>일괄 수정</Button>
+        <Button icon={Delete16} disabled={$userInfo.userGroup !== "admin"}>삭제</Button>
       </ToolbarBatchActions>
       <ToolbarContent>
         <ToolbarSearch bind:value={searchValue} />
         <Button icon={Download16}>XLSX로 내보내기</Button>
-        <Button href="/module/auth/upload" icon={Upload16}>파일으로부터 업로드</Button>
+        <Button href="/module/auth/upload" icon={Upload16} disabled={$userInfo.userGroup !== "admin"}>파일으로부터 업로드</Button>
       </ToolbarContent>
     </Toolbar>
     <svelte:fragment slot="cell" let:row let:cell>
       {#if cell.key === "edit"}
-        <Button icon={Edit16} on:click={() => openUpdateModal(row)}>수정</Button>
+        <Button icon={Edit16} on:click={() => openUpdateModal(row)} disabled={$userInfo.userGroup !== "admin"}>수정</Button>
       {:else if cell.key === "userGroup"}
         {groupDisplayName[cell.value] ?? cell.value}
       {:else}
