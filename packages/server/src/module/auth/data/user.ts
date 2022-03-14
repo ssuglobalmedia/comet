@@ -4,6 +4,7 @@ import type {
 	ExpressionAttributeValueMap,
 	GetItemInput,
 	QueryInput,
+	QueryOutput,
 	UpdateItemInput,
 	WriteRequest
 } from 'aws-sdk/clients/dynamodb';
@@ -56,6 +57,7 @@ export const getUser = async function (id: string): Promise<User> {
 	return fromUserDao(dao);
 };
 export const queryUser = async function (startsWith: string): Promise<Array<User>> {
+	let composedRes: Array<User> = [];
 	const req: QueryInput = {
 		TableName,
 		KeyConditionExpression: '#module = :v1 AND begins_with(#dataId, :v2)',
@@ -69,8 +71,20 @@ export const queryUser = async function (startsWith: string): Promise<Array<User
 		},
 		ProjectionExpression: 'dataId, userName, userGroup, lastSemester, phone'
 	};
-	const res = await dynamoDB.query(req).promise();
-	return res.Items.map((v) => fromUserDao(v as unknown as UserDao));
+	let res: QueryOutput;
+	do {
+		res = await dynamoDB
+			.query({
+				...req,
+				...(res && res.LastEvaluatedKey && { ExclusiveStartKey: res.LastEvaluatedKey })
+			})
+			.promise();
+		composedRes = [
+			...composedRes,
+			...res.Items.map<User>((v) => fromUserDao(v as unknown as UserDao))
+		];
+	} while (res.LastEvaluatedKey);
+	return composedRes;
 };
 
 type UserUpdateRequest = {
