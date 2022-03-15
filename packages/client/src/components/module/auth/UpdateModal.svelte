@@ -27,7 +27,6 @@
   let phone: string;
   let lastSemesterYear;
   let lastSemesterNum;
-  $: lastSemester = `${lastSemesterYear}-${lastSemesterNum + 1}`;
   export let reqStatus: "pending" | "active" | "finished" | "error" = "pending";
 
   function setupFirstValues() {
@@ -55,7 +54,7 @@
           ...(userName !== targetUser.userName && { userName }),
           ...(userGroup !== targetUser.userGroup && { userGroup }),
           ...(phone !== targetUser.phone && { phone: phone.replace(/\D/g, "") }),
-          ...(lastSemesterYear && lastSemester !== targetUser.lastSemester && { lastSemester })
+          ...(lastSemesterYear && `${lastSemesterYear}-${lastSemesterNum + 1}` !== targetUser.lastSemester && { lastSemester: `${lastSemesterYear}-${lastSemesterNum + 1}` })
         })
       }).then((res) => res.json()).then(() => {
       reqStatus = "finished";
