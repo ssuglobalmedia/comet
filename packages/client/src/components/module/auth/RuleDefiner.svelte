@@ -20,7 +20,7 @@
     set.add(userIdCol);
     set.add(userNameCol);
     if(checkPhone) set.add(phoneCol);
-    if (set.size < (3 + (checkPhone ? 1 : 0))) return false;
+    if (set.size < (2 + (checkPhone ? 1 : 0))) return false;
     return true;
   }
 
