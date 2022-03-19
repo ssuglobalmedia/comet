@@ -147,7 +147,7 @@
     </svelte:fragment>
   </DataTable>
   <Pagination
-      pageSizes={[25, 50, 100, 200]}
+      pageSizes={[25, 50, 100, 200, 500]}
       bind:pageSize={pageSize}
       bind:page={page}
       totalItems={(filteredUsers).length}

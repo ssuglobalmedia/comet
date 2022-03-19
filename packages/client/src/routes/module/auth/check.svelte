@@ -94,9 +94,10 @@
   }
 
   const validationHeaders = [
+    {key: "problem", value: "문제"},
     {key: "userId", value: "학번"},
     {key: "userName", value: "사용자 이름"},
-    {key: "problem", value: "문제"}
+
   ];
 
   let validationTablePageSize = 25;
@@ -161,7 +162,7 @@
   >
     {#if validatedData}
       <DataTable
-          expandable
+          batchExpansion
           sortable
           title="데이터 확인"
           description="데이터를 확인합니다."
@@ -198,7 +199,7 @@
         bind:pageSize={validationTablePageSize}
         bind:page={validationTablePage}
         totalItems={(validatedData ?? []).length}
-        pageSizeInputDisabled
+        pageSizes={[25, 50, 100, 200, 500]}
     />
     <Button slot="navigation" href="/module/auth" icon={TaskComplete16}>완료</Button>
   </StepTile>
