@@ -11,6 +11,11 @@ export const modules: Record<string, ModuleDefinition> = {
 				title: '파일으로부터 업로드',
 				description: '.xlsx, .csv 등의 파일으로부터 데이터를 가져옵니다.',
 				accessibleGroup: 'admin'
+			},
+			check: {
+				title: '사용자 목록 확인',
+				description: '.xlsx, .csv 등의 파일의 데이터가 정확한지 확인합니다.',
+				accessibleGroup: 'admin'
 			}
 		}
 	},

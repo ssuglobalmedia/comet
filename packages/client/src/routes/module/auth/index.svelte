@@ -130,7 +130,7 @@
       <ToolbarContent>
         <ToolbarSearch bind:value={searchValue}/>
         <Button on:click={() => { exportModalOpen = true; }} icon={Export16}>XLSX로 내보내기</Button>
-        <Button href="/module/auth/check" icon={Checkmark16}>납부자 명단 확인</Button>
+        <Button href="/module/auth/check" icon={Checkmark16}>사용자 명단 확인</Button>
         <Button kind="secondary" href="/module/auth/upload" icon={Upload16} disabled={$userInfo.userGroup !== "admin"}>파일으로부터 업로드
         </Button>
       </ToolbarContent>
