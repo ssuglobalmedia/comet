@@ -12,8 +12,7 @@
   import {read, utils} from "xlsx";
   import {NextFilled16, TaskComplete16, WarningAlt16, CheckmarkFilled16} from "carbon-icons-svelte";
   import StepTile from "../../../components/molcule/StepTile.svelte";
-  import type {CometResponse} from "@types/mirinae-comet";
-  import {User} from "@types/mirinae-comet";
+  import type {CometResponse, User} from "@types/mirinae-comet";
   import {fetchWithAuth, isAccessible} from "$lib/module/auth";
   import {browser} from "$app/env";
   import {variables} from "$lib/variables";
