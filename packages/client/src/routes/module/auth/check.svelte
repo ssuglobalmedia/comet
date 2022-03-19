@@ -4,7 +4,6 @@
     DataTable,
     DataTableSkeleton,
     FileUploader,
-    Pagination,
     ProgressIndicator,
     ProgressStep
   } from "carbon-components-svelte";
@@ -16,8 +15,9 @@
   import {fetchWithAuth, isAccessible} from "$lib/module/auth";
   import {browser} from "$app/env";
   import {variables} from "$lib/variables";
-  import RuleDefiner from "../../../components/module/auth/RuleDefiner.svelte";
+  import RuleDefiner from "../../../components/molcule/module/auth/RuleDefiner.svelte";
   import {getCurrentFullSemester} from "$lib/utils";
+  import PaginationKor from "../../../components/atom/PaginationKor.svelte";
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -195,7 +195,7 @@
     {:else}
       <DataTableSkeleton headers={validationHeaders}/>
     {/if}
-    <Pagination
+    <PaginationKor
         bind:pageSize={validationTablePageSize}
         bind:page={validationTablePage}
         totalItems={(validatedData ?? []).length}

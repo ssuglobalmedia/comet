@@ -7,18 +7,19 @@
     Grid,
     Column,
     Button,
-    InlineLoading, DataTable, Pagination, DataTableSkeleton, Row
+    InlineLoading, DataTable, DataTableSkeleton, Row
   } from "carbon-components-svelte";
   import type { WorkBook } from "xlsx";
   import { read, utils } from "xlsx";
   import { NextFilled16, SendToBack16, Upload16 } from "carbon-icons-svelte";
   import StepTile from "../../../components/molcule/StepTile.svelte";
-  import DataTransformer from "../../../components/module/auth/DataTransformer.svelte";
+  import DataTransformer from "../../../components/molcule/module/auth/DataTransformer.svelte";
   import type { CometResponse, User } from "@types/mirinae-comet";
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import { browser } from "$app/env";
   import { variables } from "$lib/variables";
   import { getCurrentFullSemester } from "$lib/utils";
+  import PaginationKor from "../../../components/atom/PaginationKor.svelte";
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -184,7 +185,7 @@
     {:else}
       <DataTableSkeleton headers={convertedHeaders} />
     {/if}
-    <Pagination
+    <PaginationKor
       bind:pageSize={convertTablePageSize}
       bind:page={convertTablePage}
       totalItems={(convertedData ?? []).length}

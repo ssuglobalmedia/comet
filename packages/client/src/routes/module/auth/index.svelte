@@ -1,9 +1,7 @@
 <script lang="ts">
   import {
-    Button, ButtonSet,
-    DataTable,
+    Button, DataTable,
     DataTableSkeleton,
-    Pagination,
     PaginationSkeleton,
     Toolbar,
     ToolbarBatchActions,
@@ -16,9 +14,10 @@
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import type { CometResponse, User } from "mirinae-comet";
   import { Checkmark16, Delete16, Edit16, Export16, Upload16 } from "carbon-icons-svelte";
-  import UpdateModal from "../../../components/module/auth/UpdateModal.svelte";
-  import BatchUpdateModal from "../../../components/module/auth/BatchUpdateModal.svelte";
-  import ExportModal from "../../../components/module/auth/ExportModal.svelte";
+  import UpdateModal from "../../../components/molcule/module/auth/UpdateModal.svelte";
+  import BatchUpdateModal from "../../../components/molcule/module/auth/BatchUpdateModal.svelte";
+  import ExportModal from "../../../components/molcule/module/auth/ExportModal.svelte";
+  import PaginationKor from "../../../components/atom/PaginationKor.svelte";
 
   type UserCell = {
     id: string;
@@ -125,7 +124,7 @@
   >
     <Toolbar>
       <ToolbarBatchActions formatTotalSelected={(totalSelected) => `${totalSelected}개 선택됨`}>
-        <slot name="cancel">선택 해제</slot>
+        <svelte:fragment slot="cancel">선택 해제</svelte:fragment>
         <Button icon={Edit16} on:click={openBatchUpdateModal} disabled={$userInfo.userGroup !== "admin"}>일괄 수정</Button>
         <Button icon={Delete16} on:click={deleteSelected} disabled={$userInfo.userGroup !== "admin"}>삭제</Button>
       </ToolbarBatchActions>
@@ -149,7 +148,7 @@
       {/if}
     </svelte:fragment>
   </DataTable>
-  <Pagination
+  <PaginationKor
     pageSizes={[25, 50, 100, 200, 500]}
     bind:pageSize={pageSize}
     bind:page={page}

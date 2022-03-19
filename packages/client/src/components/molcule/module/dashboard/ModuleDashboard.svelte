@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {ModuleDefinition} from "../../../global";
+    import type {ModuleDefinition} from "../../../../global";
     import { ClickableTile, Column, Grid, Row } from "carbon-components-svelte";
     import {isAccessible, groupDisplayName} from "$lib/module/auth";
     import {userInfo} from "$lib/stores";
