@@ -40,6 +40,7 @@
 
   $: lastSemester = `${lastSemesterYear}-${lastSemesterNum + 1}`;
   $: userEditedUserIds = (userEditedUserIdTexts ?? "").split(",").map((v) => v.trim());
+  $: invalidUserIds = userEditedUserIds.filter((v) => userMap[v] === undefined);
   export let reqStatus: "pending" | "active" | "finished" | "error" = "pending";
   $: if (selectedUserIds) {
     setupFirstValues();
@@ -77,6 +78,8 @@
       helperText="쉼표로 구분하여 학번을 추가할 수 있습니다."
       placeholder="학번을 입력하세요..."
       bind:value={userEditedUserIdTexts}
+      invalid={invalidUserIds.length}
+      invalidText={invalidUserIds.join(", ") + "을 찾을 수 없습니다."}
     />
     <FormGroup legendText="구분">
       <div style="display:flex;">
