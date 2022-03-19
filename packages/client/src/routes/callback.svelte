@@ -1,7 +1,7 @@
 <script lang='ts'>
     import {Button, Column, Content, Grid, InlineLoading} from "carbon-components-svelte";
     import {onMount} from "svelte";
-    import EntryCard from "../components/entry/EntryCard.svelte";
+    import EntryCard from "../components/molcule/entry/EntryCard.svelte";
     import {variables} from "$lib/variables";
     let result;
     let redirect;

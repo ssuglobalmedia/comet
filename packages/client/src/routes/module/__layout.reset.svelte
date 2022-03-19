@@ -21,8 +21,8 @@
   import { onMount } from "svelte";
   import { UserAvatarFilledAlt20 } from "carbon-icons-svelte";
   import { findPageByPath, modules } from "$lib/modules";
-  import UserMenu from "../../components/headeraction/UserMenu.svelte";
-  import ModuleSwitcher from "../../components/headeraction/ModuleSwitcher.svelte";
+  import UserMenu from "../../components/molcule/headeraction/UserMenu.svelte";
+  import ModuleSwitcher from "../../components/molcule/headeraction/ModuleSwitcher.svelte";
   import { afterNavigate } from "$app/navigation";
   import { browser } from "$app/env";
 

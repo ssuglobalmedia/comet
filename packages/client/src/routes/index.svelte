@@ -3,7 +3,7 @@
     import Soongsil from "../icons/Soongsil.svelte";
     import {onMount} from "svelte";
     import {getAuthorization} from "$lib/module/auth";
-    import EntryCard from "../components/entry/EntryCard.svelte";
+    import EntryCard from "../components/molcule/entry/EntryCard.svelte";
 
     let callbackUrl;
     let loginCookie;

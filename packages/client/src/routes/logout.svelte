@@ -2,7 +2,7 @@
     import {Button, Column, Content, Grid, InlineLoading} from "carbon-components-svelte";
     import {onMount} from "svelte";
     import {getAuthorization} from "$lib/module/auth";
-    import EntryCard from "../components/entry/EntryCard.svelte";
+    import EntryCard from "../components/molcule/entry/EntryCard.svelte";
     let isAuthorized = false;
     onMount(() => {
         if(getAuthorization()) {
