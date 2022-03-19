@@ -52,8 +52,8 @@
       if (res.success) {
         const users: Array<User> = (res.result as Array<User>);
         validatedData = data.reduce((arr, v) => {
-          const userId = v[validationRule.userId];
-          const userName = v[validationRule.userName];
+          const userId = `${v[validationRule.userId]}`;
+          const userName = `${v[validationRule.userName]}`;
           const exactUser = users.find((v) => v.userId === userId && v.userName === userName);
           const foundUser = users.filter((v) => v.userId === userId || v.userName === userName);
           const problems = [];
@@ -71,6 +71,10 @@
               problems.push({ id: "no_user" });
             }
           } else {
+            if(validationRule.checkPhone) {
+              const phone = `${v[validationRule.phone]}`.replace(/\D/g, "");
+              if(exactUser.phone && exactUser.phone !== phone) problems.push({ id: "mismatch_phone", fixes: [exactUser.phone] });
+            }
             if(validationRule.checkCertificated) {
               if(!isAccessible(exactUser, 'certificated')) problems.push({ id: "no_permission" });
             }
@@ -97,6 +101,15 @@
 
   let validationTablePageSize = 25;
   let validationTablePage = 1;
+
+  const problem_desc = {
+    "no_user": "사용자 정보를 찾을 수 없습니다.",
+    "mismatch_name": "학번은 일치하지만 이름은 일치하지 않습니다.",
+    "mismatch_id": "이름은 일치하지만 학번은 일치하지 않습니다.",
+    "mismatch_phone": "전화번호가 일치하지 않습니다.",
+    "no_permission": "납부자가 아닙니다.",
+    "not_attended": "현재 재학자가 아닙니다."
+  }
 </script>
 
 <ProgressIndicator spaceEqually class="my-4" bind:currentIndex>
@@ -148,6 +161,7 @@
   >
     {#if validatedData}
       <DataTable
+          expandable
           sortable
           title="데이터 확인"
           description="데이터를 확인합니다."
@@ -155,6 +169,7 @@
           rows={validatedData ?? []}
           pageSize={validationTablePageSize}
           page={validationTablePage}
+          nonExpandableRowIds={(validatedData ?? []).filter((v) => !v.problem.length).map((v) => v.id)}
       >
         <svelte:fragment slot="cell" let:row let:cell>
           {#if cell.key === "problem"}
@@ -167,6 +182,14 @@
             {cell.value ?? "정보 없음"}
           {/if}
         </svelte:fragment>
+        <svelte:fragment slot="expanded-row" let:row>
+          {#each row.problem as problem}
+            <p><WarningAlt16 /> {problem_desc[problem.id]}</p>
+            {#if problem.fixes && problem.fixes.length}
+              <p>추천 수정: {problem.fixes.join(", ")}</p>
+            {/if}
+          {/each}
+        </svelte:fragment>
       </DataTable>
     {:else}
       <DataTableSkeleton headers={validationHeaders}/>
@@ -177,6 +200,6 @@
         totalItems={(validatedData ?? []).length}
         pageSizeInputDisabled
     />
-    <Button slot="navigation" on:click={() => {if(currentIndex < 3) currentIndex = 3}} icon={TaskComplete16}>완료</Button>
+    <Button slot="navigation" href="/module/auth" icon={TaskComplete16}>완료</Button>
   </StepTile>
 {/if}
