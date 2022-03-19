@@ -7,7 +7,7 @@
     Grid,
     Column,
     Button,
-    InlineLoading, DataTable, Pagination, DataTableSkeleton
+    InlineLoading, DataTable, Pagination, DataTableSkeleton, Row
   } from "carbon-components-svelte";
   import type { WorkBook } from "xlsx";
   import { read, utils } from "xlsx";
@@ -153,9 +153,7 @@
       headers={previewHeader}
       rows={previewData}
     />
-    <Grid noGutter condensed style="margin: 1rem">
-      <DataTransformer originalData={data} bind:conversion />
-    </Grid>
+    <DataTransformer originalData={data} bind:conversion />
     <Button slot="navigation" on:click={() => {if(currentIndex < 2) currentIndex = 2}} icon={NextFilled16}
             disabled={!conversion}>다음으로
     </Button>
@@ -200,9 +198,11 @@
     <InlineLoading description={loadingDesc}
                    status={response && responseSuccess ? 'finished' : response ? 'error' : 'active'} />
     <Grid noGutter condensed>
-      <Column style="display: flex; justify-content: end;">
-        <Button href="/module/auth" icon={SendToBack16}>돌아가기</Button>
-      </Column>
+      <Row>
+        <Column style="display: flex; justify-content: end;">
+          <Button href="/module/auth" icon={SendToBack16}>돌아가기</Button>
+        </Column>
+      </Row>
     </Grid>
   </Tile>
 {/if}
