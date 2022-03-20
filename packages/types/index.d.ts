@@ -29,3 +29,47 @@ export type User = {
   lastSemester?: string;
   phone?: string;
 };
+
+export type RentStatus = {
+  userId: string,
+  until: string,
+  amount: number
+}
+
+export type RentStatusDao = {
+  uI: { S: string },
+  u: {  S: string },
+  a: {  N: string }
+}
+
+export type Rental = {
+  name: string,
+  category: string,
+  amount: number,
+  rentStatus: [RentStatus]
+}
+
+export type RentalDao = {
+  n: { S: string },
+  c: { S: string },
+  a: { N: string },
+  rS: [RentStatusDao]
+}
+
+export type RentalList = {
+  categories: {
+    [id: string]: string
+  },
+  rentals: {
+    [id: string]: Rental
+  }
+}
+
+export type RentalListDao = {
+  c: {
+    [id: string]: { S: string }
+  },
+  r: {
+    [id: string]: RentalDao
+  }
+}
