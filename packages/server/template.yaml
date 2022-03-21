@@ -303,7 +303,7 @@ Resources:
   CfDistribution:
     Properties:
       DistributionConfig:
-        Comment: 'A simple distribution with an S3 origin'
+        Comment: 'mirinae-comet CloudFront distribution'
         DefaultCacheBehavior:
           AllowedMethods:
             - 'HEAD'
