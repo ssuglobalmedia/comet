@@ -4,8 +4,8 @@
 
 <Grid>
     <Row>
-        <h1>물품 대여</h1>
         <Column>
+            <h1>물품 대여</h1>
             준비중입니다.
         </Column>
     </Row>
