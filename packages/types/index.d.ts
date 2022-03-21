@@ -31,45 +31,29 @@ export type User = {
 };
 
 export type RentStatus = {
-  userId: string,
-  until: string,
-  amount: number
-}
+  userId: string;
+  until: Date;
+  amount: number;
+  additionalInfo: string;
+};
 
 export type RentStatusDao = {
-  uI: { S: string },
-  u: {  S: string },
-  a: {  N: string }
-}
+  uI: { S: string };
+  u: { S: string };
+  a: { N: string };
+  aI: { S: string };
+};
 
-export type Rental = {
-  name: string,
-  category: string,
-  amount: number,
-  rentStatus: [RentStatus]
-}
+export type Goods = {
+  name: string;
+  category: string;
+  amount: number;
+  rentStatus: [RentStatus];
+};
 
-export type RentalDao = {
-  n: { S: string },
-  c: { S: string },
-  a: { N: string },
-  rS: [RentStatusDao]
-}
-
-export type RentalList = {
-  categories: {
-    [id: string]: string
-  },
-  rentals: {
-    [id: string]: Rental
-  }
-}
-
-export type RentalListDao = {
-  c: {
-    [id: string]: { S: string }
-  },
-  r: {
-    [id: string]: RentalDao
-  }
-}
+export type GoodsDao = {
+  n: { S: string };
+  c: { S: string };
+  a: { N: string };
+  rS: [RentStatusDao];
+};
