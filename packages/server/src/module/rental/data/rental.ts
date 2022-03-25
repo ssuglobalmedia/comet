@@ -31,7 +31,7 @@ export const toGoodsDao = (goods: Goods): GoodsDao => ({
 	rS: goods.rentStatus.map(toRentStatusDao)
 });
 
-export const getRentalList = async (): Record<string, Goods> => {
+export const getRentalList = async (): Promise<Record<string, Goods>> => {
 	const req: GetItemInput = {
 		TableName,
 		Key: {
