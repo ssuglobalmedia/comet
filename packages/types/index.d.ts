@@ -48,12 +48,16 @@ export type Goods = {
   name: string;
   category: string;
   amount: number;
-  rentStatus: [RentStatus];
+  rentStatus: RentStatus[];
 };
 
 export type GoodsDao = {
   n: { S: string };
   c: { S: string };
   a: { N: string };
-  rS: [RentStatusDao];
+  rS: RentStatusDao[];
 };
+
+export type GoodsListDao = {
+  g: GoodsDao[];
+} & ModuleDao;
