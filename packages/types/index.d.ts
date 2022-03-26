@@ -32,32 +32,43 @@ export type User = {
 
 export type RentStatus = {
   userId: string;
+  userName: string;
   until: Date;
-  amount: number;
-  additionalInfo: string;
+  additionalInfo?: string;
 };
 
 export type RentStatusDao = {
   uI: { S: string };
+  uN: { S: string };
   u: { S: string };
-  a: { N: string };
-  aI: { S: string };
+  aI?: { S: string };
 };
 
 export type Goods = {
+  id: string;
   name: string;
   category: string;
-  amount: number;
-  rentStatus: RentStatus[];
+  rentStatus?: RentStatus;
 };
 
 export type GoodsDao = {
   n: { S: string };
   c: { S: string };
-  a: { N: string };
-  rS: RentStatusDao[];
+  rS?: { M: RentStatusDao };
 };
 
-export type GoodsListDao = {
-  g: GoodsDao[];
+export type GoodsMap = {
+  goods: {
+    [id: string]: Goods;
+  };
+};
+
+export type GoodsMapDao = {
+  g: { M: { [id: string]: GoodsDao } };
 } & ModuleDao;
+
+export type GoodsUpdateRequest = {
+  id: string;
+  name?: string;
+  category?: string;
+};
