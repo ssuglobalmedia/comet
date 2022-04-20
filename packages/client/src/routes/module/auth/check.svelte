@@ -86,18 +86,26 @@
             id: userId,
             userId,
             userName,
+            ...(validationRule.checkPhone && { phone: `${v[validationRule.phone]}`.trim().replace(/\D/g, "") }),
             problem: problems
           }];
         }, []);
+        if(validationRule.checkPhone) {
+          validationHeaders = [
+            {key: "problem", value: "문제"},
+            {key: "userId", value: "학번"},
+            {key: "userName", value: "사용자 이름"},
+            {key: "phone", value: "전화번호"}
+          ];
+        }
       }
     })();
   }
 
-  const validationHeaders = [
+  let validationHeaders = [
     {key: "problem", value: "문제"},
     {key: "userId", value: "학번"},
-    {key: "userName", value: "사용자 이름"},
-
+    {key: "userName", value: "사용자 이름"}
   ];
 
   let validationTablePageSize = 25;
