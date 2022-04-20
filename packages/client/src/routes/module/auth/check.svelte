@@ -52,27 +52,27 @@
       if (res.success) {
         const users: Array<User> = (res.result as Array<User>);
         validatedData = data.reduce((arr, v) => {
-          const userId = `${v[validationRule.userId]}`;
-          const userName = `${v[validationRule.userName]}`;
-          const exactUser = users.find((v) => v.userId === userId && v.userName === userName);
-          const foundUser = users.filter((v) => v.userId === userId || v.userName === userName);
+          const userId = `${v[validationRule.userId]}`.trim();
+          const userName = `${v[validationRule.userName]}`.trim();
+          const exactUser = users.find((u) => u.userId === userId && u.userName === userName);
+          const foundUser = users.filter((u) => u.userId === userId || u.userName === userName);
           const problems = [];
           if (!exactUser) {
             if (foundUser.length) {
-              const sameIds = foundUser.filter((v) => v.userId === userId);
-              const sameNames = foundUser.filter((v) => v.userName === userName);
+              const sameIds = foundUser.filter((u) => u.userId === userId);
+              const sameNames = foundUser.filter((u) => u.userName === userName);
               if(sameIds.length) {
-                problems.push({ id: "mismatch_name", fixes: sameIds.map((v) => v.userName)});
+                problems.push({ id: "mismatch_name", fixes: sameIds.map((u) => u.userName)});
               }
               if(sameNames.length) {
-                problems.push({ id: "mismatch_id", fixes: sameNames.map((v) => v.userId)});
+                problems.push({ id: "mismatch_id", fixes: sameNames.map((u) => u.userId)});
               }
             } else {
               problems.push({ id: "no_user" });
             }
           } else {
             if(validationRule.checkPhone) {
-              const phone = `${v[validationRule.phone]}`.replace(/\D/g, "");
+              const phone = `${v[validationRule.phone]}`.trim().replace(/\D/g, "");
               if(exactUser.phone && exactUser.phone !== phone) problems.push({ id: "mismatch_phone", fixes: [exactUser.phone] });
             }
             if(validationRule.checkCertificated) {
