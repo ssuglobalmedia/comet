@@ -12,19 +12,19 @@
     HeaderNav,
     HeaderUtilities,
     InlineLoading,
-    InlineNotification,
+    InlineNotification, Row,
     SkipToContent
   } from "carbon-components-svelte";
-  import { expoIn } from "svelte/easing";
-  import { getAuthorization, isAccessible } from "$lib/module/auth";
-  import { userInfo } from "$lib/stores";
-  import { onMount } from "svelte";
-  import { UserAvatarFilledAlt20 } from "carbon-icons-svelte";
-  import { findPageByPath, modules } from "$lib/modules";
+  import {expoIn} from "svelte/easing";
+  import {getAuthorization, isAccessible} from "$lib/module/auth";
+  import {userInfo} from "$lib/stores";
+  import {onMount} from "svelte";
+  import {UserAvatarFilledAlt20} from "carbon-icons-svelte";
+  import {findPageByPath, modules} from "$lib/modules";
   import UserMenu from "../../components/molcule/headeraction/UserMenu.svelte";
   import ModuleSwitcher from "../../components/molcule/headeraction/ModuleSwitcher.svelte";
-  import { afterNavigate } from "$app/navigation";
-  import { browser } from "$app/env";
+  import {afterNavigate} from "$app/navigation";
+  import {browser} from "$app/env";
 
   let isMounted = false;
   let isSideNavOpen;
@@ -38,11 +38,11 @@
   let transitions = {
     "0": {
       text: "Default (duration: 200ms)",
-      value: { duration: 200 }
+      value: {duration: 200}
     },
     "1": {
       text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
-      value: { duration: 600, delay: 50, easing: expoIn }
+      value: {duration: 600, delay: 50, easing: expoIn}
     },
     "2": {
       text: "Disabled",
@@ -55,7 +55,7 @@
     }
   }
 
-  if(browser) {
+  if (browser) {
     if (getAuthorization()) {
       isAuthorized = true;
     }
@@ -76,7 +76,7 @@
     currentPage = findPageByPath(window.location.pathname.replace("/module", ""));
     breadcrumb = constructBreadcrumb(window.location.pathname.replace("/module", ""));
   });
-  afterNavigate(({ to }) => {
+  afterNavigate(({to}) => {
     breadcrumb = constructBreadcrumb(to.pathname.replace("/module", ""))
   });
 </script>
@@ -87,62 +87,64 @@
 
 <Header company="미리내" platformName="COMET" href="/module/dashboard" bind:isSideNavOpen>
   <svelte:fragment slot="skip-to-content">
-    <SkipToContent />
+    <SkipToContent/>
   </svelte:fragment>
   <HeaderNav>
     {#if isAuthorized && $userInfo === undefined}
-      <InlineLoading description="사용자 정보를 가져오는 중..." />
+      <InlineLoading description="사용자 정보를 가져오는 중..."/>
     {/if}
-    <slot name="headerNav" />
+    <slot name="headerNav"/>
   </HeaderNav>
   {#if isAuthorized && $userInfo}
     <HeaderUtilities>
       <HeaderAction
-        bind:isOpen={isUserInfoOpen}
-        icon={UserAvatarFilledAlt20}
-        closeIcon={UserAvatarFilledAlt20}
-        text="{$userInfo.userName}"
-        transition={transitions[selected].value}
+          bind:isOpen={isUserInfoOpen}
+          icon={UserAvatarFilledAlt20}
+          closeIcon={UserAvatarFilledAlt20}
+          text="{$userInfo.userName}"
+          transition={transitions[selected].value}
       >
-        <UserMenu />
+        <UserMenu/>
       </HeaderAction>
       <HeaderAction bind:isOpen={isModuleSwitcherOpen} transition={transitions[selected].value}>
-        <ModuleSwitcher {modules} />
+        <ModuleSwitcher {modules}/>
       </HeaderAction>
     </HeaderUtilities>
   {/if}
 </Header>
-<slot name="sidebar" />
+<slot name="sidebar"/>
 <Content black>
   {#if isAuthorized && $userInfo && isAccessible($userInfo, currentPage?.accessibleGroup)}
     <Grid class="my-4">
-      <Column>
-        {#if breadcrumb}
-          <Breadcrumb noTrailingSlash>
-            {#each breadcrumb as item, i}
-              <BreadcrumbItem href="/module{item.path}"
-                              isCurrentPage="{i === breadcrumb.length - 1}">{item.title}</BreadcrumbItem>
-            {/each}
-          </Breadcrumb>
-        {:else}
-          <Breadcrumb noTrailingSlash>
-            <BreadcrumbItem skeleton />
-          </Breadcrumb>
-        {/if}
-      </Column>
-    </Grid>
-    <Grid>
-      <Column>
-        <slot />
-      </Column>
+      <Row>
+        <Column>
+          {#if breadcrumb}
+            <Breadcrumb noTrailingSlash>
+              {#each breadcrumb as item, i}
+                <BreadcrumbItem href="/module{item.path}"
+                                isCurrentPage="{i === breadcrumb.length - 1}">{item.title}</BreadcrumbItem>
+              {/each}
+            </Breadcrumb>
+          {:else}
+            <Breadcrumb noTrailingSlash>
+              <BreadcrumbItem skeleton/>
+            </Breadcrumb>
+          {/if}
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <slot/>
+        </Column>
+      </Row>
     </Grid>
 
   {:else}
     {#if isMounted && isAuthorized && $userInfo === null}
       <InlineNotification
-        hideCloseButton
-        title="오류:"
-        subtitle="인증 토큰을 이용하여 유저 정보를 가져오지 못했습니다. 다시 로그인하세요."
+          hideCloseButton
+          title="오류:"
+          subtitle="인증 토큰을 이용하여 유저 정보를 가져오지 못했습니다. 다시 로그인하세요."
       />
     {/if}
     {#if isMounted && (!isAuthorized || $userInfo === null)}
