@@ -53,7 +53,8 @@ export const callbackHandler: APIGatewayProxyHandler = async (event) => {
 			};
 			return createResponse(200, { success: true, ...res });
 		}
-		return new UnauthorizedError('Unauthorized').response();
+		const e = new UnauthorizedError('Unauthorized');
+		return e.response();
 	} catch (e) {
 		if (!(e instanceof ResponsibleError)) {
 			console.error(e);
