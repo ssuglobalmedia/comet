@@ -106,7 +106,7 @@
       {#if reqStatus === 'active'}
         <InlineLoading description="업데이트 중..." />
       {:else if reqStatus === 'finished'}
-        <InlineLoading status="finished" description="새로고침 하면 정보가 반영됩니다." />
+        <InlineLoading status="finished" description="잠시만 기다리시면 정보가 반영됩니다." />
       {:else if reqStatus === 'error'}
         <InlineLoading status="error" description="오류 발생" />
       {/if}
