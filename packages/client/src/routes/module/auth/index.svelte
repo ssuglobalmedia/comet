@@ -74,6 +74,10 @@
   let batchUpdateModalOpen = false;
   let updateTargetUser: User = undefined;
 
+  $: if((updateTargetUser != undefined && !updateModalOpen) || (selectedUsers.length > 0 && !batchUpdateModalOpen)) {
+    if(browser) updateUsers();
+  }
+
   function updateUsers() {
     fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`).then((res) => res.json()).then((res: CometResponse) => {
       if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
@@ -88,18 +92,8 @@
     updateModalOpen = true;
   }
 
-  function closeUpdateModal() {
-    updateModalOpen = false;
-    updateUsers();
-  }
-
   function openBatchUpdateModal() {
     batchUpdateModalOpen = true;
-  }
-
-  function closeBatchUpdateModal() {
-    batchUpdateModalOpen = false;
-    updateUsers();
   }
 
   function deleteSelected() {
@@ -174,6 +168,6 @@
 
 <ExportModal bind:open={exportModalOpen} bind:users={users} on:close={() => (exportModalOpen = false)} />
 <UpdateModal bind:open={updateModalOpen} bind:targetUser={updateTargetUser}
-             on:close={closeUpdateModal} />
+             on:close={() => (updateModalOpen = false)} />
 <BatchUpdateModal bind:open={batchUpdateModalOpen} userSupplier={users} selectedUserIds={selectedUsers}
-                  on:close={closeBatchUpdateModal} />
+                  on:close={() => (batchUpdateModalOpen = false)} />
