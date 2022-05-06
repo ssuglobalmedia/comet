@@ -85,10 +85,10 @@ Resources:
           Properties:
             Path: /api/module/rental/add
             Method: options
-        ModuleRentalGet:
+        ModuleRentalQuery:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /api/module/rental/get
+            Path: /api/module/rental/query
             Method: options
         ModuleRentalUpdate:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -270,11 +270,11 @@ Resources:
           Properties:
             Path: /api/module/rental/add
             Method: post
-  ModuleRentalGetFunction:
+  ModuleRentalQueryFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./dist
-      Handler: handler.rental.rentalGetHandler
+      Handler: handler.rental.rentalQueryHandler
       Runtime: nodejs14.x
       Layers:
         - !Ref DependenciesLayer
@@ -285,10 +285,10 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        RentalGetHandler:
+        RentalQueryHandler:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /api/module/rental/get
+            Path: /api/module/rental/query
             Method: get
   ModuleRentalUpdateFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -310,11 +310,11 @@ Resources:
           Properties:
             Path: /api/module/rental/update
             Method: post
-  ModuleRentalRemoveFunction:
+  ModuleRentalDeleteFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./dist
-      Handler: handler.rental.rentalRemoveHandler
+      Handler: handler.rental.rentalDeleteHandler
       Runtime: nodejs14.x
       Layers:
         - !Ref DependenciesLayer
@@ -325,10 +325,10 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        RentalUpdateHandler:
+        RentalDeleteHandler:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /api/module/rental/remove
+            Path: /api/module/rental/delete
             Method: post
   ModuleRentalRentFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

@@ -6,7 +6,7 @@ import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../env';
 import { assertAccessible } from '../../auth/util/permission';
 import { ResponsibleError } from '../../../util/error';
-import { addGoods } from '../data/rental';
+import { updateGoods } from '../data/rental';
 
 export const rentalAddHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -41,7 +41,7 @@ export const rentalAddHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'executive');
-		const res = await addGoods(data);
+		const res = await updateGoods(data);
 		return createResponse(200, { success: res });
 	} catch (e) {
 		if (e instanceof ResponsibleError) {

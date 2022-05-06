@@ -4,15 +4,15 @@ import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../env';
 import { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 import { ResponsibleError } from '../../../util/error';
-import { getRentalList } from '../data/rental';
+import { queryGoods } from '../data/rental';
 import { assertAccessible } from '../../auth/util/permission';
 
-export const rentalGetHandler: APIGatewayProxyHandler = async (event) => {
+export const rentalQueryHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
 	try {
 		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
 		await assertAccessible(id, token, 'certificated');
-		const result = await getRentalList();
+		const result = await queryGoods();
 		return createResponse(200, {
 			success: true,
 			result

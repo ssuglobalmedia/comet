@@ -4,15 +4,15 @@ import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../env';
 import { assertAccessible } from '../../auth/util/permission';
-import { removeGoods } from '../data/rental';
+import { deleteGoods } from '../data/rental';
 import { ResponsibleError } from '../../../util/error';
-import type { GoodsRemoveRequest } from "mirinae-comet";
+import type { GoodsDeleteRequest } from "mirinae-comet";
 
-export const rentalRemoveHandler: APIGatewayProxyHandler = async (event) => {
+export const rentalDeleteHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-	let data: GoodsRemoveRequest;
+	let data: GoodsDeleteRequest;
 	try {
-		data = JSON.parse(event.body) as GoodsRemoveRequest;
+		data = JSON.parse(event.body) as GoodsDeleteRequest;
 	} catch {
 		return createResponse(500, {
 			success: false,
@@ -41,8 +41,8 @@ export const rentalRemoveHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'executive');
-		const res = await removeGoods(data.id);
-		return createResponse(200, { success: res });
+		const res = await deleteGoods(data.id);
+		return createResponse(200, { success: true, result: res });
 	} catch (e) {
 		if (e instanceof ResponsibleError) {
 			return e.response();

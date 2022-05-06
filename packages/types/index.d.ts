@@ -55,7 +55,7 @@ export type GoodsDao = {
   n: { S: string };
   c: { S: string };
   rS?: { M: RentStatusDao };
-};
+} & ModuleDao;
 
 export type GoodsMap = {
   goods: {
@@ -73,6 +73,6 @@ export type GoodsUpdateRequest = {
   category?: string;
 };
 
-export type GoodsRemoveRequest = {
+export type GoodsDeleteRequest = {
   id: string;
 }
