@@ -88,8 +88,18 @@
     updateModalOpen = true;
   }
 
+  function closeUpdateModal() {
+    updateModalOpen = false;
+    updateUsers();
+  }
+
   function openBatchUpdateModal() {
     batchUpdateModalOpen = true;
+  }
+
+  function closeBatchUpdateModal() {
+    batchUpdateModalOpen = false;
+    updateUsers();
   }
 
   function deleteSelected() {
@@ -164,6 +174,6 @@
 
 <ExportModal bind:open={exportModalOpen} bind:users={users} on:close={() => (exportModalOpen = false)} />
 <UpdateModal bind:open={updateModalOpen} bind:targetUser={updateTargetUser}
-             on:close={() => (updateModalOpen = false)} />
+             on:close={closeUpdateModal} />
 <BatchUpdateModal bind:open={batchUpdateModalOpen} userSupplier={users} selectedUserIds={selectedUsers}
-                  on:close={() => (batchUpdateModalOpen = false)} />
+                  on:close={closeBatchUpdateModal} />
