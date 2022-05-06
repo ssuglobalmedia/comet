@@ -6,12 +6,13 @@ import { JWT_SECRET } from '../../../env';
 import { assertAccessible } from '../../auth/util/permission';
 import { removeGoods } from '../data/rental';
 import { ResponsibleError } from '../../../util/error';
+import type { GoodsRemoveRequest } from "mirinae-comet";
 
 export const rentalRemoveHandler: APIGatewayProxyHandler = async (event) => {
 	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-	let data: string;
+	let data: GoodsRemoveRequest;
 	try {
-		data = JSON.parse(event.body) as string;
+		data = JSON.parse(event.body) as GoodsRemoveRequest;
 	} catch {
 		return createResponse(500, {
 			success: false,
@@ -40,7 +41,7 @@ export const rentalRemoveHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'executive');
-		const res = await removeGoods(data);
+		const res = await removeGoods(data.id);
 		return createResponse(200, { success: res });
 	} catch (e) {
 		if (e instanceof ResponsibleError) {

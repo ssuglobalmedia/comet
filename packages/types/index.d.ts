@@ -72,3 +72,7 @@ export type GoodsUpdateRequest = {
   name?: string;
   category?: string;
 };
+
+export type GoodsRemoveRequest = {
+  id: string;
+}
