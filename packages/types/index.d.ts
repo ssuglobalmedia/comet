@@ -69,3 +69,22 @@ export type GoodsUpdateRequest = {
 export type GoodsDeleteRequest = {
   id: string;
 }
+
+export type Log = {
+  date: string;
+  userId: string;
+  userName: string;
+  module: string;
+  target: string;
+  action: string;
+  description?: string;
+}
+
+export type LogDao = {
+  uI: { S: string };
+  uN: { S: string };
+  m: { S: string };
+  t: { S: string };
+  a: { S: string };
+  d?: { S: string };
+} & ModuleDao;

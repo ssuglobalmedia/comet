@@ -44,8 +44,8 @@ export const rentalReturnHandler: APIGatewayProxyHandler = async (event) => {
 	}
 	try {
 		const id = payload.aud as string;
-		await assertAccessible(id, token, 'executive');
-		const res = await returnGoods(data.userId, data.goodsId);
+		const requester = await assertAccessible(id, token, 'executive');
+		const res = await returnGoods(requester, data.userId, data.goodsId);
 		return createResponse(200, { success: res });
 	} catch (e) {
 		if (e instanceof ResponsibleError) {
