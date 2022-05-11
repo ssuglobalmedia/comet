@@ -4,12 +4,11 @@ import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../env';
 import { assertAccessible } from '../../auth/util/permission';
-import { returnGoods } from '../data/rental';
 import { ResponsibleError } from '../../../util/error';
-import type { User } from 'mirinae-comet';
+import {returnGoods} from "../data/rental";
 
 type ReturnRequest = {
-	user: User;
+	userId: string;
 	goodsId: string;
 };
 
@@ -25,7 +24,7 @@ export const rentalReturnHandler: APIGatewayProxyHandler = async (event) => {
 			error_description: 'Data body is malformed JSON'
 		});
 	}
-	if (!data || !data.user) {
+	if (!data) {
 		return createResponse(500, {
 			success: false,
 			error: 500,
@@ -46,7 +45,7 @@ export const rentalReturnHandler: APIGatewayProxyHandler = async (event) => {
 	try {
 		const id = payload.aud as string;
 		await assertAccessible(id, token, 'executive');
-		const res = await returnGoods(data.user, data.goodsId);
+		const res = await returnGoods(data.userId, data.goodsId);
 		return createResponse(200, { success: res });
 	} catch (e) {
 		if (e instanceof ResponsibleError) {

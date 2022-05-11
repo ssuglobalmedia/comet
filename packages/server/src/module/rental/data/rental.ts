@@ -14,6 +14,7 @@ import type {
 	QueryOutput,
 	UpdateItemInput
 } from 'aws-sdk/clients/dynamodb';
+import {groupIndex, permissionLevel} from "../../auth/util/permission";
 
 export const fromRentStatusDao = (dao: RentStatusDao): RentStatus => ({
 	userId: dao.uI.S,
@@ -33,6 +34,7 @@ export const fromGoodsDao = (dao: GoodsDao): Goods => ({
 	id: dao.dataId.S.substring(2),
 	name: dao.n.S,
 	category: dao.c.S,
+	permission: groupIndex[parseInt(dao.p.N)],
 	...(dao.rS?.M && { rentStatus: fromRentStatusDao(dao.rS.M) })
 });
 
@@ -41,6 +43,7 @@ export const toGoodsDao = (goods: Goods): GoodsDao => ({
 	dataId: { S: `g-${goods.id}` },
 	n: { S: goods.name },
 	c: { S: goods.category },
+	p: { N: `${permissionLevel[goods.permission]}` },
 	...(goods.rentStatus && { rS: { M: toRentStatusDao(goods.rentStatus) } })
 });
 
@@ -94,6 +97,10 @@ export const updateGoods = async (goodsUpdateRequest: GoodsUpdateRequest) => {
 	if (goodsUpdateRequest.category) {
 		exp += `${exp.length ? ', ' : 'SET '} c = :category`;
 	}
+	if (goodsUpdateRequest.permission) {
+		exp += `${exp.length ? ', ' : 'SET '} p = :permission`;
+	}
+
 	const req: UpdateItemInput = {
 		TableName,
 		Key: {
@@ -102,7 +109,8 @@ export const updateGoods = async (goodsUpdateRequest: GoodsUpdateRequest) => {
 		},
 		ExpressionAttributeValues: {
 			...(goodsUpdateRequest.name && { ':name': { S: goodsUpdateRequest.name } }),
-			...(goodsUpdateRequest.category && { ':category': { S: goodsUpdateRequest.category } })
+			...(goodsUpdateRequest.category && { ':category': { S: goodsUpdateRequest.category } }),
+			...(goodsUpdateRequest.permission && { ':permission': { N: `${permissionLevel[goodsUpdateRequest.permission]}` } })
 		},
 		UpdateExpression: exp,
 		ReturnValues: 'UPDATED_NEW'
@@ -131,16 +139,18 @@ export const rentGoods = async (
 			dataId: { S: `g-${goodsId}` }
 		},
 		ExpressionAttributeValues: {
-			':value': { M: toRentStatusDao(rentStatus) }
+			':value': { M: toRentStatusDao(rentStatus) },
+			':userGroup': { N: `${permissionLevel[user.userGroup]}` }
 		},
 		UpdateExpression: `SET rS = if_not_exists(rS, :value)`,
+		ConditionExpression: `p <= :userGroup`,
 		ReturnValues: 'UPDATED_NEW'
 	};
 	const res = await dynamoDB.updateItem(req).promise();
-	return !!res.Attributes.rS?.M;
+	return !!(res.Attributes.rS?.M);
 };
 
-export const returnGoods = async (user: User, goodsId: string) => {
+export const returnGoods = async (userId: string, goodsId: string) => {
 	const req: UpdateItemInput = {
 		TableName,
 		Key: {
@@ -148,7 +158,7 @@ export const returnGoods = async (user: User, goodsId: string) => {
 			dataId: { S: `g-${goodsId}` }
 		},
 		ExpressionAttributeValues: {
-			':userId': { S: user.userId }
+			':userId': { S: userId }
 		},
 		ConditionExpression: 'attribute_exists(rS) and rS.uI = :userId',
 		UpdateExpression: `REMOVE rS`,
