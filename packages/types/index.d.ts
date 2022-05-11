@@ -48,27 +48,24 @@ export type Goods = {
   id: string;
   name: string;
   category: string;
+  permission: string;
   rentStatus?: RentStatus;
 };
 
 export type GoodsDao = {
   n: { S: string };
   c: { S: string };
+  p: { N: string };
   rS?: { M: RentStatusDao };
-};
-
-export type GoodsMap = {
-  goods: {
-    [id: string]: Goods;
-  };
-};
-
-export type GoodsMapDao = {
-  g: { M: { [id: string]: GoodsDao } };
 } & ModuleDao;
 
 export type GoodsUpdateRequest = {
   id: string;
   name?: string;
   category?: string;
+  permission?: string;
 };
+
+export type GoodsDeleteRequest = {
+  id: string;
+}

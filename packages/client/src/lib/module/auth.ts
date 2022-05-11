@@ -25,7 +25,7 @@ export function isAccessible(user: User, group: string): boolean {
 }
 
 export const groupDisplayName = {
-	everyone: "학부생",
+	everyone: "학부생 (미납자)",
 	certificated: "학부생 (납부자)",
 	executive: "집행부원",
 	admin: "관리자"

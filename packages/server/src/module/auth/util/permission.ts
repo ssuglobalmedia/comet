@@ -4,13 +4,16 @@ import {UnauthorizedError} from "../../../util/error";
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 
+export const permissionLevel = {
+    everyone: 0,
+    certificated: 1,
+    executive: 2,
+    admin: 3
+};
+
+export const groupIndex = ["everyone", "certificated", "executive", "admin"]
+
 export function isAccessible(userGroup: string, group: string): boolean {
-    const permissionLevel = {
-        everyone: 0,
-        certificated: 1,
-        executive: 2,
-        admin: 3
-    };
     if (permissionLevel[group] === undefined) return false;
     return permissionLevel[userGroup] >= permissionLevel[group];
 }

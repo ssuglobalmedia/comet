@@ -8,7 +8,13 @@ import type {
 } from 'mirinae-comet';
 
 import dynamoDB, { TableName } from '../../../util/database';
-import type { GetItemInput, MapAttributeValue, UpdateItemInput } from 'aws-sdk/clients/dynamodb';
+import type {
+	DeleteItemInput,
+	QueryInput,
+	QueryOutput,
+	UpdateItemInput
+} from 'aws-sdk/clients/dynamodb';
+import {groupIndex, permissionLevel} from "../../auth/util/permission";
 
 export const fromRentStatusDao = (dao: RentStatusDao): RentStatus => ({
 	userId: dao.uI.S,
@@ -24,104 +30,94 @@ export const toRentStatusDao = (rs: RentStatus): RentStatusDao => ({
 	aI: { S: rs.additionalInfo }
 });
 
-export const fromGoodsDao = (id: string, dao: GoodsDao): Goods => ({
-	id,
+export const fromGoodsDao = (dao: GoodsDao): Goods => ({
+	id: dao.dataId.S.substring(2),
 	name: dao.n.S,
 	category: dao.c.S,
+	permission: groupIndex[parseInt(dao.p.N)],
 	...(dao.rS?.M && { rentStatus: fromRentStatusDao(dao.rS.M) })
 });
 
 export const toGoodsDao = (goods: Goods): GoodsDao => ({
+	module: { S: 'rental' },
+	dataId: { S: `g-${goods.id}` },
 	n: { S: goods.name },
 	c: { S: goods.category },
+	p: { N: `${permissionLevel[goods.permission]}` },
 	...(goods.rentStatus && { rS: { M: toRentStatusDao(goods.rentStatus) } })
 });
 
-export const getRentalList = async (): Promise<Record<string, Goods>> => {
-	const req: GetItemInput = {
+export const queryGoods = async (startsWith = ''): Promise<Array<Goods>> => {
+	let composedRes: Array<Goods> = [];
+	const req: QueryInput = {
 		TableName,
-		Key: {
-			module: { S: 'rental' },
-			dataId: { S: 'list' }
-		}
-	};
-	const res = await dynamoDB.getItem(req).promise();
-
-	if (res.Item?.g?.M) {
-		return Object.fromEntries(
-			Object.entries(res.Item.g.M).map(([key, goods]) => [
-				key,
-				fromGoodsDao(key, goods as unknown as GoodsDao)
-			])
-		);
-	}
-	return {};
-};
-
-export const addGoods = async (goods: Goods) => {
-	const req: UpdateItemInput = {
-		TableName,
-		Key: {
-			module: { S: 'rental' },
-			dataId: { S: 'list' }
-		},
+		KeyConditionExpression: '#module = :v1 AND begins_with(#dataId, :v2)',
 		ExpressionAttributeNames: {
-			'#id': goods.id
+			'#module': 'module',
+			'#dataId': 'dataId'
 		},
 		ExpressionAttributeValues: {
-			':value': { M: toGoodsDao(goods) as MapAttributeValue }
-		},
-		UpdateExpression: `SET g.#id = if_not_exists(g.#id, :value)`,
-		ReturnValues: 'UPDATED_NEW'
+			':v1': { S: 'rental' },
+			':v2': { S: `g-${startsWith}` }
+		}
 	};
-	const res = await dynamoDB.updateItem(req).promise();
-	return !!(res.Attributes.g?.M && Object.keys(res.Attributes.g?.M).length);
+	let res: QueryOutput;
+	do {
+		res = await dynamoDB
+			.query({
+				...req,
+				...(res && res.LastEvaluatedKey && { ExclusiveStartKey: res.LastEvaluatedKey })
+			})
+			.promise();
+		composedRes = [
+			...composedRes,
+			...res.Items.map<Goods>((v) => fromGoodsDao(v as unknown as GoodsDao))
+		];
+	} while (res.LastEvaluatedKey);
+	return composedRes;
 };
 
-export const removeGoods = async (goodsId: string) => {
-	const req: UpdateItemInput = {
+export const deleteGoods = async (goodsId: string) => {
+	const req: DeleteItemInput = {
 		TableName,
 		Key: {
 			module: { S: 'rental' },
-			dataId: { S: 'list' }
-		},
-		ExpressionAttributeNames: {
-			'#id': goodsId
-		},
-		UpdateExpression: `REMOVE g.#id`,
-		ReturnValues: 'UPDATED_OLD'
+			dataId: { S: `g-${goodsId}` }
+		}
 	};
-	const res = await dynamoDB.updateItem(req).promise();
-	return !!(res.Attributes.g?.M && Object.keys(res.Attributes.g?.M).length);
+	await dynamoDB.deleteItem(req).promise();
+	return goodsId;
 };
 
 export const updateGoods = async (goodsUpdateRequest: GoodsUpdateRequest) => {
 	let exp = '';
 	if (goodsUpdateRequest.name) {
-		exp += `${exp.length ? ', ' : 'SET '} g.#id.name = :name`;
+		exp += `${exp.length ? ', ' : 'SET '} n = :name`;
 	}
 	if (goodsUpdateRequest.category) {
-		exp += `${exp.length ? ', ' : 'SET '} g.#id.category = :category`;
+		exp += `${exp.length ? ', ' : 'SET '} c = :category`;
 	}
+	if (goodsUpdateRequest.permission) {
+		exp += `${exp.length ? ', ' : 'SET '} p = :permission`;
+	}
+
 	const req: UpdateItemInput = {
 		TableName,
 		Key: {
 			module: { S: 'rental' },
-			dataId: { S: 'list' }
-		},
-		ExpressionAttributeNames: {
-			'#id': goodsUpdateRequest.id
+			dataId: { S: `g-${goodsUpdateRequest.id}` }
 		},
 		ExpressionAttributeValues: {
 			...(goodsUpdateRequest.name && { ':name': { S: goodsUpdateRequest.name } }),
-			...(goodsUpdateRequest.category && { ':category': { S: goodsUpdateRequest.category } })
+			...(goodsUpdateRequest.category && { ':category': { S: goodsUpdateRequest.category } }),
+			...(goodsUpdateRequest.permission && { ':permission': { N: `${permissionLevel[goodsUpdateRequest.permission]}` } })
 		},
 		UpdateExpression: exp,
 		ReturnValues: 'UPDATED_NEW'
 	};
 
 	const res = await dynamoDB.updateItem(req).promise();
-	return !!(res.Attributes.g?.M && Object.keys(res.Attributes.g?.M).length);
+	return !!res.Attributes;
 };
 
 export const rentGoods = async (
@@ -140,40 +136,34 @@ export const rentGoods = async (
 		TableName,
 		Key: {
 			module: { S: 'rental' },
-			dataId: { S: 'list' }
-		},
-		ExpressionAttributeNames: {
-			'#id': goodsId
+			dataId: { S: `g-${goodsId}` }
 		},
 		ExpressionAttributeValues: {
-			':value': { M: toRentStatusDao(rentStatus) }
+			':value': { M: toRentStatusDao(rentStatus) },
+			':userGroup': { N: `${permissionLevel[user.userGroup]}` }
 		},
-		ConditionExpression: 'attribute_exists(g.#id)',
-		UpdateExpression: `SET g.#id.rS = if_not_exists(g.#id.rS, :value)`,
+		UpdateExpression: `SET rS = if_not_exists(rS, :value)`,
+		ConditionExpression: `p <= :userGroup`,
 		ReturnValues: 'UPDATED_NEW'
 	};
 	const res = await dynamoDB.updateItem(req).promise();
-	return !!(res.Attributes.g?.M && Object.keys(res.Attributes.g?.M).length);
+	return !!(res.Attributes.rS?.M);
 };
 
-export const returnGoods = async (user: User, goodsId: string) => {
+export const returnGoods = async (userId: string, goodsId: string) => {
 	const req: UpdateItemInput = {
 		TableName,
 		Key: {
 			module: { S: 'rental' },
-			dataId: { S: 'list' }
-		},
-		ExpressionAttributeNames: {
-			'#id': goodsId
+			dataId: { S: `g-${goodsId}` }
 		},
 		ExpressionAttributeValues: {
-			':userId': { S: user.userId }
+			':userId': { S: userId }
 		},
-		ConditionExpression:
-			'attribute_exists(g.#id) and attribute_exists(g.#id.rS) and g.#id.rS.userId = :userId',
-		UpdateExpression: `REMOVE g.#id.rS`,
+		ConditionExpression: 'attribute_exists(rS) and rS.uI = :userId',
+		UpdateExpression: `REMOVE rS`,
 		ReturnValues: 'UPDATED_OLD'
 	};
 	const res = await dynamoDB.updateItem(req).promise();
-	return !!res.Attributes.g?.M[goodsId];
+	return !res.Attributes.g?.M[goodsId];
 };

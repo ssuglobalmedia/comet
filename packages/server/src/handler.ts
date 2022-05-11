@@ -6,11 +6,11 @@ import {userBatchPutHandler} from './module/auth/handler/user/batchPut';
 import {userBatchDeleteHandler} from './module/auth/handler/user/batchDelete';
 import {userQueryHandler} from './module/auth/handler/user/query';
 import {rentalAddHandler} from './module/rental/handler/add';
-import {rentalGetHandler} from './module/rental/handler/get';
+import {rentalQueryHandler} from './module/rental/handler/query';
 import {rentalUpdateHandler} from './module/rental/handler/update';
-import {rentalRemoveHandler} from './module/rental/handler/remove';
 import {rentalRentHandler} from './module/rental/handler/rent';
 import {rentalReturnHandler} from './module/rental/handler/return';
+import {rentalDeleteHandler} from "./module/rental/handler/delete";
 
 export const auth = {
   callbackHandler,
@@ -26,9 +26,9 @@ export const auth = {
 
 export const rental = {
   rentalAddHandler,
-  rentalGetHandler,
+  rentalQueryHandler,
   rentalUpdateHandler,
-  rentalRemoveHandler,
+  rentalDeleteHandler,
   rentalRentHandler,
   rentalReturnHandler
 }
