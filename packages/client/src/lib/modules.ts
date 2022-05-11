@@ -31,11 +31,11 @@ export const modules: Record<string, ModuleDefinition> = {
 		title: '일정 보기',
 		description: '학부, 학사 일정을 확인합니다.'
 	},
-	accounting: {
-		module: 'accounting',
+	log: {
+		module: 'log',
 		accessibleGroup: 'executive',
-		title: '회계 관리',
-		description: '예/결산안, 감사 자료 등 회계 관리를 수행합니다.'
+		title: '관리 기록',
+		description: 'COMET으로 관리한 기록을 열람합니다.'
 	},
 	dashboard: {
 		module: 'dashboard',

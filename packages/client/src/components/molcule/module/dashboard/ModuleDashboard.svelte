@@ -7,7 +7,7 @@
     import UserAnalytics from "carbon-pictograms-svelte/lib/UserAnalytics.svelte";
     import SocialWork_01 from "carbon-pictograms-svelte/lib/SocialWork_01.svelte";
     import CalendarEvent from "carbon-pictograms-svelte/lib/CalendarEvent.svelte";
-    import Invoice from "carbon-pictograms-svelte/lib/Invoice.svelte";
+    import FileBackup from "carbon-pictograms-svelte/lib/FileBackup.svelte";
 
 
     export let modules: Record<string, ModuleDefinition>;
@@ -23,7 +23,7 @@
         "dashboard": Dashboard,
         "rental": SocialWork_01,
         "calendar": CalendarEvent,
-        "accounting": Invoice
+        "log": FileBackup
     }
 </script>
 
