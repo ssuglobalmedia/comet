@@ -60,12 +60,10 @@
   $: isoDate = `${date}T${time}:00:00.000`
 
   $: if (user) {
-    console.log("Updating selectableGoodies");
     selectableGoodies = (goodies ?? []).filter((goods) => goods.rentStatus === undefined && isAccessible(user, goods.permission)).map((goods) => ({
       id: goods.id,
       text: goods.name
     }))
-    console.log(goodies, selectableGoodies);
   }
 
   $: if(open) {
