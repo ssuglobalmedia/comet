@@ -79,6 +79,7 @@
   }
 
   function updateUsers() {
+    users = undefined;
     fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`).then((res) => res.json()).then((res: CometResponse) => {
       if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
       users = (res.result as Array<User>).map(transformUser);
