@@ -145,7 +145,8 @@
                   {#if cell.value !== undefined}
                     <Tag type="red">대여 중</Tag>
                     <Tag type="outline">{cell.value.userName}
-                      / {(new Date(cell.value.until)).toLocaleDateString("ko")} {(new Date(cell.value.until)).getHours()}시 경 반납 예정
+                      / {(new Date(cell.value.until)).toLocaleDateString("ko")} {(new Date(cell.value.until)).getHours()}
+                      시 경 반납 예정
                     </Tag>
                   {:else}
                     <Tag type="green">대여 가능</Tag>
@@ -181,6 +182,8 @@
               </svelte:fragment>
             </DataTable>
           </Tile>
+        {:else}
+          <p>대여 가능한 물품이 없습니다.</p>
         {/each}
       {:else}
         <SkeletonText paragraph/>
@@ -202,7 +205,7 @@
 >
   <p>
     {#if targetGoods}
-      이 작업은 되돌릴 수 없습니다. <br /> 정말 {targetGoods?.name}물품을 삭제하시겠습니까?
+      이 작업은 되돌릴 수 없습니다. <br/> 정말 {targetGoods?.name}물품을 삭제하시겠습니까?
     {:else}
       <InlineNotification
           hideCloseButton
@@ -226,7 +229,7 @@
 >
   <p>
     {#if targetGoods}
-      물품의 상태를 점검한 후 반납하시기 바랍니다.<br /> 정말 {targetGoods?.name}물품을 반납하시겠습니까?
+      물품의 상태를 점검한 후 반납하시기 바랍니다.<br/> 정말 {targetGoods?.name}물품을 반납하시겠습니까?
     {:else}
       <InlineNotification
           hideCloseButton
@@ -239,7 +242,7 @@
   </p>
 </Modal>
 
-<AddGoodsModal bind:open={addGoodsModalOpen} on:success={() => updateGoods()} />
+<AddGoodsModal bind:open={addGoodsModalOpen} on:success={() => updateGoods()}/>
 <UpdateGoodsModal bind:open={updateGoodsModalOpen} {targetGoods}
-                  on:success={() => updateGoods()} />
-<RentModal bind:open={rentModalOpen} goodies={allGoodies} on:success={() => updateGoods()} />
+                  on:success={() => updateGoods()}/>
+<RentModal bind:open={rentModalOpen} goodies={allGoodies} on:success={() => updateGoods()}/>
