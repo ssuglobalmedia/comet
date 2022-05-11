@@ -34,7 +34,7 @@ export const queryLogs = async (year: number = undefined, month: number = undefi
       '#dataId': 'dataId'
     },
     ExpressionAttributeValues: {
-      ':v1': { S: 'rental' },
+      ':v1': { S: 'log' },
       ':v2': { S: `l-${date}` }
     }
   };
