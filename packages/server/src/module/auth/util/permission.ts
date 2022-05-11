@@ -1,6 +1,8 @@
 import type {GetItemInput} from "aws-sdk/clients/dynamodb";
 import dynamoDB, {TableName} from "../../../util/database";
 import {UnauthorizedError} from "../../../util/error";
+import type {User, UserDao} from "mirinae-comet";
+import {fromUserDao} from "../data/user";
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 
@@ -18,7 +20,7 @@ export function isAccessible(userGroup: string, group: string): boolean {
     return permissionLevel[userGroup] >= permissionLevel[group];
 }
 
-export async function assertAccessible(id: string, token: string, group: string) {
+export async function assertAccessible(id: string, token: string, group: string): Promise<User> {
     const authReq: GetItemInput = {
         TableName,
         Key: {
@@ -36,4 +38,5 @@ export async function assertAccessible(id: string, token: string, group: string)
     ) {
         throw new UnauthorizedError('Unauthorized');
     }
+    return fromUserDao(authRes.Item as unknown as UserDao);
 }

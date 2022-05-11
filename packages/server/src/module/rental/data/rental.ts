@@ -15,6 +15,7 @@ import type {
 	UpdateItemInput
 } from 'aws-sdk/clients/dynamodb';
 import {groupIndex, permissionLevel} from "../../auth/util/permission";
+import {putLog} from "../../log/data/log";
 
 export const fromRentStatusDao = (dao: RentStatusDao): RentStatus => ({
 	userId: dao.uI.S,
@@ -121,6 +122,7 @@ export const updateGoods = async (goodsUpdateRequest: GoodsUpdateRequest) => {
 };
 
 export const rentGoods = async (
+	requester: User,
 	user: User,
 	goodsId: string,
 	until: Date,
@@ -147,10 +149,32 @@ export const rentGoods = async (
 		ReturnValues: 'UPDATED_NEW'
 	};
 	const res = await dynamoDB.updateItem(req).promise();
-	return !!(res.Attributes.rS?.M);
+	if(!!(res.Attributes.rS?.M)) {
+		try {
+			(() => {
+				void putLog({
+					date: new Date().toISOString(),
+					userId: requester.userId,
+					userName: requester.userName,
+					module: 'rental',
+					action: 'rent',
+					target: `${user.userId}(${user.userName})`,
+					description: JSON.stringify({
+						goodsId: goodsId,
+						until: until,
+						additionalInfo: additionalInfo
+					})
+				})
+			})()
+		} catch (e) {
+			console.error(e);
+		}
+		return true;
+	}
+	return false;
 };
 
-export const returnGoods = async (userId: string, goodsId: string) => {
+export const returnGoods = async (requester: User, userId: string, goodsId: string) => {
 	const req: UpdateItemInput = {
 		TableName,
 		Key: {
@@ -165,5 +189,25 @@ export const returnGoods = async (userId: string, goodsId: string) => {
 		ReturnValues: 'UPDATED_OLD'
 	};
 	const res = await dynamoDB.updateItem(req).promise();
-	return !res.Attributes.g?.M[goodsId];
+	if(!res.Attributes.g?.M[goodsId]) {
+		try {
+			(() => {
+				void putLog({
+					date: new Date().toISOString(),
+					userId: requester.userId,
+					userName: requester.userName,
+					module: 'rental',
+					action: 'rent',
+					target: `${userId}`,
+					description: JSON.stringify({
+						goodsId: goodsId
+					})
+				})
+			})()
+		} catch (e) {
+			console.error(e);
+		}
+		return true;
+	}
+	return false;
 };
