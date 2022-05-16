@@ -35,6 +35,7 @@ export const fromGoodsDao = (dao: GoodsDao): Goods => ({
   id: dao.dataId.S.substring(2),
   name: dao.n.S,
   category: dao.c.S,
+  location: dao.l.S,
   permission: groupIndex[parseInt(dao.p.N)],
   ...(dao.rS?.M && {rentStatus: fromRentStatusDao(dao.rS.M)})
 });
@@ -44,6 +45,7 @@ export const toGoodsDao = (goods: Goods): GoodsDao => ({
   dataId: {S: `g-${goods.id}`},
   n: {S: goods.name},
   c: {S: goods.category},
+  l: {S: goods.location},
   p: {N: `${permissionLevel[goods.permission]}`},
   ...(goods.rentStatus && {rS: {M: toRentStatusDao(goods.rentStatus)}})
 });
@@ -101,6 +103,9 @@ export const updateGoods = async (goodsUpdateRequest: GoodsUpdateRequest) => {
   if (goodsUpdateRequest.permission) {
     exp += `${exp.length ? ', ' : 'SET '} p = :permission`;
   }
+  if (goodsUpdateRequest.location) {
+    exp += `${exp.length ? ', ' : 'SET '} l = :location`;
+  }
 
   const req: UpdateItemInput = {
     TableName,
@@ -111,6 +116,7 @@ export const updateGoods = async (goodsUpdateRequest: GoodsUpdateRequest) => {
     ExpressionAttributeValues: {
       ...(goodsUpdateRequest.name && {':name': {S: goodsUpdateRequest.name}}),
       ...(goodsUpdateRequest.category && {':category': {S: goodsUpdateRequest.category}}),
+      ...(goodsUpdateRequest.location && {':location': {S: goodsUpdateRequest.location}}),
       ...(goodsUpdateRequest.permission && {':permission': {N: `${permissionLevel[goodsUpdateRequest.permission]}`}})
     },
     UpdateExpression: exp,

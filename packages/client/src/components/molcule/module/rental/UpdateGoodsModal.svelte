@@ -38,6 +38,7 @@
 
   let name;
   let category;
+  let location = "";
   let permission;
 
   function doUpdate() {
@@ -53,6 +54,7 @@
           id: targetGoods.id,
           ...(name !== targetGoods.name && { name }),
           ...(category !== targetGoods.category && { category }),
+          ...(location !== targetGoods.location && { location }),
           ...(permission !== targetGoods.permission && { permission })
         })
       }).then((res) => res.json()).then(() => {
@@ -75,6 +77,7 @@
       </FormGroup>
       <TextInput labelText="물품명" placeholder="물품명을 입력하세요..." bind:value={name}/>
       <TextInput labelText="카테고리" placeholder="카테고리를 입력하세요..." bind:value={category}/>
+      <TextInput labelText="위치" placeholder="물품 위치를 입력하세요..." bind:value={location}/>
       <Dropdown titleText="대여 가능 사용자" items={groupDropdownItems} bind:selectedId={permission}/>
     {:else}
       <InlineNotification

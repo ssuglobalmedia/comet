@@ -29,6 +29,7 @@
   let goodsId;
   let name;
   let category;
+  let location = "";
   let permission = "everyone";
 
   function doAdd() {
@@ -44,6 +45,7 @@
           id: goodsId,
           name,
           category,
+          location,
           permission: permission
         })
       }).then((res) => res.json()).then(() => {
@@ -64,6 +66,7 @@
                bind:value={goodsId}/>
     <TextInput labelText="물품명" placeholder="물품명을 입력하세요..." bind:value={name}/>
     <TextInput labelText="카테고리" placeholder="카테고리를 입력하세요..." bind:value={category}/>
+    <TextInput labelText="위치" placeholder="물품의 위치를 입력하세요..." bind:value={location}/>
     <Dropdown titleText="대여 가능 사용자" items={groupDropdownItems} bind:selectedId={permission}/>
   </ModalBody>
   <div style="display: flex; justify-content: end; padding-left: 0.825rem; padding-right: 0.825rem;">

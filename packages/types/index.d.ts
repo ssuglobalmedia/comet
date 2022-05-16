@@ -49,6 +49,7 @@ export type Goods = {
   name: string;
   category: string;
   permission: string;
+  location: string;
   rentStatus?: RentStatus;
 };
 
@@ -56,6 +57,7 @@ export type GoodsDao = {
   n: { S: string };
   c: { S: string };
   p: { N: string };
+  l: { S: string };
   rS?: { M: RentStatusDao };
 } & ModuleDao;
 
@@ -63,6 +65,7 @@ export type GoodsUpdateRequest = {
   id: string;
   name?: string;
   category?: string;
+  location?: string;
   permission?: string;
 };
 

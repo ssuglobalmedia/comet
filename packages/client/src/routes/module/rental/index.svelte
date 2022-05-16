@@ -135,6 +135,7 @@
                 nonExpandableRowIds={goodies.filter((row) => row.rentStatus === undefined).map((row) => row.id)}
                 headers={[
                   { key: "name", value: "물품명" },
+                  { key: "location", value: "위치" },
                   { key: "rentStatus", value: "대여 여부" },
                   { key: "overflow", empty: true }
                 ]}
