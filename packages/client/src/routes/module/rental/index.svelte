@@ -118,9 +118,9 @@
   <Row style="margin-top: 1rem;">
     <Column>
       {#if allGoodies}
-        <div style="display: flex; margin: 1rem 0;">
+        <div style="display: flex; margin: 1rem 0; flex-wrap: wrap; justify-content: space-evenly;">
           {#each Object.keys(categorizedGoods) as category}
-            <ClickableTile href="#{category}">
+            <ClickableTile style="margin-right: 0.5rem; margin-bottom: 0.5rem;" href="#{category}">
               {category}
             </ClickableTile>
           {/each}
