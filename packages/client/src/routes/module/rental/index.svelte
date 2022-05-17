@@ -135,7 +135,6 @@
                 nonExpandableRowIds={goodies.filter((row) => row.rentStatus === undefined).map((row) => row.id)}
                 headers={[
                   { key: "name", value: "물품명" },
-                  { key: "location", value: "위치" },
                   { key: "rentStatus", value: "대여 여부" },
                   { key: "overflow", empty: true }
                 ]}
@@ -153,6 +152,9 @@
                     <Tag type="green">대여 가능</Tag>
                     <Tag type="outline">{groupDisplayName[row.permission]} 이상</Tag>
                   {/if}
+                {:else if cell.key === "name"}
+                  <p>{cell.value}</p>
+                  <p class="bx--form__helper-text">위치: {row.location}</p>
                 {:else if cell.key === "overflow"}
                   {#if isAccessible($userInfo, "executive")}
                     <Button iconDescription="수정" kind="ghost" icon={Edit16} on:click={() => openUpdateGoodsModal(row)}
