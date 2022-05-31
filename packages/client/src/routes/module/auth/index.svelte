@@ -74,10 +74,6 @@
   let batchUpdateModalOpen = false;
   let updateTargetUser: User = undefined;
 
-  $: if((updateTargetUser != undefined && !updateModalOpen) || (selectedUsers.length > 0 && !batchUpdateModalOpen)) {
-    if(browser) updateUsers();
-  }
-
   function updateUsers() {
     users = undefined;
     fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`).then((res) => res.json()).then((res: CometResponse) => {
@@ -169,6 +165,6 @@
 
 <ExportModal bind:open={exportModalOpen} bind:users={users} on:close={() => (exportModalOpen = false)} />
 <UpdateModal bind:open={updateModalOpen} bind:targetUser={updateTargetUser}
-             on:close={() => (updateModalOpen = false)} />
+             on:close={() => (updateModalOpen = false)} on:update={updateUsers} />
 <BatchUpdateModal bind:open={batchUpdateModalOpen} userSupplier={users} selectedUserIds={selectedUsers}
-                  on:close={() => (batchUpdateModalOpen = false)} />
+                  on:close={() => (batchUpdateModalOpen = false)} on:update={updateUsers} />

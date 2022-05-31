@@ -10,11 +10,12 @@
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import { variables } from "$lib/variables";
   import { getCurrentSemester } from "$lib/utils";
+  import {createEventDispatcher} from "svelte";
 
   export let open = false;
 
   export let userSupplier: Array<User> = [];
-  $: userMap = Object.fromEntries(userSupplier.map(v => [v.userId, v]));
+  $: userMap = Object.fromEntries((userSupplier ?? []).map(v => [v.userId, v]));
   export let selectedUserIds: Array<string> = [];
   const groupDropdownItems = Object.entries(groupDisplayName).map(([key, value]) => ({ id: key, text: value }));
   const groupIndex = {
@@ -23,6 +24,8 @@
     executive: 2,
     admin: 3
   };
+
+  const dispatch = createEventDispatcher();
 
   let includeUserGroup = false;
   let includeLastSemester = false;
@@ -62,6 +65,7 @@
         })))
       }).then((res) => res.json()).then(() => {
       reqStatus = "finished";
+      dispatch('update', {});
       setTimeout(() => open = false, 500);
     }).catch((e) => {
       reqStatus = "error";

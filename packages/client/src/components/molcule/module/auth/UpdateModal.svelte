@@ -10,6 +10,7 @@
   } from "carbon-components-svelte";
   import { fetchWithAuth, groupDisplayName } from "$lib/module/auth";
   import { variables } from "$lib/variables";
+  import {createEventDispatcher} from "svelte";
 
   export let open = false;
 
@@ -28,6 +29,8 @@
   let lastSemesterYear;
   let lastSemesterNum;
   export let reqStatus: "pending" | "active" | "finished" | "error" = "pending";
+
+  const dispatch = createEventDispatcher();
 
   function setupFirstValues() {
     reqStatus = "pending";
@@ -58,6 +61,7 @@
         })
       }).then((res) => res.json()).then(() => {
       reqStatus = "finished";
+      dispatch('update', {});
       setTimeout(() => open = false, 500);
     }).catch((e) => {
       reqStatus = "error";
