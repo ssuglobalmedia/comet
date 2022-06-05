@@ -31,7 +31,8 @@
     reqStatus = "pending";
     name = targetGoods.name;
     category = targetGoods.category;
-    permission = groupLevel[targetGoods.permission];
+    location = targetGoods.location;
+    permission = targetGoods.permission;
   }
 
   $: if (targetGoods) setupFirstValues();
