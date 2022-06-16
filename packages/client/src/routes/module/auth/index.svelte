@@ -83,7 +83,7 @@
     })
   }
 
-  $: filteredUsers = users && selectedGroups && selectedSemesters ? filterUser(users) : [];
+  $: filteredUsers = users && selectedGroups && selectedSemesters || debouncedSearchValue ? filterUser(users) : [];
 
   $: semesters = users ?
     Array.from(users.reduce<Set<string>>((set, value) => set.add(value.lastSemester), new Set<string>())).map((v) => (v ? {
