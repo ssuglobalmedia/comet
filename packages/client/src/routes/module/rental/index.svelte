@@ -1,12 +1,13 @@
 <script lang='ts'>
   import {
+    Accordion, AccordionItem,
     Button, ClickableTile,
     Column,
     DataTable,
     Grid, InlineNotification, Modal,
     Row,
     SkeletonText,
-    Tag, Tile
+    Tag, Tile, Toggle
   } from "carbon-components-svelte";
   import type {CometResponse, Goods} from "mirinae-comet";
   import {fetchWithAuth, groupDisplayName} from "$lib/module/auth";
@@ -22,7 +23,7 @@
 
   let allGoodies: Array<Goods> = undefined;
 
-  $: categorizedGoods = (allGoodies ?? []).reduce((map, obj) => ({
+  $: categorizedGoods = (allGoodies ?? []).filter((v) => (rentOnly && v.rentStatus !== undefined) || !rentOnly).reduce((map, obj) => ({
     ...map,
     [obj.category]: (map[obj.category] || []).concat(obj)
   }), {})
@@ -37,6 +38,7 @@
   let deleteModalOpen = false;
   let returnModalOpen = false;
   let targetGoods = undefined;
+  let rentOnly = false;
 
   function openUpdateGoodsModal(row) {
     targetGoods = row;
@@ -115,6 +117,11 @@
       </Column>
     {/if}
   </Row>
+  <Row>
+    <Column>
+      <Toggle labelText="대여 중인 물품만 보기" labelA="끔" labelB="켬" bind:toggled={rentOnly} />
+    </Column>
+  </Row>
   <Row style="margin-top: 1rem;">
     <Column>
       {#if allGoodies}
@@ -125,69 +132,82 @@
             </ClickableTile>
           {/each}
         </div>
-        {#each Object.entries(categorizedGoods) as [category, goodies]}
-          <Tile id={category}>
-            <h3>{category}</h3>
-            <p>{goodies.length}개 중 {goodies.filter((goods) => goods.rentStatus === undefined).length}개 대여 가능</p>
-            <DataTable
-                size="short"
-                expandable
-                nonExpandableRowIds={goodies.filter((row) => row.rentStatus === undefined).map((row) => row.id)}
-                headers={[
+        {#if Object.keys(categorizedGoods).length > 0}
+          <Accordion>
+            {#each Object.entries(categorizedGoods) as [category, goodies]}
+              <AccordionItem id={category}>
+                <svelte:fragment slot="title">
+                  <h3>{category}</h3>
+                  <p>{goodies.length}개 중 {goodies.filter((goods) => goods.rentStatus === undefined).length}개 대여 가능</p>
+                </svelte:fragment>
+                <DataTable
+                    style="width: 100%;"
+                    size="short"
+                    expandable
+                    nonExpandableRowIds={goodies.filter((row) => row.rentStatus === undefined).map((row) => row.id)}
+                    headers={[
                   { key: "name", value: "물품명" },
                   { key: "rentStatus", value: "대여 여부" },
                   { key: "overflow", empty: true }
                 ]}
-                rows={goodies}
-            >
-              <svelte:fragment slot="cell" let:row let:cell>
-                {#if cell.key === "rentStatus"}
-                  {#if cell.value !== undefined}
-                    <Tag type="red">대여 중</Tag>
-                    <Tag type="outline">{cell.value.userName}
-                      / {(new Date(cell.value.until)).toLocaleDateString("ko")} {(new Date(cell.value.until)).getHours()}
-                      시 경 반납 예정
-                    </Tag>
-                  {:else}
-                    <Tag type="green">대여 가능</Tag>
-                    <Tag type="outline">{groupDisplayName[row.permission]} 이상</Tag>
-                  {/if}
-                {:else if cell.key === "name"}
-                  <p>{cell.value}</p>
-                  <p class="bx--form__helper-text">위치: {row.location}</p>
-                {:else if cell.key === "overflow"}
-                  {#if isAccessible($userInfo, "executive")}
-                    <Button iconDescription="수정" kind="ghost" icon={Edit16} on:click={() => openUpdateGoodsModal(row)}
-                            disabled={!isAccessible($userInfo, "executive")}/>
-                    <Button iconDescription="삭제" kind="ghost" icon={Delete16} on:click={() => openDeleteGoodsModal(row)}
-                            disabled={!isAccessible($userInfo, "executive")}/>
-                  {/if}
-                {:else}
-                  {cell.value}
-                {/if}
-              </svelte:fragment>
-              <svelte:fragment slot="expanded-row" let:row>
-                <Grid>
-                  <Row>
-                    <Column>
-                      <h5>비고</h5>
-                      <pre>{row.rentStatus.additionalInfo}</pre>
-                    </Column>
-                    {#if isAccessible($userInfo, "executive")}
-                      <Column>
-                        <Button disabled={!isAccessible($userInfo, "executive")}
-                                on:click={() => openReturnGoodsModal(row)}>반납 처리
-                        </Button>
-                      </Column>
+                    rows={goodies}
+                >
+                  <svelte:fragment slot="cell" let:row let:cell>
+                    {#if cell.key === "rentStatus"}
+                      {#if cell.value !== undefined}
+                        <Tag type="red">대여 중</Tag>
+                        <Tag type="outline">{cell.value.userName}
+                          / {(new Date(cell.value.until)).toLocaleDateString("ko")} {(new Date(cell.value.until)).getHours()}
+                          시 경 반납 예정
+                        </Tag>
+                      {:else}
+                        <Tag type="green">대여 가능</Tag>
+                        <Tag type="outline">{groupDisplayName[row.permission]} 이상</Tag>
+                      {/if}
+                    {:else if cell.key === "name"}
+                      <p>{cell.value}</p>
+                      <p class="bx--form__helper-text">위치: {row.location}</p>
+                    {:else if cell.key === "overflow"}
+                      {#if isAccessible($userInfo, "executive")}
+                        <Button iconDescription="수정" kind="ghost" icon={Edit16}
+                                on:click={() => openUpdateGoodsModal(row)}
+                                disabled={!isAccessible($userInfo, "executive")}/>
+                        <Button iconDescription="삭제" kind="ghost" icon={Delete16}
+                                on:click={() => openDeleteGoodsModal(row)}
+                                disabled={!isAccessible($userInfo, "executive")}/>
+                      {/if}
+                    {:else}
+                      {cell.value}
                     {/if}
-                  </Row>
-                </Grid>
-              </svelte:fragment>
-            </DataTable>
-          </Tile>
+                  </svelte:fragment>
+                  <svelte:fragment slot="expanded-row" let:row>
+                    <Grid>
+                      <Row>
+                        <Column>
+                          <h5>비고</h5>
+                          <pre>{row.rentStatus.additionalInfo}</pre>
+                        </Column>
+                        {#if isAccessible($userInfo, "executive")}
+                          <Column>
+                            <Button disabled={!isAccessible($userInfo, "executive")}
+                                    on:click={() => openReturnGoodsModal(row)}>반납 처리
+                            </Button>
+                          </Column>
+                        {/if}
+                      </Row>
+                    </Grid>
+                  </svelte:fragment>
+                </DataTable>
+              </AccordionItem>
+            {/each}
+          </Accordion>
         {:else}
-          <p>대여 가능한 물품이 없습니다.</p>
-        {/each}
+          {#if rentOnly}
+            <p>대여 중인 물품이 없습니다.</p>
+          {:else}
+            <p>대여 가능한 물품이 없습니다.</p>
+          {/if}
+        {/if}
       {:else}
         <SkeletonText paragraph/>
       {/if}
