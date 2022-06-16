@@ -35,7 +35,7 @@ export const fromGoodsDao = (dao: GoodsDao): Goods => ({
   id: dao.dataId.S.substring(2),
   name: dao.n.S,
   category: dao.c.S,
-  location: dao.l.S,
+  location: dao.l?.S,
   permission: groupIndex[parseInt(dao.p.N)],
   ...(dao.rS?.M && {rentStatus: fromRentStatusDao(dao.rS.M)})
 });
