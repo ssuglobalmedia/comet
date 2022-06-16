@@ -68,7 +68,7 @@
 
   function filterUser(users) {
     return users.filter((v) => {
-      if((v.lastSemester === undefined && !selectedSemesters.includes("none")) || !selectedSemesters.includes(v.lastSemester)) {
+      if((v.lastSemester === undefined && !selectedSemesters.includes("none")) || (v.lastSemester !== undefined && !selectedSemesters.includes(v.lastSemester))) {
         return false;
       }
       if(!selectedGroups.includes(v.userGroup)) {
