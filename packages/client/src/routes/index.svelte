@@ -28,7 +28,7 @@
                 style="display: flex; flex-direction: column; justify-content: center;">
             <EntryCard>
                 <Button icon={Soongsil} style="width: 100%" skeleton={callbackUrl === undefined}
-                        href='https://class.ssu.ac.kr/xn-sso/gw.php?login_type=standalone&callback_url={encodeURIComponent(callbackUrl)}'>
+                        href='https://class.ssu.ac.kr/xn-sso/gw.php?login_type=sso&callback_url={encodeURIComponent(callbackUrl)}'>
                     숭실대학교로 로그인
                 </Button>
             </EntryCard>
