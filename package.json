@@ -4,10 +4,10 @@
   "description": "Combined Operation and Management Engaging Tools for SSU Globalmedia student union.",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter=./packages/** --stream build",
-    "dev": "pnpm --filter=./packages/** --stream dev",
-    "delete": "pnpm delete --filter=client && pnpm delete --filter=server --stream",
-    "deploy": "pnpm deploy --filter=server && pnpm deploy --filter=client --stream"
+    "build": "pnpm run --filter=./packages/** --stream build",
+    "dev": "pnpm run --filter=./packages/** --stream dev",
+    "delete": "pnpm run delete --filter=client && pnpm delete --filter=server --stream",
+    "deploy": "pnpm run deploy --filter=server && pnpm deploy --filter=client --stream"
   },
   "repository": {
     "type": "git",
