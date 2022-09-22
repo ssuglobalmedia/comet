@@ -4,8 +4,10 @@
     "lib": [
       "es5",
       "ES2015.Core",
-      "es2015",
+      "ES2015.Iterable",
       "ES2015.Collection",
+      "es2015",
+      "ES6",
       "es2016",
       "ES2016.Array.Include",
       "es2017",

@@ -13,7 +13,7 @@
   import {fetchWithAuth, groupDisplayName} from "$lib/module/auth";
 
   import {variables} from "$lib/variables";
-  import {browser} from "$app/env";
+  import {browser} from "$app/environment";
   import {Add16, Delete16, Edit16, Need16} from "carbon-icons-svelte";
   import {userInfo} from "$lib/stores";
   import {isAccessible} from "$lib/module/auth";
