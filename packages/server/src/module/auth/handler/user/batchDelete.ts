@@ -53,7 +53,7 @@ export const userBatchDeleteHandler: APIGatewayProxyHandler = async (event) => {
     return createResponse(200, { success: true });
   } catch (e) {
     if (isCometError(e)) {
-      (e as CometError).additionalInfo.failed_data = data.slice(i, data.length);
+      e.additionalInfo.failed_data = data.slice(i, data.length);
       return responseAsCometError(e);
     }
     console.error(e);

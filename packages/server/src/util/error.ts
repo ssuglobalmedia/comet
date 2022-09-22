@@ -51,7 +51,7 @@ export class InternalError extends CometError {
   }
 }
 
-export function isCometError(error: unknown) {
+export function isCometError(error: unknown): error is CometError {
   return typeof error === 'object' && (error as CometError)?.isCometError;
 }
 
@@ -74,11 +74,11 @@ export function responseAsCometError(
 ) {
   if (isCometError(error)) {
     if (additionalInfo)
-      (error as CometError).additionalInfo = {
-        ...(error as CometError).additionalInfo,
+      error.additionalInfo = {
+        ...error.additionalInfo,
         ...additionalInfo,
       };
-    return errorResponse(error as CometError);
+    return errorResponse(error);
   }
   console.error(error);
   if (additionalInfo) fallback.additionalInfo = { ...fallback.additionalInfo, ...additionalInfo };
