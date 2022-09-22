@@ -73,6 +73,8 @@ export type GoodsDeleteRequest = {
   id: string;
 }
 
+/* Log Module */
+
 export type Log = {
   date: string;
   userId: string;
@@ -80,7 +82,7 @@ export type Log = {
   module: string;
   target: string;
   action: string;
-  description?: string;
+  data?: string;
 }
 
 export type LogDao = {
