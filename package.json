@@ -4,10 +4,10 @@
   "description": "Combined Operation and Management Engaging Tools for SSU Globalmedia student union.",
   "private": true,
   "scripts": {
-    "build": "pnpm run --filter=./packages/** --stream build",
-    "dev": "pnpm run --filter=./packages/** --stream dev",
-    "delete": "pnpm run delete --filter=client && pnpm delete --filter=server --stream",
-    "deploy": "pnpm run deploy --filter=server && pnpm deploy --filter=client --stream"
+    "build": "concurrently -p \"[{name} / {time}]\" -c \"green,magenta\" -n \"client,server\" \"pnpm run -r --filter=client build \" \"pnpm run -r -filter=server build\"",
+    "dev": "concurrently -p \"[{name} / {time}]\" -c \"green,magenta\" -n \"client,server\" \"pnpm run -r --filter=client dev \" \"pnpm run -r -filter=server dev\"",
+    "delete": "pnpm run --filter=client delete && pnpm run --filter=server delete",
+    "deploy": "node ./scripts/deploy.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/EATSTEAK/mirinae-comet/issues"
   },
-  "homepage": "https://github.com/EATSTEAK/mirinae-comet#readme"
+  "homepage": "https://github.com/EATSTEAK/mirinae-comet#readme",
+  "devDependencies": {
+    "concurrently": "^7.3.0"
+  }
 }
