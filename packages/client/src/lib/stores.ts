@@ -5,7 +5,7 @@ import type { Readable } from 'svelte/store';
 import type { CometResponse, User } from 'mirinae-comet';
 import { fetchWithAuth, getAuthorization } from '$lib/module/auth';
 import { variables } from '$lib/variables';
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 
 export const userInfo: Readable<User> = readable<User>(undefined, (set) => {
 	if (browser) {

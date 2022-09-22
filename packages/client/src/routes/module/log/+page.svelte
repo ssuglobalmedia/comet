@@ -1,0 +1,41 @@
+<script lang="ts">
+  import { CodeSnippet, Column, Grid, Row, TextAreaSkeleton } from "carbon-components-svelte";
+  import type { Log, CometResponse } from "mirinae-comet";
+  import { fetchWithAuth } from "$lib/module/auth";
+  import { variables } from "$lib/variables";
+  import { browser } from "$app/environment";
+
+  let logs: Array<Log> = undefined;
+
+  if (browser) {
+    updateLogs();
+  }
+
+  function updateLogs() {
+    logs = undefined;
+    fetchWithAuth(`${variables.baseUrl as string}/api/module/log/query`).then((res) => res.json()).then((res: CometResponse) => {
+      if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
+      logs = (res.result as Array<Log>);
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+</script>
+
+<Grid>
+  <Row>
+    <Column>
+      준비 중입니다.
+    </Column>
+  </Row>
+  <Row>
+    {#if logs}
+      <CodeSnippet type="multi" code={JSON.stringify(logs)} />
+    {:else}
+      <TextAreaSkeleton hideLabel />
+    {/if}
+  </Row>
+</Grid>
+
+<style>
+</style>

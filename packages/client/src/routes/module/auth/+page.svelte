@@ -1,4 +1,6 @@
 <script lang="ts">
+  throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
   import {
     Accordion, AccordionItem,
     Button, Checkbox, Column, DataTable,
@@ -9,7 +11,7 @@
     ToolbarContent, ToolbarMenu, ToolbarMenuItem,
     ToolbarSearch
   } from "carbon-components-svelte";
-  import {browser} from "$app/env";
+  import {browser} from "$app/environment";
   import {variables} from "$lib/variables";
   import {userInfo} from "$lib/stores";
   import {fetchWithAuth, groupDisplayName} from "$lib/module/auth";

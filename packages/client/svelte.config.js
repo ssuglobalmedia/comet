@@ -8,23 +8,11 @@ const config = {
 	// for more information about preprocessors
 
 	kit: {
-		prerender: {
-			default: true
-		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build'
 		}),
-
-		vite: {
-			css: {
-				preprocessorOptions: {
-					scss: {
-						additionalData: '@use "src/styles/variables.scss" as *;'
-					}
-				}
-			}
-		}
+		trailingSlash: "always"
 	},
 
 	preprocess: [

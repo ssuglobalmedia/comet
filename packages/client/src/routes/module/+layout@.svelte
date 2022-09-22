@@ -24,7 +24,7 @@
   import UserMenu from "../../components/molcule/headeraction/UserMenu.svelte";
   import ModuleSwitcher from "../../components/molcule/headeraction/ModuleSwitcher.svelte";
   import {afterNavigate} from "$app/navigation";
-  import {browser} from "$app/env";
+  import {browser} from "$app/environment";
 
   let isMounted = false;
   let isSideNavOpen;
@@ -77,7 +77,7 @@
     breadcrumb = constructBreadcrumb(window.location.pathname.replace("/module", ""));
   });
   afterNavigate(({to}) => {
-    breadcrumb = constructBreadcrumb(to.pathname.replace("/module", ""))
+    breadcrumb = constructBreadcrumb(to.url.pathname.replace("/module", ""))
   });
 </script>
 

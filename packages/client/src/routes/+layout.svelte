@@ -1,6 +1,7 @@
 <script>
   import "../styles/app.css";
   import { createEventDispatcher } from "svelte";
+
   const dispatch = createEventDispatcher();
   $: if (typeof window !== "undefined") {
     document.documentElement.setAttribute("full", "true");
