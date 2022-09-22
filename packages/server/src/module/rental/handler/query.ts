@@ -3,36 +3,32 @@ import { createResponse } from '../../../common';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../env';
 import { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken';
-import { ResponsibleError } from '../../../util/error';
+import {
+  CometError,
+  InternalError,
+  isCometError,
+  responseAsCometError,
+  UnauthorizedError,
+} from '../../../util/error';
 import { queryGoods } from '../data/rental';
 import { assertAccessible } from '../../auth/util/permission';
 
 export const rentalQueryHandler: APIGatewayProxyHandler = async (event) => {
-	const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-	try {
-		const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
-		await assertAccessible(id, token, 'certificated');
-		const result = await queryGoods();
-		return createResponse(200, {
-			success: true,
-			result
-		});
-	} catch (e) {
-		if (e instanceof ResponsibleError) {
-			return e.response();
-		}
-		if (e instanceof JsonWebTokenError || e instanceof TokenExpiredError) {
-			return createResponse(401, {
-				success: false,
-				error: 401,
-				description: 'Unauthorized'
-			});
-		}
-		console.error(e);
-		return createResponse(500, {
-			success: false,
-			error: 500,
-			description: 'Internal Error'
-		});
-	}
+  const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
+  try {
+    const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
+    await assertAccessible(id, token, 'certificated');
+    const result = await queryGoods();
+    return createResponse(200, {
+      success: true,
+      result,
+    });
+  } catch (e) {
+    if (isCometError(e)) return responseAsCometError(e);
+    if (e instanceof JsonWebTokenError || e instanceof TokenExpiredError) {
+      return responseAsCometError(new UnauthorizedError());
+    }
+    console.error(e);
+    return responseAsCometError(new InternalError());
+  }
 };
