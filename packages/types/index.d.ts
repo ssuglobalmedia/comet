@@ -30,11 +30,14 @@ export type User = {
   phone?: string;
 };
 
+/* Rental Module */
+
 export type RentStatus = {
   userId: string;
   userName: string;
   until: Date;
   additionalInfo?: string;
+  announced?: boolean;
 };
 
 export type RentStatusDao = {
@@ -42,6 +45,7 @@ export type RentStatusDao = {
   uN: { S: string };
   u: { S: string };
   aI?: { S: string };
+  a?: { BOOL: boolean };
 };
 
 export type Goods = {
