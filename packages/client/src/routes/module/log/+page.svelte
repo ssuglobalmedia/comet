@@ -1,6 +1,6 @@
 <script lang="ts">
   import { CodeSnippet, Column, Grid, Row, TextAreaSkeleton } from "carbon-components-svelte";
-  import type { Log, CometResponse } from "mirinae-comet";
+  import type {Log, CometResponse, CometError} from "mirinae-comet";
   import { fetchWithAuth } from "$lib/module/auth";
   import { variables } from "$lib/variables";
   import { browser } from "$app/environment";
@@ -13,9 +13,9 @@
 
   function updateLogs() {
     logs = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/log/query`).then((res) => res.json()).then((res: CometResponse) => {
-      if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
-      logs = (res.result as Array<Log>);
+    fetchWithAuth(`${variables.baseUrl as string}/api/module/log/query`).then((res) => res.json()).then((res: CometResponse<Array<Log>, CometError>) => {
+      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
+      if(res.success) logs = res.result;
     }).catch((err) => {
       console.error(err);
     });

@@ -1,11 +1,43 @@
-/* Response */
-export type CometResponse = {
-  success: boolean;
-  // eslint-disable-next-line
-  result?: any;
-  error?: number;
-  error_description?: string;
+/* Error */
+export interface CometError {
+  code: number;
+  name: string;
+  message?: string;
+  additionalInfo?: Record<string, unknown>;
+}
+
+export type BadRequestError = CometError & {
+  code: 400;
+  name: 'BadRequest';
 };
+
+export type UnauthorizedError = CometError & {
+  code: 401;
+  name: 'Unauthorized';
+};
+
+export type NotFoundError = CometError & {
+  code: 404;
+  name: 'NotFound';
+};
+
+export type InternalError = CometError & {
+  code: 500;
+  name: 'InternalError';
+};
+
+/* Response */
+export type CometResponse<T, E> = SuccessResponse<T> | ErrorResponse<E>;
+
+export interface SuccessResponse<T> extends CometResponse {
+  success: true;
+  result: T;
+}
+
+export interface ErrorResponse<E extends CometError> extends CometResponse {
+  success: false;
+  error: E;
+}
 
 /* Module */
 
@@ -75,7 +107,7 @@ export type GoodsUpdateRequest = {
 
 export type GoodsDeleteRequest = {
   id: string;
-}
+};
 
 /* Log Module */
 
@@ -87,7 +119,7 @@ export type Log = {
   target: string;
   action: string;
   data?: string;
-}
+};
 
 export type LogDao = {
   uI: { S: string };
