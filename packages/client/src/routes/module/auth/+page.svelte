@@ -15,7 +15,7 @@
   import {variables} from "$lib/variables";
   import {userInfo} from "$lib/stores";
   import {fetchWithAuth, groupDisplayName} from "$lib/module/auth";
-  import type {CometResponse, User} from "mirinae-comet";
+  import type {CometError, CometResponse, User} from "mirinae-comet";
   import {Checkmark16, Delete16, Edit16} from "carbon-icons-svelte";
   import UpdateModal from "../../../components/molcule/module/auth/UpdateModal.svelte";
   import BatchUpdateModal from "../../../components/molcule/module/auth/BatchUpdateModal.svelte";
@@ -108,9 +108,9 @@
 
   function updateUsers() {
     users = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`).then((res) => res.json()).then((res: CometResponse) => {
-      if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
-      users = (res.result as Array<User>).map(transformUser);
+    fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`).then((res) => res.json()).then((res: CometResponse<Array<User>, CometError>) => {
+      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
+      if(res.success) users = (res.result as Array<User>).map(transformUser);
     }).catch((err) => {
       console.error(err);
     });

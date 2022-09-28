@@ -9,7 +9,7 @@
     SkeletonText,
     Tag, Tile, Toggle
   } from "carbon-components-svelte";
-  import type {CometResponse, Goods} from "mirinae-comet";
+  import type {CometError, CometResponse, Goods} from "mirinae-comet";
   import {fetchWithAuth, groupDisplayName} from "$lib/module/auth";
 
   import {variables} from "$lib/variables";
@@ -57,9 +57,9 @@
 
   function updateGoods() {
     allGoodies = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/query`).then((res) => res.json()).then((res: CometResponse) => {
-      if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
-      allGoodies = (res.result as Array<Goods>)
+    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/query`).then((res) => res.json()).then((res: CometResponse<Array<Goods>, CometError>) => {
+      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
+      if(res.success) allGoodies = (res.result as Array<Goods>)
     }).catch((err) => {
       console.error(err);
     });
@@ -76,8 +76,8 @@
       body: JSON.stringify({
         id: targetGoods.id
       })
-    }).then((res) => res.json()).then((res: CometResponse) => {
-      if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
+    }).then((res) => res.json()).then((res: CometResponse<{}, CometError>) => {
+      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
       updateGoods();
     })
   }
@@ -94,8 +94,8 @@
         userId: targetGoods.rentStatus.userId,
         goodsId: targetGoods.id
       })
-    }).then((res) => res.json()).then((res: CometResponse) => {
-      if (!res.success) throw new Error(`Request error ${res.error}: ${res.error_description}`);
+    }).then((res) => res.json()).then((res: CometResponse<{}, CometError>) => {
+      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
       updateGoods();
     })
   }
