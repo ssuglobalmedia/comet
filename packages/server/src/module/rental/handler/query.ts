@@ -1,7 +1,6 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import { createResponse } from '../../../common';
+import { createResponse, JWT_SECRET } from '../../../common';
 import * as jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../../env';
 import { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 import {
   CometError,

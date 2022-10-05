@@ -1,9 +1,8 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
 import type { User } from 'mirinae-comet';
-import { createResponse } from '../../../../common';
+import { createResponse, JWT_SECRET } from '../../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../../../env';
 import { updateUser } from '../../data/user';
 import {
   BadRequestError,

@@ -1,8 +1,7 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import { createResponse } from '../../../common';
+import { createResponse, JWT_SECRET } from '../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../../env';
 import { assertAccessible } from '../../auth/util/permission';
 import { updateGoods } from '../data/rental';
 import {

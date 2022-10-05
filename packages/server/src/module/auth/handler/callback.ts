@@ -8,8 +8,7 @@ import {
 } from '../../../util/error';
 import * as jwt from 'jsonwebtoken';
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import { JWT_SECRET } from '../../../env';
-import { createResponse } from '../../../common';
+import { createResponse, JWT_SECRET } from '../../../common';
 import { issueToken } from '../data/token';
 
 function requestBody(result: string): Promise<string> {
