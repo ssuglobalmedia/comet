@@ -3,9 +3,7 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "mirinae-comet"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-i6ml612z96ny"
 s3_prefix = "mirinae-comet"
-profile = "globalmedia"
 region = "ap-northeast-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
