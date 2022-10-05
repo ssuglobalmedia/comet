@@ -129,3 +129,31 @@ export type LogDao = {
   a: { S: string };
   d?: { S: string };
 } & ModuleDao;
+
+/* Config Module */
+
+export interface Config {
+  rentalWebhook: {
+    url: string;
+    type: 'teams';
+  };
+  logFormat: {
+    [module: string]: {
+      [action: string]: string;
+    }
+  }
+}
+
+export type ConfigUpdateRequest = Optional<Config>;
+
+export interface ConfigDao {
+  rW: { M: {
+    u: { S: string; };
+    t: { S: string; };
+  }};
+  lF: { M: {
+    [module: string]: { M: {
+        [action: string]: { S: string };
+      }};
+  }};
+}
