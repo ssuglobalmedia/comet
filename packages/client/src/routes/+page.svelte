@@ -14,7 +14,7 @@
             window.location.href = '/module/dashboard';
         }
         redirect = new URLSearchParams(window.location.search).get('redirect');
-        callbackUrl = window.location.protocol + '//' + window.location.host + '/callback' + (redirect ? `?redirect=${redirect}` : '');
+        callbackUrl = window.location.protocol + '//' + window.location.host + '/callback/' + (redirect ? `?redirect=${redirect}` : '');
     });
 </script>
 
