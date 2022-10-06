@@ -1,5 +1,5 @@
 <script>
-  import { Column, Grid, Tile } from "carbon-components-svelte";
+  import { Column, Grid, Tile } from 'carbon-components-svelte';
   export let title;
   export let description;
 </script>

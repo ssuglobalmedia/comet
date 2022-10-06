@@ -1,6 +1,5 @@
 import https from 'https';
 import {
-  CometError,
   InternalError,
   isCometError,
   responseAsCometError,

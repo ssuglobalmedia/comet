@@ -118,7 +118,7 @@ Resources:
     Metadata:
       BuildMethod: nodejs14.x
     Properties:
-      LayerName: "dependencies"
+      LayerName: 'dependencies'
       ContentUri: dependencies/
       CompatibleRuntimes:
         - nodejs14.x
@@ -536,8 +536,8 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   SsuLockerApi:
-    Description: "API Gateway endpoint URL for Prod stage for Lambda function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Description: 'API Gateway endpoint URL for Prod stage for Lambda function'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod'
   FrontS3BucketName:
     Description: 'Bucket name'
     Value: !Ref FrontS3Bucket
@@ -549,4 +549,4 @@ Outputs:
     Value: !Ref CfDistribution
   CfDistributionDomainName:
     Description: 'Domain URL for cloudfront distribution'
-    Value: !Sub "https://${CfDistribution.DomainName}"
+    Value: !Sub 'https://${CfDistribution.DomainName}'

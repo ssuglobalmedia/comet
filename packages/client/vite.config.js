@@ -7,10 +7,10 @@ const config = {
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@use "src/styles/variables.scss" as *;'
-      }
-    }
-  }
+        additionalData: '@use "src/styles/variables.scss" as *;',
+      },
+    },
+  },
 };
 
 export default config;

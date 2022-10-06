@@ -2,12 +2,7 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET, createResponse } from '../../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
-import {
-  CometError,
-  InternalError,
-  isCometError,
-  responseAsCometError,
-} from '../../../../util/error';
+import { InternalError, isCometError, responseAsCometError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
 import { batchPutUser } from '../../data/user';
 import type { User } from 'mirinae-comet';

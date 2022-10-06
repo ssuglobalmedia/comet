@@ -3,12 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET, createResponse } from '../../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
 import { queryUser } from '../../data/user';
-import {
-  CometError,
-  InternalError,
-  isCometError,
-  responseAsCometError,
-} from '../../../../util/error';
+import { InternalError, isCometError, responseAsCometError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
 
 export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
