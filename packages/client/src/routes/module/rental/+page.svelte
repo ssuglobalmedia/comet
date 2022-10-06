@@ -1,32 +1,43 @@
-<script lang='ts'>
+<script lang="ts">
   import {
-    Accordion, AccordionItem,
-    Button, ClickableTile,
+    Accordion,
+    AccordionItem,
+    Button,
+    ClickableTile,
     Column,
     DataTable,
-    Grid, InlineNotification, Modal,
+    Grid,
+    InlineNotification,
+    Modal,
     Row,
     SkeletonText,
-    Tag, Tile, Toggle
-  } from "carbon-components-svelte";
-  import type {CometError, CometResponse, Goods} from "mirinae-comet";
-  import {fetchWithAuth, groupDisplayName} from "$lib/module/auth";
+    Tag,
+    Tile,
+    Toggle,
+  } from 'carbon-components-svelte';
+  import type { CometError, CometResponse, Goods } from 'mirinae-comet';
+  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
 
-  import {variables} from "$lib/variables";
-  import {browser} from "$app/environment";
-  import {Add16, Delete16, Edit16, Need16} from "carbon-icons-svelte";
-  import {userInfo} from "$lib/stores";
-  import {isAccessible} from "$lib/module/auth";
-  import AddGoodsModal from "../../../components/molcule/module/rental/AddGoodsModal.svelte";
-  import UpdateGoodsModal from "../../../components/molcule/module/rental/UpdateGoodsModal.svelte";
-  import RentModal from "../../../components/molcule/module/rental/RentModal.svelte";
+  import { variables } from '$lib/variables';
+  import { browser } from '$app/environment';
+  import { Add16, Delete16, Edit16, Need16 } from 'carbon-icons-svelte';
+  import { userInfo } from '$lib/stores';
+  import { isAccessible } from '$lib/module/auth';
+  import AddGoodsModal from '../../../components/molcule/module/rental/AddGoodsModal.svelte';
+  import UpdateGoodsModal from '../../../components/molcule/module/rental/UpdateGoodsModal.svelte';
+  import RentModal from '../../../components/molcule/module/rental/RentModal.svelte';
 
   let allGoodies: Array<Goods> = undefined;
 
-  $: categorizedGoods = (allGoodies ?? []).filter((v) => (rentOnly && v.rentStatus !== undefined) || !rentOnly).reduce((map, obj) => ({
-    ...map,
-    [obj.category]: (map[obj.category] || []).concat(obj)
-  }), {})
+  $: categorizedGoods = (allGoodies ?? [])
+    .filter((v) => (rentOnly && v.rentStatus !== undefined) || !rentOnly)
+    .reduce(
+      (map, obj) => ({
+        ...map,
+        [obj.category]: (map[obj.category] || []).concat(obj),
+      }),
+      {},
+    );
 
   if (browser) {
     updateGoods();
@@ -57,47 +68,57 @@
 
   function updateGoods() {
     allGoodies = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/query`).then((res) => res.json()).then((res: CometResponse<Array<Goods>, CometError>) => {
-      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
-      if(res.success) allGoodies = (res.result as Array<Goods>)
-    }).catch((err) => {
-      console.error(err);
-    });
+    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/query`)
+      .then((res) => res.json())
+      .then((res: CometResponse<Array<Goods>, CometError>) => {
+        if (res.success === false)
+          throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
+        if (res.success) allGoodies = res.result as Array<Goods>;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   function deleteGoods() {
     deleteModalOpen = false;
     fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/delete`, {
       method: 'POST',
-      cache: "no-cache",
+      cache: 'no-cache',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: targetGoods.id
-      })
-    }).then((res) => res.json()).then((res: CometResponse<{}, CometError>) => {
-      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
-      updateGoods();
+        id: targetGoods.id,
+      }),
     })
+      .then((res) => res.json())
+      .then((res: CometResponse<{}, CometError>) => {
+        if (res.success === false)
+          throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
+        updateGoods();
+      });
   }
 
   function returnGoods() {
     returnModalOpen = false;
     fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/return`, {
       method: 'POST',
-      cache: "no-cache",
+      cache: 'no-cache',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId: targetGoods.rentStatus.userId,
-        goodsId: targetGoods.id
-      })
-    }).then((res) => res.json()).then((res: CometResponse<{}, CometError>) => {
-      if (res.success === false) throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
-      updateGoods();
+        goodsId: targetGoods.id,
+      }),
     })
+      .then((res) => res.json())
+      .then((res: CometResponse<{}, CometError>) => {
+        if (res.success === false)
+          throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
+        updateGoods();
+      });
   }
 </script>
 
@@ -106,13 +127,24 @@
     <Column>
       <h1>대여 현황</h1>
     </Column>
-    {#if isAccessible($userInfo, "executive")}
+    {#if isAccessible($userInfo, 'executive')}
       <Column style="display: flex; justify-content: end;">
-        <Button icon={Need16} on:click={() => {rentModalOpen = true;}} disabled={!isAccessible($userInfo, "executive")}>
+        <Button
+          icon={Need16}
+          on:click={() => {
+            rentModalOpen = true;
+          }}
+          disabled={!isAccessible($userInfo, 'executive')}>
           대여하기
         </Button>
-        <Button icon={Add16} on:click={() => {addGoodsModalOpen = true;}} kind="secondary"
-                disabled={!isAccessible($userInfo, "executive")}>대여 물품 추가
+        <Button
+          icon={Add16}
+          on:click={() => {
+            addGoodsModalOpen = true;
+          }}
+          kind="secondary"
+          disabled={!isAccessible($userInfo, 'executive')}
+          >대여 물품 추가
         </Button>
       </Column>
     {/if}
@@ -138,43 +170,55 @@
               <AccordionItem id={category}>
                 <svelte:fragment slot="title">
                   <h3>{category}</h3>
-                  <p>{goodies.length}개 중 {goodies.filter((goods) => goods.rentStatus === undefined).length}개 대여 가능</p>
+                  <p>
+                    {goodies.length}개 중 {goodies.filter((goods) => goods.rentStatus === undefined)
+                      .length}개 대여 가능
+                  </p>
                 </svelte:fragment>
                 <DataTable
-                    style="width: 100%;"
-                    size="short"
-                    expandable
-                    nonExpandableRowIds={goodies.filter((row) => row.rentStatus === undefined).map((row) => row.id)}
-                    headers={[
-                  { key: "name", value: "물품명" },
-                  { key: "rentStatus", value: "대여 여부" },
-                  { key: "overflow", empty: true }
-                ]}
-                    rows={goodies}
-                >
+                  style="width: 100%;"
+                  size="short"
+                  expandable
+                  nonExpandableRowIds={goodies
+                    .filter((row) => row.rentStatus === undefined)
+                    .map((row) => row.id)}
+                  headers={[
+                    { key: 'name', value: '물품명' },
+                    { key: 'rentStatus', value: '대여 여부' },
+                    { key: 'overflow', empty: true },
+                  ]}
+                  rows={goodies}>
                   <svelte:fragment slot="cell" let:row let:cell>
-                    {#if cell.key === "rentStatus"}
+                    {#if cell.key === 'rentStatus'}
                       {#if cell.value !== undefined}
                         <Tag type="red">대여 중</Tag>
-                        <Tag type="outline">{cell.value.userName}
-                          / {(new Date(cell.value.until)).toLocaleDateString("ko")} {(new Date(cell.value.until)).getHours()}
+                        <Tag type="outline"
+                          >{cell.value.userName}
+                          / {new Date(cell.value.until).toLocaleDateString('ko')}
+                          {new Date(cell.value.until).getHours()}
                           시 경 반납 예정
                         </Tag>
                       {:else}
                         <Tag type="green">대여 가능</Tag>
                         <Tag type="outline">{groupDisplayName[row.permission]} 이상</Tag>
                       {/if}
-                    {:else if cell.key === "name"}
+                    {:else if cell.key === 'name'}
                       <p>{cell.value}</p>
                       <p class="bx--form__helper-text">위치: {row.location}</p>
-                    {:else if cell.key === "overflow"}
-                      {#if isAccessible($userInfo, "executive")}
-                        <Button iconDescription="수정" kind="ghost" icon={Edit16}
-                                on:click={() => openUpdateGoodsModal(row)}
-                                disabled={!isAccessible($userInfo, "executive")}/>
-                        <Button iconDescription="삭제" kind="ghost" icon={Delete16}
-                                on:click={() => openDeleteGoodsModal(row)}
-                                disabled={!isAccessible($userInfo, "executive")}/>
+                    {:else if cell.key === 'overflow'}
+                      {#if isAccessible($userInfo, 'executive')}
+                        <Button
+                          iconDescription="수정"
+                          kind="ghost"
+                          icon={Edit16}
+                          on:click={() => openUpdateGoodsModal(row)}
+                          disabled={!isAccessible($userInfo, 'executive')} />
+                        <Button
+                          iconDescription="삭제"
+                          kind="ghost"
+                          icon={Delete16}
+                          on:click={() => openDeleteGoodsModal(row)}
+                          disabled={!isAccessible($userInfo, 'executive')} />
                       {/if}
                     {:else}
                       {cell.value}
@@ -187,10 +231,12 @@
                           <h5>비고</h5>
                           <pre>{row.rentStatus.additionalInfo}</pre>
                         </Column>
-                        {#if isAccessible($userInfo, "executive")}
+                        {#if isAccessible($userInfo, 'executive')}
                           <Column>
-                            <Button disabled={!isAccessible($userInfo, "executive")}
-                                    on:click={() => openReturnGoodsModal(row)}>반납 처리
+                            <Button
+                              disabled={!isAccessible($userInfo, 'executive')}
+                              on:click={() => openReturnGoodsModal(row)}
+                              >반납 처리
                             </Button>
                           </Column>
                         {/if}
@@ -201,71 +247,65 @@
               </AccordionItem>
             {/each}
           </Accordion>
+        {:else if rentOnly}
+          <p>대여 중인 물품이 없습니다.</p>
         {:else}
-          {#if rentOnly}
-            <p>대여 중인 물품이 없습니다.</p>
-          {:else}
-            <p>대여 가능한 물품이 없습니다.</p>
-          {/if}
+          <p>대여 가능한 물품이 없습니다.</p>
         {/if}
       {:else}
-        <SkeletonText paragraph/>
+        <SkeletonText paragraph />
       {/if}
     </Column>
   </Row>
 </Grid>
 
 <Modal
-    danger
-    bind:open={deleteModalOpen}
-    modalHeading="물품 삭제"
-    primaryButtonText="삭제"
-    secondaryButtonText="취소"
-    on:click:button--secondary={() => (deleteModalOpen = false)}
-    on:open
-    on:close
-    on:submit={() => deleteGoods(targetGoods)}
->
+  danger
+  bind:open={deleteModalOpen}
+  modalHeading="물품 삭제"
+  primaryButtonText="삭제"
+  secondaryButtonText="취소"
+  on:click:button--secondary={() => (deleteModalOpen = false)}
+  on:open
+  on:close
+  on:submit={() => deleteGoods(targetGoods)}>
   <p>
     {#if targetGoods}
-      이 작업은 되돌릴 수 없습니다. <br/> 정말 {targetGoods?.name}물품을 삭제하시겠습니까?
+      이 작업은 되돌릴 수 없습니다. <br /> 정말 {targetGoods?.name}물품을 삭제하시겠습니까?
     {:else}
       <InlineNotification
-          hideCloseButton
-          lowContrast
-          kind="error"
-          title="오류:"
-          subtitle="선택된 물품이 없습니다."
-      />
+        hideCloseButton
+        lowContrast
+        kind="error"
+        title="오류:"
+        subtitle="선택된 물품이 없습니다." />
     {/if}
   </p>
 </Modal>
 <Modal
-    bind:open={returnModalOpen}
-    modalHeading="물품 반납"
-    primaryButtonText="반납"
-    secondaryButtonText="취소"
-    on:click:button--secondary={() => (returnModalOpen = false)}
-    on:open
-    on:close
-    on:submit={() => returnGoods(targetGoods)}
->
+  bind:open={returnModalOpen}
+  modalHeading="물품 반납"
+  primaryButtonText="반납"
+  secondaryButtonText="취소"
+  on:click:button--secondary={() => (returnModalOpen = false)}
+  on:open
+  on:close
+  on:submit={() => returnGoods(targetGoods)}>
   <p>
     {#if targetGoods}
-      물품의 상태를 점검한 후 반납하시기 바랍니다.<br/> 정말 {targetGoods?.name}물품을 반납하시겠습니까?
+      물품의 상태를 점검한 후 반납하시기 바랍니다.<br /> 정말 {targetGoods?.name}물품을
+      반납하시겠습니까?
     {:else}
       <InlineNotification
-          hideCloseButton
-          lowContrast
-          kind="error"
-          title="오류:"
-          subtitle="선택된 물품이 없습니다."
-      />
+        hideCloseButton
+        lowContrast
+        kind="error"
+        title="오류:"
+        subtitle="선택된 물품이 없습니다." />
     {/if}
   </p>
 </Modal>
 
-<AddGoodsModal bind:open={addGoodsModalOpen} on:success={() => updateGoods()}/>
-<UpdateGoodsModal bind:open={updateGoodsModalOpen} {targetGoods}
-                  on:success={() => updateGoods()}/>
-<RentModal bind:open={rentModalOpen} goodies={allGoodies} on:success={() => updateGoods()}/>
+<AddGoodsModal bind:open={addGoodsModalOpen} on:success={() => updateGoods()} />
+<UpdateGoodsModal bind:open={updateGoodsModalOpen} {targetGoods} on:success={() => updateGoods()} />
+<RentModal bind:open={rentModalOpen} goodies={allGoodies} on:success={() => updateGoods()} />

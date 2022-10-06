@@ -4,25 +4,25 @@ import { optimizeImports } from 'carbon-preprocess-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://github.com/sveltejs/svelte-preprocess
-	// for more information about preprocessors
+  // Consult https://github.com/sveltejs/svelte-preprocess
+  // for more information about preprocessors
 
-	kit: {
-		adapter: adapter({
-			pages: 'build',
-			assets: 'build'
-		}),
-		trailingSlash: "always"
-	},
+  kit: {
+    adapter: adapter({
+      pages: 'build',
+      assets: 'build',
+    }),
+    trailingSlash: 'always',
+  },
 
-	preprocess: [
-		preprocess({
-			scss: {
-				prependData: '@use "src/styles/variables.scss" as *;'
-			}
-		}),
-		optimizeImports()
-	]
+  preprocess: [
+    preprocess({
+      scss: {
+        prependData: '@use "src/styles/variables.scss" as *;',
+      },
+    }),
+    optimizeImports(),
+  ],
 };
 
 export default config;

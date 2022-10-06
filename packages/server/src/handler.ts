@@ -1,17 +1,17 @@
-import {callbackHandler} from './module/auth/handler/callback';
-import {userGetHandler} from './module/auth/handler/user/get';
-import {userUpdateHandler} from './module/auth/handler/user/update';
-import {logoutHandler} from './module/auth/handler/logout';
-import {userBatchPutHandler} from './module/auth/handler/user/batchPut';
-import {userBatchDeleteHandler} from './module/auth/handler/user/batchDelete';
-import {userQueryHandler} from './module/auth/handler/user/query';
-import {rentalAddHandler} from './module/rental/handler/add';
-import {rentalQueryHandler} from './module/rental/handler/query';
-import {rentalUpdateHandler} from './module/rental/handler/update';
-import {rentalRentHandler} from './module/rental/handler/rent';
-import {rentalReturnHandler} from './module/rental/handler/return';
-import {rentalDeleteHandler} from "./module/rental/handler/delete";
-import {logQueryHandler} from "./module/log/handler/query";
+import { callbackHandler } from './module/auth/handler/callback';
+import { userGetHandler } from './module/auth/handler/user/get';
+import { userUpdateHandler } from './module/auth/handler/user/update';
+import { logoutHandler } from './module/auth/handler/logout';
+import { userBatchPutHandler } from './module/auth/handler/user/batchPut';
+import { userBatchDeleteHandler } from './module/auth/handler/user/batchDelete';
+import { userQueryHandler } from './module/auth/handler/user/query';
+import { rentalAddHandler } from './module/rental/handler/add';
+import { rentalQueryHandler } from './module/rental/handler/query';
+import { rentalUpdateHandler } from './module/rental/handler/update';
+import { rentalRentHandler } from './module/rental/handler/rent';
+import { rentalReturnHandler } from './module/rental/handler/return';
+import { rentalDeleteHandler } from './module/rental/handler/delete';
+import { logQueryHandler } from './module/log/handler/query';
 
 export const auth = {
   callbackHandler,
@@ -21,8 +21,8 @@ export const auth = {
     userUpdateHandler,
     userQueryHandler,
     userBatchPutHandler,
-    userBatchDeleteHandler
-  }
+    userBatchDeleteHandler,
+  },
 };
 
 export const rental = {
@@ -31,9 +31,9 @@ export const rental = {
   rentalUpdateHandler,
   rentalDeleteHandler,
   rentalRentHandler,
-  rentalReturnHandler
-}
+  rentalReturnHandler,
+};
 
 export const log = {
-  logQueryHandler
-}
+  logQueryHandler,
+};
