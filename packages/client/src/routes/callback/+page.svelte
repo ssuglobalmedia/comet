@@ -1,12 +1,12 @@
 <script lang='ts'>
     import {Button, Column, Content, Grid, InlineLoading} from "carbon-components-svelte";
-    import {onMount} from "svelte";
     import EntryCard from "../../components/molcule/entry/EntryCard.svelte";
     import {variables} from "$lib/variables";
+    import { browser } from '$app/environment';
     let result;
     let redirect;
     let id;
-    onMount(() => {
+    if(browser) {
         result = new URLSearchParams(window.location.search).get('result');
         redirect = new URLSearchParams(window.location.search).get('redirect');
         id = fetch(variables.baseUrl + '/api/module/auth/callback?result=' + encodeURIComponent(result)).then((res) => res.json());
@@ -14,7 +14,7 @@
             document.cookie = `comet_session=${encodeURIComponent(data.access_token)}; path=/; domain=${window.location.hostname}; max-age=${data.expires_in}; samesite=lax`;
             window.location.href = redirect ? redirect : '/module/dashboard';
         });
-    });
+    }
 </script>
 
 <svelte:head>
