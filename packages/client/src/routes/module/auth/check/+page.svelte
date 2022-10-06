@@ -16,7 +16,7 @@
     CheckmarkFilled16,
   } from 'carbon-icons-svelte';
   import StepTile from '../../../../components/molcule/StepTile.svelte';
-  import type { CometResponse, User } from '@types/mirinae-comet';
+  import type { CometError, CometResponse, User } from '@types/mirinae-comet';
   import { fetchWithAuth, isAccessible } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
@@ -62,9 +62,9 @@
     (async () => {
       const res = (await (
         await fetchWithAuth(variables.baseUrl + '/api/module/auth/user/query')
-      ).json()) as CometResponse;
+      ).json()) as CometResponse<Array<User>, CometError>;
       if (res.success) {
-        const users: Array<User> = res.result as Array<User>;
+        const users: Array<User> = res.result;
         validatedData = data.reduce((arr, v) => {
           const userId = `${v[validationRule.userId]}`.trim();
           const userName = `${v[validationRule.userName]}`.trim();

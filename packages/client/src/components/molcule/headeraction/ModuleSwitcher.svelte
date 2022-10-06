@@ -1,9 +1,9 @@
 <script lang="ts">
   import { HeaderPanelDivider, HeaderPanelLink, HeaderPanelLinks } from 'carbon-components-svelte';
   import { groupDisplayName } from '$lib/module/auth';
-  import type { ModuleDefinition } from '../../global';
   import { isAccessible } from '$lib/module/auth';
   import { userInfo } from '$lib/stores';
+  import type { ModuleDefinition } from '../../../global';
 
   export let modules: Record<string, ModuleDefinition>;
 

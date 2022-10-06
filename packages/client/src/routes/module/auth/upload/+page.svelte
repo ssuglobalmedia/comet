@@ -17,7 +17,7 @@
   import { NextFilled16, SendToBack16, Upload16 } from 'carbon-icons-svelte';
   import StepTile from '../../../../components/molcule/StepTile.svelte';
   import DataTransformer from '../../../../components/molcule/module/auth/DataTransformer.svelte';
-  import type { CometResponse, User } from '@types/mirinae-comet';
+  import type { CometError, CometResponse, User } from '@types/mirinae-comet';
   import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
@@ -89,14 +89,14 @@
       if (conversion.noOverwrite) {
         const res = (await (
           await fetchWithAuth(variables.baseUrl + '/api/module/auth/user/query')
-        ).json()) as CometResponse;
+        ).json()) as CometResponse<Array<User>, CometError>;
         if (res.success) {
-          const originalUsers = res.result as Array<User>;
+          const originalUsers = res.result;
           convertedData = converted.filter((newUser) =>
             originalUsers.every((org) => `${org.userId}` !== `${newUser.userId}`),
           );
-        } else {
-          console.error(res.error_description);
+        } else if(res.success === false) {
+          console.error(res.error.message);
           convertedData = [];
         }
       } else {
@@ -206,7 +206,7 @@
 {:else if currentIndex === 2}
   <StepTile
     title="데이터 적용"
-    description="등록할 데이터를 확인하고 "다음으로"를 눌러 적용하세요.">
+    description="등록할 데이터를 확인하고 '다음으로'를 눌러 적용하세요.">
     {#if convertedData}
       <DataTable
         sortable

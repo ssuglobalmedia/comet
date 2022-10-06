@@ -16,7 +16,7 @@
   } from 'carbon-components-svelte';
   import { fetchWithAuth, groupDisplayName, isAccessible } from '$lib/module/auth';
   import { variables } from '$lib/variables';
-  import type { CometResponse, Goods, User } from '@types/mirinae-comet';
+  import type { CometError, CometResponse, Goods, User } from '@types/mirinae-comet';
   import { createEventDispatcher } from 'svelte';
 
   export let open = false;
@@ -107,7 +107,7 @@
           }),
         })
           .then((res) => res.json())
-          .then((res: CometResponse) => {
+          .then((res: CometResponse<{}, CometError>) => {
             if (!res.success) {
               reject();
               return;
@@ -135,8 +135,8 @@
     userReqStatus = 'active';
     fetchWithAuth(variables.baseUrl + `/api/module/auth/user/query?starts=${userId}`)
       .then((res) => res.json())
-      .then((res: CometResponse) => {
-        if (!res.success || (res.result as Array<User>).length == 0) {
+      .then((res: CometResponse<Array<User>, CometError>) => {
+        if (!res.success || (res.result).length == 0) {
           userReqStatus = 'error';
           return;
         }

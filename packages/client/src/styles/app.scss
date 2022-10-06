@@ -113,6 +113,7 @@ $carbon--theme: $soongsil--theme--g100;
   @include carbon--theme($soongsil--theme--g100, true);
 }
 
+//noinspection CssUnknownTarget
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600;700&display=swap');
 $sans-kr: unquote("'IBM Plex Sans KR', 'Helvetica Neue', Arial, sans-serif");
 $carbon--font-families: map-merge(
