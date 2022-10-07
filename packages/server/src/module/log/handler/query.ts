@@ -3,7 +3,6 @@ import { createResponse, JWT_SECRET } from '../../../common';
 import * as jwt from 'jsonwebtoken';
 import { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 import {
-  CometError,
   InternalError,
   isCometError,
   responseAsCometError,

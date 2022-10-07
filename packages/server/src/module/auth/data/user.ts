@@ -9,7 +9,7 @@ import type {
   WriteRequest,
 } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
-import { NotFoundError, CometError, BadRequestError } from '../../../util/error';
+import { NotFoundError, BadRequestError } from '../../../util/error';
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 

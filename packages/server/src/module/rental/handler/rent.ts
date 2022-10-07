@@ -6,7 +6,6 @@ import { assertAccessible } from '../../auth/util/permission';
 import { rentGoods } from '../data/rental';
 import {
   BadRequestError,
-  CometError,
   InternalError,
   responseAsCometError,
   UnauthorizedError,

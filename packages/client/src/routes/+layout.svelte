@@ -1,11 +1,11 @@
 <script>
-  import "../styles/app.css";
-  import { createEventDispatcher } from "svelte";
+  import '../styles/app.scss';
+  import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  $: if (typeof window !== "undefined") {
-    document.documentElement.setAttribute("full", "true");
-    dispatch("update", { "full": "true" });
+  $: if (typeof window !== 'undefined') {
+    document.documentElement.setAttribute('full', 'true');
+    dispatch('update', { full: 'true' });
   }
 </script>
 
@@ -23,12 +23,12 @@
     background-color: var(--cds-ui-background);
   }
 
-  :root[full="true"] body {
+  :root[full='true'] body {
     inline-size: 100%;
     block-size: 100%;
   }
 
-  :root[full="true"] #svelte {
+  :root[full='true'] #svelte {
     inline-size: 100%;
     block-size: 100%;
   }
@@ -39,4 +39,3 @@
     block-size: 100%;
   }
 </style>
-

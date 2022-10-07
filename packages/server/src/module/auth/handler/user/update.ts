@@ -6,7 +6,6 @@ import * as jwt from 'jsonwebtoken';
 import { updateUser } from '../../data/user';
 import {
   BadRequestError,
-  CometError,
   InternalError,
   isCometError,
   responseAsCometError,

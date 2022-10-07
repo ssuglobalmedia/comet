@@ -2,12 +2,7 @@ import type { APIGatewayProxyHandler } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
 import type { JwtPayload } from 'jsonwebtoken';
 import { createResponse, JWT_SECRET } from '../../../../common';
-import {
-  CometError,
-  InternalError,
-  isCometError,
-  responseAsCometError,
-} from '../../../../util/error';
+import { InternalError, isCometError, responseAsCometError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
 import { batchDeleteUser } from '../../data/user';
 

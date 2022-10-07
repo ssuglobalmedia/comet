@@ -5,7 +5,6 @@ import * as jwt from 'jsonwebtoken';
 import { assertAccessible } from '../../auth/util/permission';
 import {
   BadRequestError,
-  CometError,
   InternalError,
   isCometError,
   responseAsCometError,

@@ -4,7 +4,6 @@ import { JWT_SECRET, createResponse } from '../../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
 import { getUser } from '../../data/user';
 import {
-  CometError,
   InternalError,
   isCometError,
   responseAsCometError,
