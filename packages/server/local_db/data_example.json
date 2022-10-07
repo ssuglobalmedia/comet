@@ -1,6 +1,6 @@
 {
   "RequestItems": {
-    "KeyName": [
+    "CometTable": [
       {
         "PutRequest": {
           "Item": {
@@ -10,8 +10,12 @@
             "dataId": {
               "S": "user-20XXXXXX"
             },
-            "userGroup": "admin",
-            "userName": "Killdong Hong"
+            "userGroup": {
+              "S": "admin"
+            },
+            "userName": {
+              "S": "Killdong Hong"
+            }
           }
         }
       }
