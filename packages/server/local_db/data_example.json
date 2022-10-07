@@ -1,0 +1,22 @@
+{
+  "RequestItems": {
+    "KeyName": [
+      {
+        "PutRequest": {
+          "Item": {
+            "module": {
+              "S": "auth"
+            },
+            "dataId": {
+              "S": "user-20XXXXXX"
+            },
+            "userGroup": "admin",
+            "userName": "Killdong Hong"
+          }
+        }
+      }
+    ]
+  },
+  "ReturnConsumedCapacity": "TOTAL",
+  "ReturnItemCollectionMetrics": "NONE"
+}
