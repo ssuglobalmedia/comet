@@ -1,0 +1,26 @@
+{
+  "RequestItems": {
+    "CometTable": [
+      {
+        "PutRequest": {
+          "Item": {
+            "module": {
+              "S": "auth"
+            },
+            "dataId": {
+              "S": "user-20XXXXXX"
+            },
+            "userGroup": {
+              "S": "admin"
+            },
+            "userName": {
+              "S": "Killdong Hong"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "ReturnConsumedCapacity": "TOTAL",
+  "ReturnItemCollectionMetrics": "NONE"
+}
