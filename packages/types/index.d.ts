@@ -132,28 +132,30 @@ export type LogDao = {
 
 /* Config Module */
 
+export type WebhookType = 'teams';
+
 export interface Config {
-  rentalWebhook: {
+  rentalWebhook?: {
     url: string;
-    type: 'teams';
+    type: WebhookType;
   };
   logFormat: {
-    [module: string]: {
-      [action: string]: string;
-    }
-  }
+    [moduleAction: string]: string;
+  };
 }
 
-export type ConfigUpdateRequest = Optional<Config>;
+export type ConfigUpdateRequest = Partial<Config>;
 
 export interface ConfigDao {
-  rW: { M: {
-    u: { S: string; };
-    t: { S: string; };
-  }};
-  lF: { M: {
-    [module: string]: { M: {
-        [action: string]: { S: string };
-      }};
-  }};
+  rW?: {
+    M: {
+      u: { S: string };
+      t: { S: WebhookType };
+    };
+  };
+  lF: {
+    M: {
+      [moduleAction: string]: { S: string };
+    };
+  };
 }
