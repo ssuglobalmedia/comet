@@ -1,8 +1,17 @@
 import type { ModuleDefinition, ModulePageDefinition } from '../global';
+import {
+  CalendarEvent,
+  Dashboard,
+  FileBackup,
+  Gear,
+  SocialWork_01,
+  UserAnalytics,
+} from 'carbon-pictograms-svelte';
 
 export const modules: Record<string, ModuleDefinition> = {
   auth: {
     module: 'auth',
+    iconComponent: UserAnalytics,
     accessibleGroup: 'executive',
     title: '사용자(학부생) 열람/관리',
     description: '사용자(학부생)의 정보를 보고 관리합니다.',
@@ -21,24 +30,28 @@ export const modules: Record<string, ModuleDefinition> = {
   },
   rental: {
     module: 'rental',
+    iconComponent: SocialWork_01,
     accessibleGroup: 'certificated',
     title: '물품 대여',
     description: '배터리, 우산, 노트북 거치대 등 다양한 물품을 대여합니다.',
   },
   calendar: {
     module: 'calendar',
+    iconComponent: CalendarEvent,
     accessibleGroup: 'everyone',
     title: '일정 보기',
     description: '학부, 학사 일정을 확인합니다.',
   },
   log: {
     module: 'log',
+    iconComponent: FileBackup,
     accessibleGroup: 'executive',
     title: '관리 기록',
     description: 'COMET으로 관리한 기록을 열람합니다.',
   },
   dashboard: {
     module: 'dashboard',
+    iconComponent: Dashboard,
     accessibleGroup: 'everyone',
     title: '대시보드',
     description: '전체 기능 목록을 봅니다.',
