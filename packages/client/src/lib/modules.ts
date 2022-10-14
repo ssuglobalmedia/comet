@@ -37,6 +37,13 @@ export const modules: Record<string, ModuleDefinition> = {
     title: '관리 기록',
     description: 'COMET으로 관리한 기록을 열람합니다.',
   },
+  config: {
+    module: 'config',
+    iconComponent: Gear,
+    accessibleGroup: 'admin',
+    title: '서비스 관리',
+    description: 'COMET 서비스를 설정합니다.',
+  },
   dashboard: {
     module: 'dashboard',
     accessibleGroup: 'everyone',
