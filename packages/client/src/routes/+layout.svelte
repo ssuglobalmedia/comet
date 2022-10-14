@@ -39,4 +39,9 @@
     inline-size: 100%;
     block-size: 100%;
   }
+
+  .inline-svg svg {
+    display: inline;
+    vertical-align: unset;
+  }
 </style>
