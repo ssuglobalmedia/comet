@@ -1,4 +1,5 @@
 <script>
+  import "../app.postcss";
   import '../styles/app.scss';
   import { createEventDispatcher } from 'svelte';
 
@@ -9,7 +10,7 @@
   }
 </script>
 
-<slot />
+<slot></slot>
 
 <style lang="scss" global>
   html {

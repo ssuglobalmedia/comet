@@ -20,6 +20,8 @@ const config = {
       scss: {
         prependData: '@use "src/styles/variables.scss" as *;',
       },
+
+      postcss: true,
     }),
     optimizeImports(),
   ],
