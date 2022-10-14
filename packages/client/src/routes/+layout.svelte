@@ -1,4 +1,5 @@
 <script>
+  import "../app.postcss";
   import '../styles/app.scss';
   import { createEventDispatcher } from 'svelte';
 
@@ -9,7 +10,7 @@
   }
 </script>
 
-<slot />
+<slot></slot>
 
 <style lang="scss" global>
   html {
@@ -37,5 +38,10 @@
     min-height: 100%;
     inline-size: 100%;
     block-size: 100%;
+  }
+
+  .inline-svg svg {
+    display: inline;
+    vertical-align: unset;
   }
 </style>
