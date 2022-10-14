@@ -9,25 +9,21 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { GoodsUpdateRequest } from 'mirinae-comet';
+import type { ConfigUpdateRequest, GoodsUpdateRequest } from 'mirinae-comet';
 import { updateConfig } from '../data/config';
 
 export const configUpdateHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-  let data: GoodsUpdateRequest;
+  let data: ConfigUpdateRequest;
   try {
-    data = JSON.parse(event.body) as GoodsUpdateRequest;
+    data = JSON.parse(event.body) as ConfigUpdateRequest;
   } catch {
     return responseAsCometError(new BadRequestError('Data body is malformed JSON'));
-  }
-  if (!data || !data.id) {
-    return responseAsCometError(new BadRequestError());
   }
   let payload: JwtPayload;
   try {
     payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
   } catch {
-    console.debug('malformed token');
     return responseAsCometError(new UnauthorizedError());
   }
   try {
