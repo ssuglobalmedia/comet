@@ -109,6 +109,7 @@
   {#if isAuthorized && $userInfo}
     <HeaderUtilities>
       <HeaderAction
+        class='inline-svg'
         bind:isOpen={isUserInfoOpen}
         icon={UserAvatarFilledAlt20}
         closeIcon={UserAvatarFilledAlt20}
@@ -116,7 +117,7 @@
         transition={transitions[selected].value}>
         <UserMenu />
       </HeaderAction>
-      <HeaderAction bind:isOpen={isModuleSwitcherOpen} transition={transitions[selected].value}>
+      <HeaderAction class='inline-svg' bind:isOpen={isModuleSwitcherOpen} transition={transitions[selected].value}>
         <ModuleSwitcher {modules} />
       </HeaderAction>
     </HeaderUtilities>

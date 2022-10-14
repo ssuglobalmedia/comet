@@ -20,13 +20,6 @@
     },
     {},
   );
-  export let pictograms = {
-    auth: UserAnalytics,
-    dashboard: Dashboard,
-    rental: SocialWork_01,
-    calendar: CalendarEvent,
-    log: FileBackup,
-  };
 </script>
 
 <Grid noGutter narrow>
@@ -40,7 +33,7 @@
               {#each modules as module}
                 <Column>
                   <ClickableTile href="/module/{module.module}" class="my-4">
-                    <svelte:component this={pictograms[module.module]} />
+                    <svelte:component this={module.iconComponent} />
                     <h2>{module.title}</h2>
                     <p>{module.description}</p>
                   </ClickableTile>
