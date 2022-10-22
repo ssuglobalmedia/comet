@@ -3,7 +3,7 @@
   import { groupDisplayName } from '$lib/module/auth';
   import { isAccessible } from '$lib/module/auth';
   import { userInfo } from '$lib/stores';
-  import type { ModuleDefinition } from '../../../global';
+  import type { ModuleDefinition } from '../../../../global';
 
   export let modules: Record<string, ModuleDefinition>;
 

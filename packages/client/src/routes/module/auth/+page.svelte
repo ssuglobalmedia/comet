@@ -25,10 +25,10 @@
   import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
   import type { CometError, CometResponse, User } from 'mirinae-comet';
   import { Checkmark16, Delete16, Edit16 } from 'carbon-icons-svelte';
-  import UpdateModal from '../../../components/molcule/module/auth/UpdateModal.svelte';
-  import BatchUpdateModal from '../../../components/molcule/module/auth/BatchUpdateModal.svelte';
-  import ExportModal from '../../../components/molcule/module/auth/ExportModal.svelte';
-  import PaginationKor from '../../../components/atom/PaginationKor.svelte';
+  import UpdateModal from '../../../lib/components/molcule/module/auth/UpdateModal.svelte';
+  import BatchUpdateModal from '../../../lib/components/molcule/module/auth/BatchUpdateModal.svelte';
+  import ExportModal from '../../../lib/components/molcule/module/auth/ExportModal.svelte';
+  import PaginationKor from '../../../lib/components/atom/PaginationKor.svelte';
 
   type UserCell = {
     id: string;

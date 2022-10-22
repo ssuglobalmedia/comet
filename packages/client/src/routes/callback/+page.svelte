@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, Column, Content, Grid, InlineLoading } from 'carbon-components-svelte';
-  import EntryCard from '../../components/molcule/entry/EntryCard.svelte';
+  import EntryCard from '../../lib/components/molcule/entry/EntryCard.svelte';
   import { variables } from '$lib/variables';
   import { browser } from '$app/environment';
   let result;

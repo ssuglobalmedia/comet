@@ -5,8 +5,8 @@
     HeaderPanelLinks,
     Tile,
   } from 'carbon-components-svelte';
-  import { userInfo } from '$lib/stores';
-  import { groupDisplayName } from '$lib/module/auth';
+  import { userInfo } from '$lib/stores.js';
+  import { groupDisplayName } from '$lib/module/auth.js';
 </script>
 
 <Tile>

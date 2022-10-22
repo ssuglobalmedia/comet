@@ -23,9 +23,9 @@
   import { Add16, Delete16, Edit16, Need16 } from 'carbon-icons-svelte';
   import { userInfo } from '$lib/stores';
   import { isAccessible } from '$lib/module/auth';
-  import AddGoodsModal from '../../../components/molcule/module/rental/AddGoodsModal.svelte';
-  import UpdateGoodsModal from '../../../components/molcule/module/rental/UpdateGoodsModal.svelte';
-  import RentModal from '../../../components/molcule/module/rental/RentModal.svelte';
+  import AddGoodsModal from '../../../lib/components/molcule/module/rental/AddGoodsModal.svelte';
+  import UpdateGoodsModal from '../../../lib/components/molcule/module/rental/UpdateGoodsModal.svelte';
+  import RentModal from '../../../lib/components/molcule/module/rental/RentModal.svelte';
 
   let allGoodies: Array<Goods> = undefined;
 

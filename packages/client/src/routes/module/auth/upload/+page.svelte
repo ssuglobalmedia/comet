@@ -15,14 +15,14 @@
   import type { WorkBook } from 'xlsx';
   import { read, utils } from 'xlsx';
   import { NextFilled16, SendToBack16, Upload16 } from 'carbon-icons-svelte';
-  import StepTile from '../../../../components/molcule/StepTile.svelte';
-  import DataTransformer from '../../../../components/molcule/module/auth/DataTransformer.svelte';
+  import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
+  import DataTransformer from '../../../../lib/components/molcule/module/auth/DataTransformer.svelte';
   import type { CometError, CometResponse, User } from '@types/mirinae-comet';
   import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
   import { getCurrentFullSemester } from '$lib/utils';
-  import PaginationKor from '../../../../components/atom/PaginationKor.svelte';
+  import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;

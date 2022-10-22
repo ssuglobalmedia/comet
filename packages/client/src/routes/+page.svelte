@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Button, Column, Content, Grid } from 'carbon-components-svelte';
-  import Soongsil from '../icons/Soongsil.svelte';
+  import Soongsil from '../lib/icons/Soongsil.svelte';
   import { onMount } from 'svelte';
   import { getAuthorization } from '$lib/module/auth';
-  import EntryCard from '../components/molcule/entry/EntryCard.svelte';
+  import EntryCard from '../lib/components/molcule/entry/EntryCard.svelte';
 
   let callbackUrl;
   let loginCookie;

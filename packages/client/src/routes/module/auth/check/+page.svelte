@@ -15,14 +15,14 @@
     WarningAlt16,
     CheckmarkFilled16,
   } from 'carbon-icons-svelte';
-  import StepTile from '../../../../components/molcule/StepTile.svelte';
+  import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
   import type { CometError, CometResponse, User } from '@types/mirinae-comet';
   import { fetchWithAuth, isAccessible } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
-  import RuleDefiner from '../../../../components/molcule/module/auth/RuleDefiner.svelte';
+  import RuleDefiner from '../../../../lib/components/molcule/module/auth/RuleDefiner.svelte';
   import { getCurrentFullSemester } from '$lib/utils';
-  import PaginationKor from '../../../../components/atom/PaginationKor.svelte';
+  import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
