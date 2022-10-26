@@ -22,13 +22,14 @@
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
   import { userInfo } from '$lib/stores';
-  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
+  import { groupDisplayName } from '$lib/module/auth';
   import type { CometError, CometResponse, User } from 'mirinae-comet';
   import { Checkmark16, Delete16, Edit16 } from 'carbon-icons-svelte';
   import UpdateModal from '../../../lib/components/molcule/module/auth/UpdateModal.svelte';
   import BatchUpdateModal from '../../../lib/components/molcule/module/auth/BatchUpdateModal.svelte';
   import ExportModal from '../../../lib/components/molcule/module/auth/ExportModal.svelte';
   import PaginationKor from '../../../lib/components/atom/PaginationKor.svelte';
+  import { fetchWithAuth } from '$lib/api/common';
 
   type UserCell = {
     id: string;

@@ -14,10 +14,11 @@
     SelectItem,
     TextInput,
   } from 'carbon-components-svelte';
-  import { fetchWithAuth, groupDisplayName, isAccessible } from '$lib/module/auth';
+  import { groupDisplayName, isAccessible } from '$lib/module/auth';
   import { variables } from '$lib/variables';
   import type { CometError, CometResponse, Goods, User } from '@types/mirinae-comet';
   import { createEventDispatcher } from 'svelte';
+  import { fetchWithAuth } from '$lib/api/common';
 
   export let open = false;
 

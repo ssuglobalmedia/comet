@@ -17,12 +17,13 @@
   } from 'carbon-icons-svelte';
   import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
   import type { CometError, CometResponse, User } from '@types/mirinae-comet';
-  import { fetchWithAuth, isAccessible } from '$lib/module/auth';
+  import { isAccessible } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
   import RuleDefiner from '../../../../lib/components/molcule/module/auth/RuleDefiner.svelte';
   import { getCurrentFullSemester } from '$lib/utils';
   import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
+  import { fetchWithAuth } from '$lib/api/common';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;

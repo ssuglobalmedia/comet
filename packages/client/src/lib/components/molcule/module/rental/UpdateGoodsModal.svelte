@@ -11,9 +11,10 @@
     ModalHeader,
     TextInput,
   } from 'carbon-components-svelte';
-  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
+  import { groupDisplayName } from '$lib/module/auth';
   import { variables } from '$lib/variables';
   import { createEventDispatcher } from 'svelte';
+  import { fetchWithAuth } from '$lib/api/common';
 
   export let open = false;
   export let reqStatus: 'pending' | 'active' | 'finished' | 'error' = 'pending';

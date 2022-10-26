@@ -1,9 +1,9 @@
 <script lang="ts">
   import { CodeSnippet, Column, Grid, Row, TextAreaSkeleton } from 'carbon-components-svelte';
   import type { Log, CometResponse, CometError } from 'mirinae-comet';
-  import { fetchWithAuth } from '$lib/module/auth';
   import { variables } from '$lib/variables';
   import { browser } from '$app/environment';
+  import { fetchWithAuth } from '$lib/api/common';
 
   let logs: Array<Log> = undefined;
 

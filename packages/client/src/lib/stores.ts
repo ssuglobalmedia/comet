@@ -3,9 +3,10 @@
 import { readable } from 'svelte/store';
 import type { Readable } from 'svelte/store';
 import type { CometError, CometResponse, User } from 'mirinae-comet';
-import { fetchWithAuth, getAuthorization } from '$lib/module/auth';
+import { getAuthorization } from '$lib/module/auth';
 import { variables } from '$lib/variables';
 import { browser } from '$app/environment';
+import { fetchWithAuth } from '$lib/api/common';
 
 export const userInfo: Readable<User> = readable<User>(undefined, (set) => {
   if (browser) {

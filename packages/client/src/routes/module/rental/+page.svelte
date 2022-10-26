@@ -12,11 +12,10 @@
     Row,
     SkeletonText,
     Tag,
-    Tile,
     Toggle,
   } from 'carbon-components-svelte';
   import type { CometError, CometResponse, Goods } from 'mirinae-comet';
-  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
+  import { groupDisplayName } from '$lib/module/auth';
 
   import { variables } from '$lib/variables';
   import { browser } from '$app/environment';
@@ -26,6 +25,7 @@
   import AddGoodsModal from '../../../lib/components/molcule/module/rental/AddGoodsModal.svelte';
   import UpdateGoodsModal from '../../../lib/components/molcule/module/rental/UpdateGoodsModal.svelte';
   import RentModal from '../../../lib/components/molcule/module/rental/RentModal.svelte';
+  import { fetchWithAuth } from '$lib/api/common';
 
   let allGoodies: Array<Goods> = undefined;
 

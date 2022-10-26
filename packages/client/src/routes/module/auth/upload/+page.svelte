@@ -18,11 +18,12 @@
   import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
   import DataTransformer from '../../../../lib/components/molcule/module/auth/DataTransformer.svelte';
   import type { CometError, CometResponse, User } from '@types/mirinae-comet';
-  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
+  import { groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { variables } from '$lib/variables';
   import { getCurrentFullSemester } from '$lib/utils';
   import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
+  import { fetchWithAuth } from '$lib/api/common';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -60,7 +61,7 @@
   }
 
   function convertGroup(groupConversion, value) {
-    const defaults = Object.entries(groupConversion).filter(([key, value]) => value.defaults);
+    const defaults = Object.entries(groupConversion).filter(([, value]) => value.defaults);
     const defaultGroup = defaults.length ? defaults[0][0] : 'unregistered';
     const groups = Object.fromEntries(
       Object.entries(groupConversion)
