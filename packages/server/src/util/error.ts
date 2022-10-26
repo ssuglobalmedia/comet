@@ -39,6 +39,12 @@ export class UnauthorizedError extends CometError {
   }
 }
 
+export class ForbiddenError extends CometError {
+  constructor(message?: string, additionalInfo?: Record<string, unknown>) {
+    super(403, 'Forbidden', message, additionalInfo);
+  }
+}
+
 export class NotFoundError extends CometError {
   constructor(message?: string, additionalInfo?: Record<string, unknown>) {
     super(404, 'NotFound', message, additionalInfo);
