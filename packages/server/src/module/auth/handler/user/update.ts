@@ -1,5 +1,5 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import type { User } from 'mirinae-comet';
+import type { User, UserUpdateResponse } from 'mirinae-comet';
 import { createResponse, JWT_SECRET } from '../../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
@@ -22,20 +22,19 @@ export const userUpdateHandler: APIGatewayProxyHandler = async (event) => {
     return responseAsCometError(new BadRequestError('Data body is malformed JSON'));
   }
   if (!data || !data.userId) {
-    return responseAsCometError(new BadRequestError());
+    return responseAsCometError(new BadRequestError('Wrong data body'));
   }
   let payload: JwtPayload;
   try {
     payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
   } catch {
-    console.debug('malformed token');
-    return responseAsCometError(new UnauthorizedError());
+    return responseAsCometError(new UnauthorizedError('Malformed token'));
   }
   try {
     const id = payload.aud as string;
     await assertAccessible(id, token, 'admin');
-    const res = await updateUser(data);
-    return createResponse(200, { success: true, ...res });
+    const result = await updateUser(data);
+    return createResponse<UserUpdateResponse>(200, { success: true, result });
   } catch (e) {
     if (isCometError(e)) return responseAsCometError(e);
     console.error(e);

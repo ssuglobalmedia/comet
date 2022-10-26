@@ -1,4 +1,3 @@
-import type { User, UserDao } from 'mirinae-comet';
 import type {
   BatchWriteItemInput,
   ExpressionAttributeValueMap,
@@ -10,6 +9,7 @@ import type {
 } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
 import { NotFoundError, BadRequestError } from '../../../util/error';
+import type { User, UserDao, UserUpdateRequest } from 'mirinae-comet';
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 
@@ -85,14 +85,6 @@ export const queryUser = async function (startsWith: string): Promise<Array<User
     ];
   } while (res.LastEvaluatedKey);
   return composedRes;
-};
-
-type UserUpdateRequest = {
-  userId: string;
-  userName?: string;
-  userGroup?: string;
-  lastSemester?: string;
-  phone?: string;
 };
 
 export const updateUser = async function (info: UserUpdateRequest): Promise<UserUpdateRequest> {
