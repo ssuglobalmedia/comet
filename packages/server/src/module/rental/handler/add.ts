@@ -34,7 +34,7 @@ export const rentalAddHandler: APIGatewayProxyHandler = async (event) => {
     const id = payload.aud as string;
     await assertAccessible(id, token, 'executive');
     const res = await updateGoods(data);
-    return createResponse<GoodsAddResponse>(200, { success: res });
+    return createResponse<GoodsAddResponse>(200, { success: true });
   } catch (e) {
     if (isCometError(e)) return responseAsCometError(e);
     console.error(e);
