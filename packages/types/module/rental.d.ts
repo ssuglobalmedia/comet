@@ -14,7 +14,7 @@ import type {
 export type RentStatus = {
   userId: string;
   userName: string;
-  until: Date;
+  until: Date | string;
   additionalInfo?: string;
   announced?: boolean;
 };
