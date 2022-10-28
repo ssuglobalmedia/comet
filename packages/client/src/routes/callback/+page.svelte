@@ -3,18 +3,25 @@
   import EntryCard from '../../lib/components/molcule/entry/EntryCard.svelte';
   import { browser } from '$app/environment';
   import { apiCallback } from '$lib/api/module/auth';
+  import { InternalError } from '$lib/api/error';
   let result;
   let redirect;
   let id;
   if (browser) {
     result = new URLSearchParams(window.location.search).get('result');
     redirect = new URLSearchParams(window.location.search).get('redirect');
-    id = apiCallback(result);
-    id.then((data) => {
-      document.cookie = `comet_session=${encodeURIComponent(data.access_token)}; path=/; domain=${
-        window.location.hostname
-      }; max-age=${data.expires_in}; samesite=lax`;
-      window.location.href = redirect ? redirect : '/module/dashboard';
+    id = apiCallback(result).then((res) => {
+      if(res.success) {
+        const data = res.result;
+        document.cookie = `comet_session=${encodeURIComponent(data.accessToken)}; path=/; domain=${
+          window.location.hostname
+        }; max-age=${data.expiresIn}; samesite=lax`;
+        window.location.href = redirect ? redirect : '/module/dashboard';
+        return data;
+      } else {
+        if(res.success === false) throw res.error;
+        throw new InternalError('', res);
+      }
     });
   }
 </script>
