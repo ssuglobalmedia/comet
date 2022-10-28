@@ -84,7 +84,7 @@ export type GoodsDeleteResponse = CometResponse<
 
 export type GoodsQueryResponse = CometResponse<
   Goods[],
-  IntenralError | UnauthorizedError | ForbiddenError
+  InternalError | UnauthorizedError | ForbiddenError
 >;
 
 export type GoodsRentResponse = CometResponse<
