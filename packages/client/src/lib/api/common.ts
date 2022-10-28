@@ -2,6 +2,11 @@
 import { getAuthorization } from '$lib/module/auth';
 import type { ZodTypeAny } from 'zod';
 import { z } from 'zod';
+// eslint-disable-next-line import/extensions
+import { variables } from '$lib/variables';
+// eslint-disable-next-line import/extensions
+import { BadResponseError, CometError, cometError, FetchError, isCometError } from '$lib/api/error';
+import type { CometResponse, ErrorResponse, SuccessResponse } from 'mirinae-comet';
 
 export const createSuccessResponse = (schema: Zod.ZodTypeAny = z.any().optional()) =>
   z
@@ -13,34 +18,7 @@ export const createSuccessResponse = (schema: Zod.ZodTypeAny = z.any().optional(
     })
     .passthrough();
 
-export const cometError = z.object({
-  code: z.number().int(),
-  name: z.string(),
-  message: z.string().optional(),
-  additionalInfo: z.object({}).passthrough().optional(),
-});
-
-export const badRequestError = cometError.extend({
-  code: z.literal(400),
-  name: z.literal('BadRequest'),
-});
-
-export const unauthorizedError = cometError.extend({
-  code: z.literal(401),
-  name: z.literal('Unauthorized'),
-});
-
-export const notFoundError = cometError.extend({
-  code: z.literal(404),
-  name: z.literal('NotFound'),
-});
-
-export const internalError = cometError.extend({
-  code: z.literal(500),
-  name: z.literal('InternalError'),
-});
-
-export const createErrorResponse = (schema: ZodTypeAny = z.any().optional()) =>
+export const createErrorResponse = (schema: ZodTypeAny = cometError) =>
   z
     .object({
       success: z.literal(false),
@@ -51,10 +29,53 @@ export const createErrorResponse = (schema: ZodTypeAny = z.any().optional()) =>
     .passthrough();
 
 export const fetchWithAuth = (resource: RequestInfo, init?: RequestInit) =>
-  fetch(resource, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${getAuthorization()}`,
-      ...init?.headers,
-    },
-  });
+  getAuthorization()
+    ? fetch(resource, {
+        ...init,
+        headers: {
+          Authorization: `Bearer ${getAuthorization()}`,
+          ...init?.headers,
+        },
+      })
+    : fetch(resource, init);
+
+export async function fetchApi<T>(
+  apiPath: string,
+  responseSchema: ZodTypeAny,
+  init?: RequestInit,
+): Promise<CometResponse<T, CometError>> {
+  const response = await fetchWithAuth(`${variables.baseUrl}/api${apiPath}`, init)
+    .then((res) => res.json())
+    .then((responseData) => {
+      if (typeof responseData.success === 'boolean') {
+        return responseData;
+      }
+      return new BadResponseError('Response is not standard comet response', {
+        response: responseData,
+      });
+    })
+    .catch((err) => {
+      return new FetchError('', err);
+    });
+  if (isCometError(response)) {
+    return {
+      success: false,
+      error: response,
+    };
+  }
+  const successResponse = createSuccessResponse(responseSchema);
+  const errorResponse = createErrorResponse();
+  const parseResult = successResponse.safeParse(response);
+  if (parseResult.success) {
+    return parseResult.data as SuccessResponse<T>;
+  } else {
+    const errorParseResult = errorResponse.safeParse(response);
+    if (errorParseResult.success) {
+      return errorParseResult.data as ErrorResponse<CometError>;
+    }
+    return {
+      success: false,
+      error: new BadResponseError(response),
+    };
+  }
+}
