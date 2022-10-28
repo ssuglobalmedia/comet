@@ -8,6 +8,10 @@ import { variables } from '$lib/variables';
 import { BadResponseError, CometError, cometError, FetchError, isCometError } from '$lib/api/error';
 import type { CometResponse, ErrorResponse, SuccessResponse } from 'mirinae-comet';
 
+export const dateSchema = z.preprocess((arg) => {
+  if (typeof arg == 'string' || arg instanceof Date) return new Date(arg);
+}, z.date());
+
 export const createSuccessResponse = (schema: Zod.ZodTypeAny = z.any().optional()) =>
   z
     .object({
