@@ -50,8 +50,10 @@ export const apiLogout = async (): Promise<ClientResponse<LogoutResponse>> =>
 export const apiUserGet = async (): Promise<ClientResponse<UserGetResponse>> =>
   fetchApi<User>('/module/auth/user/get', user);
 
-export const apiUserQuery = async (): Promise<ClientResponse<UserQueryResponse>> =>
-  fetchApi<User[]>('/module/auth/user/query', z.array(user));
+export const apiUserQuery = async (
+  starts: string = undefined,
+): Promise<ClientResponse<UserQueryResponse>> =>
+  fetchApi<User[]>(`/module/auth/user/query${starts ? '?starts=' + starts : ''}`, z.array(user));
 
 export const apiUserUpdate = async (
   data: UserUpdateRequest,
