@@ -15,10 +15,9 @@
     TextArea,
   } from 'carbon-components-svelte';
   import { groupDisplayName } from '$lib/module/auth';
-  import { variables } from '$lib/variables';
   import { getCurrentSemester } from '$lib/utils';
   import { createEventDispatcher } from 'svelte';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiUserBatchPut } from '$lib/api/module/auth';
 
   export let open = false;
 
@@ -62,25 +61,20 @@
 
   function doUpdate() {
     reqStatus = 'active';
-    fetchWithAuth(variables.baseUrl + '/api/module/auth/user/batch/put', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(
-        userEditedUserIds.map((v) => ({
-          ...userMap[v],
-          ...(includeUserGroup && { userGroup }),
-          ...(includeLastSemester && { lastSemester }),
-        })),
-      ),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        reqStatus = 'finished';
-        dispatch('update', {});
-        setTimeout(() => (open = false), 500);
+    apiUserBatchPut(userEditedUserIds.map((v) => ({
+      ...userMap[v],
+      ...(includeUserGroup && { userGroup }),
+      ...(includeLastSemester && { lastSemester }),
+    })))
+      .then((res) => {
+        if(res.success) {
+          reqStatus = 'finished';
+          dispatch('update', {});
+          setTimeout(() => (open = false), 500);
+        } else {
+          reqStatus = 'error';
+          if(res.success === false) console.error(res.error);
+        }
       })
       .catch((e) => {
         reqStatus = 'error';

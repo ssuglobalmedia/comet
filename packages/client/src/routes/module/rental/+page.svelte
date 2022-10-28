@@ -16,8 +16,6 @@
   } from 'carbon-components-svelte';
   import type { CometError, CometResponse, Goods } from 'mirinae-comet';
   import { groupDisplayName } from '$lib/module/auth';
-
-  import { variables } from '$lib/variables';
   import { browser } from '$app/environment';
   import { Add16, Delete16, Edit16, Need16 } from 'carbon-icons-svelte';
   import { userInfo } from '$lib/stores';
@@ -25,7 +23,7 @@
   import AddGoodsModal from '../../../lib/components/molcule/module/rental/AddGoodsModal.svelte';
   import UpdateGoodsModal from '../../../lib/components/molcule/module/rental/UpdateGoodsModal.svelte';
   import RentModal from '../../../lib/components/molcule/module/rental/RentModal.svelte';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiGoodsDelete, apiGoodsQuery, apiGoodsReturn } from '$lib/api/module/rental';
 
   let allGoodies: Array<Goods> = undefined;
 
@@ -68,9 +66,8 @@
 
   function updateGoods() {
     allGoodies = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/query`)
-      .then((res) => res.json())
-      .then((res: CometResponse<Array<Goods>, CometError>) => {
+    apiGoodsQuery()
+      .then((res) => {
         if (res.success === false)
           throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
         if (res.success) allGoodies = res.result as Array<Goods>;
@@ -82,18 +79,8 @@
 
   function deleteGoods() {
     deleteModalOpen = false;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/delete`, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: targetGoods.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res: CometResponse<{}, CometError>) => {
+    apiGoodsDelete(targetGoods.id)
+      .then((res) => {
         if (res.success === false)
           throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
         updateGoods();
@@ -102,18 +89,10 @@
 
   function returnGoods() {
     returnModalOpen = false;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/rental/return`, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: targetGoods.rentStatus.userId,
-        goodsId: targetGoods.id,
-      }),
+    apiGoodsReturn({
+      userId: targetGoods.rentStatus.userId,
+      goodsId: targetGoods.id,
     })
-      .then((res) => res.json())
       .then((res: CometResponse<{}, CometError>) => {
         if (res.success === false)
           throw new Error(`Request error ${res.error.name}: ${res.error.message}`);

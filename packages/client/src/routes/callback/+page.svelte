@@ -1,17 +1,15 @@
 <script lang="ts">
   import { Button, Column, Content, Grid, InlineLoading } from 'carbon-components-svelte';
   import EntryCard from '../../lib/components/molcule/entry/EntryCard.svelte';
-  import { variables } from '$lib/variables';
   import { browser } from '$app/environment';
+  import { apiCallback } from '$lib/api/module/auth';
   let result;
   let redirect;
   let id;
   if (browser) {
     result = new URLSearchParams(window.location.search).get('result');
     redirect = new URLSearchParams(window.location.search).get('redirect');
-    id = fetch(
-      variables.baseUrl + '/api/module/auth/callback?result=' + encodeURIComponent(result),
-    ).then((res) => res.json());
+    id = apiCallback(result);
     id.then((data) => {
       document.cookie = `comet_session=${encodeURIComponent(data.access_token)}; path=/; domain=${
         window.location.hostname

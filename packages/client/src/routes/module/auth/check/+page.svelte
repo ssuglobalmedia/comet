@@ -16,14 +16,13 @@
     CheckmarkFilled16,
   } from 'carbon-icons-svelte';
   import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
-  import type { CometError, CometResponse, User } from '@types/mirinae-comet';
+  import type { User } from '@types/mirinae-comet';
   import { isAccessible } from '$lib/module/auth';
   import { browser } from '$app/environment';
-  import { variables } from '$lib/variables';
   import RuleDefiner from '../../../../lib/components/molcule/module/auth/RuleDefiner.svelte';
   import { getCurrentFullSemester } from '$lib/utils';
   import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiUserQuery } from '$lib/api/module/auth';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -61,11 +60,9 @@
 
   $: if (browser && currentIndex === 2 && validationRule && !validatedData) {
     (async () => {
-      const res = (await (
-        await fetchWithAuth(variables.baseUrl + '/api/module/auth/user/query')
-      ).json()) as CometResponse<Array<User>, CometError>;
+      const res = await apiUserQuery();
       if (res.success) {
-        const users: Array<User> = res.result;
+        const users: User[] = res.result;
         validatedData = data.reduce((arr, v) => {
           const userId = `${v[validationRule.userId]}`.trim();
           const userName = `${v[validationRule.userName]}`.trim();

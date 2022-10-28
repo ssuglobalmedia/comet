@@ -15,9 +15,8 @@
     TextInput,
   } from 'carbon-components-svelte';
   import { groupDisplayName } from '$lib/module/auth';
-  import { variables } from '$lib/variables';
   import { createEventDispatcher } from 'svelte';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiUserUpdate } from '$lib/api/module/auth';
 
   export let open = false;
 
@@ -59,28 +58,25 @@
 
   function doUpdate() {
     reqStatus = 'active';
-    fetchWithAuth(variables.baseUrl + '/api/module/auth/user/update', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: targetUser.userId,
-        ...(userName !== targetUser.userName && { userName }),
-        ...(userGroup !== targetUser.userGroup && { userGroup }),
-        ...(phone !== targetUser.phone && { phone: phone.replace(/\D/g, '') }),
-        ...(lastSemesterYear &&
-          `${lastSemesterYear}-${lastSemesterNum + 1}` !== targetUser.lastSemester && {
-            lastSemester: `${lastSemesterYear}-${lastSemesterNum + 1}`,
-          }),
-      }),
+    apiUserUpdate({
+      userId: targetUser.userId,
+      ...(userName !== targetUser.userName && { userName }),
+      ...(userGroup !== targetUser.userGroup && { userGroup }),
+      ...(phone !== targetUser.phone && { phone: phone.replace(/\D/g, '') }),
+      ...(lastSemesterYear &&
+        `${lastSemesterYear}-${lastSemesterNum + 1}` !== targetUser.lastSemester && {
+          lastSemester: `${lastSemesterYear}-${lastSemesterNum + 1}`,
+        }),
     })
-      .then((res) => res.json())
-      .then(() => {
-        reqStatus = 'finished';
-        dispatch('update', {});
-        setTimeout(() => (open = false), 500);
+      .then((res) => {
+        if(res.success) {
+          reqStatus = 'finished';
+          dispatch('update', {});
+          setTimeout(() => (open = false), 500);
+        } else {
+          reqStatus = 'error';
+          if(res.success === false) console.error(res.error);
+        }
       })
       .catch((e) => {
         reqStatus = 'error';

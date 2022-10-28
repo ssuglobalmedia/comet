@@ -1,9 +1,8 @@
 <script lang="ts">
   import { CodeSnippet, Column, Grid, Row, TextAreaSkeleton } from 'carbon-components-svelte';
-  import type { Log, CometResponse, CometError } from 'mirinae-comet';
-  import { variables } from '$lib/variables';
+  import type { Log } from 'mirinae-comet';
   import { browser } from '$app/environment';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiLogQuery } from '$lib/api/module/log';
 
   let logs: Array<Log> = undefined;
 
@@ -13,9 +12,8 @@
 
   function updateLogs() {
     logs = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/log/query`)
-      .then((res) => res.json())
-      .then((res: CometResponse<Array<Log>, CometError>) => {
+    apiLogQuery()
+      .then((res) => {
         if (res.success === false)
           throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
         if (res.success) logs = res.result;

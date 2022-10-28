@@ -20,16 +20,15 @@
     ToolbarSearch,
   } from 'carbon-components-svelte';
   import { browser } from '$app/environment';
-  import { variables } from '$lib/variables';
   import { userInfo } from '$lib/stores';
   import { groupDisplayName } from '$lib/module/auth';
-  import type { CometError, CometResponse, User } from 'mirinae-comet';
+  import type { User } from 'mirinae-comet';
   import { Checkmark16, Delete16, Edit16 } from 'carbon-icons-svelte';
   import UpdateModal from '../../../lib/components/molcule/module/auth/UpdateModal.svelte';
   import BatchUpdateModal from '../../../lib/components/molcule/module/auth/BatchUpdateModal.svelte';
   import ExportModal from '../../../lib/components/molcule/module/auth/ExportModal.svelte';
   import PaginationKor from '../../../lib/components/atom/PaginationKor.svelte';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiUserBatchDelete, apiUserQuery } from '$lib/api/module/auth';
 
   type UserCell = {
     id: string;
@@ -131,9 +130,8 @@
 
   function updateUsers() {
     users = undefined;
-    fetchWithAuth(`${variables.baseUrl as string}/api/module/auth/user/query`)
-      .then((res) => res.json())
-      .then((res: CometResponse<Array<User>, CometError>) => {
+    apiUserQuery()
+      .then((res) => {
         if (res.success === false)
           throw new Error(`Request error ${res.error.name}: ${res.error.message}`);
         if (res.success) users = (res.result as Array<User>).map(transformUser);
@@ -153,15 +151,7 @@
   }
 
   function deleteSelected() {
-    fetchWithAuth(variables.baseUrl + '/api/module/auth/user/batch/delete', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedUsers),
-    })
-      .then((res) => res.json())
+    apiUserBatchDelete(selectedUsers)
       .then(() => {
         selectedUsers = [];
         updateUsers();

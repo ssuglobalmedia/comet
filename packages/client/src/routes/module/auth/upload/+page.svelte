@@ -17,13 +17,12 @@
   import { NextFilled16, SendToBack16, Upload16 } from 'carbon-icons-svelte';
   import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
   import DataTransformer from '../../../../lib/components/molcule/module/auth/DataTransformer.svelte';
-  import type { CometError, CometResponse, User } from '@types/mirinae-comet';
+  import type { User } from '@types/mirinae-comet';
   import { groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
-  import { variables } from '$lib/variables';
   import { getCurrentFullSemester } from '$lib/utils';
   import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
-  import { fetchWithAuth } from '$lib/api/common';
+  import { apiUserBatchPut, apiUserQuery } from '$lib/api/module/auth';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -88,9 +87,7 @@
         }),
       }));
       if (conversion.noOverwrite) {
-        const res = (await (
-          await fetchWithAuth(variables.baseUrl + '/api/module/auth/user/query')
-        ).json()) as CometResponse<Array<User>, CometError>;
+        const res = await apiUserQuery();
         if (res.success) {
           const originalUsers = res.result;
           convertedData = converted.filter((newUser) =>
@@ -107,15 +104,7 @@
   }
 
   $: if (browser && currentIndex === 3 && convertedData) {
-    fetchWithAuth(variables.baseUrl + '/api/module/auth/user/batch/put', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(convertedData),
-    })
-      .then((res) => res.json())
+    apiUserBatchPut(convertedData)
       .then((resJson) => {
         response = resJson;
         responseSuccess = true;
