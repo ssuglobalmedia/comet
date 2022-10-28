@@ -21,7 +21,7 @@ const user = z.object({
   userId: z.string().regex(/^\d+$/),
   userName: z.string(),
   userGroup: z.string(),
-  lastSemester: z.number().optional(),
+  lastSemester: z.string().optional(),
   phone: z.string().optional(),
 });
 
