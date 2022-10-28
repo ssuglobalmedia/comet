@@ -73,12 +73,12 @@ export async function fetchApi<T>(
   if (parseResult.success) {
     return parseResult.data as SuccessResponse<T>;
   } else {
-    if (parseResult.success === false) console.error(parseResult.error);
     const errorParseResult = errorResponse.safeParse(response);
     if (errorParseResult.success) {
       return errorParseResult.data as ErrorResponse<CometError>;
     } else if (errorParseResult.success === false) {
-      console.error(errorParseResult.error);
+      if (parseResult.success === false) console.error('On success:', parseResult.error);
+      console.error('On error:', errorParseResult.error);
     }
     return {
       success: false,
