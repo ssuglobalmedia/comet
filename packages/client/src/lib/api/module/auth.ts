@@ -60,6 +60,10 @@ export const apiUserUpdate = async (
 ): Promise<ClientResponse<UserUpdateResponse>> =>
   fetchApi<UserUpdateRequest>('/module/auth/user/update', userUpdateRequest, {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(data),
   });
 
@@ -68,6 +72,10 @@ export const apiUserBatchDelete = async (
 ): Promise<ClientResponse<UserBatchDeleteResponse>> =>
   fetchApi<void>('/module/auth/user/batch/delete', z.any().optional(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(data),
   });
 
@@ -76,5 +84,9 @@ export const apiUserBatchPut = async (
 ): Promise<ClientResponse<UserBatchPutResponse>> =>
   fetchApi<void>('/module/auth/user/batch/put', z.any().optional(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(data),
   });

@@ -35,6 +35,10 @@ const goods = z.object({
 export const apiGoodsAdd = async (goodsToAdd: Goods): Promise<ClientResponse<GoodsAddResponse>> =>
   fetchApi<void>('/module/api/rental/add', z.any().optional(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(goodsToAdd),
   });
 
@@ -43,6 +47,10 @@ export const apiGoodsDelete = async (
 ): Promise<ClientResponse<GoodsDeleteResponse>> =>
   fetchApi<string>('/module/api/rental/delete', z.string(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ id: goodsName }),
   });
 
@@ -54,6 +62,10 @@ export const apiGoodsRent = async (
 ): Promise<ClientResponse<GoodsRentResponse>> =>
   fetchApi<boolean>('/module/api/rental/rent', z.boolean(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(req),
   });
 
@@ -62,6 +74,10 @@ export const apiGoodsReturn = async (
 ): Promise<ClientResponse<GoodsReturnResponse>> =>
   fetchApi<boolean>('/module/api/rental/return', z.boolean(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(req),
   });
 
@@ -70,5 +86,9 @@ export const apiGoodsUpdate = async (
 ): Promise<ClientResponse<GoodsUpdateResponse>> =>
   fetchApi<boolean>('/module/api/rental/update', z.boolean(), {
     method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(req),
   });
