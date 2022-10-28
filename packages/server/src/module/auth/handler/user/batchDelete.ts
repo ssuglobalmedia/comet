@@ -11,7 +11,7 @@ import {
 } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
 import { batchDeleteUser } from '../../data/user';
-import type { UserBatchDeleteResponse } from '@types/mirinae-comet';
+import type { UserBatchDeleteResponse } from 'mirinae-comet';
 
 export const userBatchDeleteHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
