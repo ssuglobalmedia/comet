@@ -13,7 +13,6 @@ import type {
 } from 'mirinae-comet';
 import { z } from 'zod';
 // eslint-disable-next-line import/extensions
-// eslint-disable-next-line import/extensions
 import { fetchApi } from '$lib/api/common';
 import type { ClientResponse } from '../../../global';
 
