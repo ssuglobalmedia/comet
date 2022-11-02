@@ -9,7 +9,7 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { ConfigUpdateRequest, GoodsUpdateRequest } from 'mirinae-comet';
+import type { ConfigUpdateRequest } from 'mirinae-comet';
 import { updateConfig } from '../data/config';
 
 export const configUpdateHandler: APIGatewayProxyHandler = async (event) => {
