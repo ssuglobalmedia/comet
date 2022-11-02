@@ -10,6 +10,7 @@ import {
 } from '../../../util/error';
 import { assertAccessible } from '../../auth/util/permission';
 import { queryLogs } from '../data/log';
+import type { LogQueryResponse } from 'mirinae-comet';
 
 export const logQueryHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -17,7 +18,7 @@ export const logQueryHandler: APIGatewayProxyHandler = async (event) => {
     const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
     await assertAccessible(id, token, 'certificated');
     const result = await queryLogs();
-    return createResponse(200, {
+    return createResponse<LogQueryResponse>(200, {
       success: true,
       result,
     });

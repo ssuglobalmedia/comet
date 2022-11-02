@@ -8,9 +8,9 @@
     ModalHeader,
     TextInput,
   } from 'carbon-components-svelte';
-  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
-  import { variables } from '$lib/variables';
+  import { groupDisplayName } from '$lib/module/auth';
   import { createEventDispatcher } from 'svelte';
+  import { apiGoodsAdd } from '$lib/api/module/rental';
 
   export let open = false;
   export let reqStatus: 'pending' | 'active' | 'finished' | 'error' = 'pending';
@@ -40,25 +40,22 @@
 
   function doAdd() {
     reqStatus = 'active';
-    fetchWithAuth(variables.baseUrl + '/api/module/rental/add', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: goodsId,
-        name,
-        category,
-        location,
-        permission: permission,
-      }),
+    apiGoodsAdd({
+      id: goodsId,
+      name,
+      category,
+      location,
+      permission: permission,
     })
-      .then((res) => res.json())
-      .then(() => {
-        reqStatus = 'finished';
-        setTimeout(() => (open = false), 500);
-        dispatch('success', {});
+      .then((res) => {
+        if(res.success) {
+          reqStatus = 'finished';
+          dispatch('update', {});
+          setTimeout(() => (open = false), 500);
+        } else {
+          reqStatus = 'error';
+          if(res.success === false) console.error(res.error);
+        }
       })
       .catch((e) => {
         reqStatus = 'error';

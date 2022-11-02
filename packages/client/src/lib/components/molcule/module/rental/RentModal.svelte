@@ -14,10 +14,11 @@
     SelectItem,
     TextInput,
   } from 'carbon-components-svelte';
-  import { fetchWithAuth, groupDisplayName, isAccessible } from '$lib/module/auth';
-  import { variables } from '$lib/variables';
-  import type { CometError, CometResponse, Goods, User } from '@types/mirinae-comet';
+  import { groupDisplayName, isAccessible } from '$lib/module/auth';
+  import type { Goods, User } from '@types/mirinae-comet';
   import { createEventDispatcher } from 'svelte';
+  import { apiGoodsRent } from '$lib/api/module/rental';
+  import { apiUserQuery } from '$lib/api/module/auth';
 
   export let open = false;
 
@@ -93,22 +94,14 @@
     reqStatus = 'active';
     const requests = selectedGoodies.map((id) => {
       return new Promise((resolve, reject) => {
-        fetchWithAuth(variables.baseUrl + `/api/module/rental/rent`, {
-          method: 'POST',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user,
-            goodsId: id,
-            until: new Date(isoDate).toISOString(),
-            additionalInfo,
-          }),
+        apiGoodsRent({
+          user,
+          goodsId: id,
+          until: new Date(isoDate).toISOString(),
+          additionalInfo,
         })
-          .then((res) => res.json())
-          .then((res: CometResponse<{}, CometError>) => {
-            if (!res.success) {
+          .then((res) => {
+            if (res.success === false) {
               reject();
               return;
             }
@@ -133,14 +126,13 @@
 
   function queryUser() {
     userReqStatus = 'active';
-    fetchWithAuth(variables.baseUrl + `/api/module/auth/user/query?starts=${userId}`)
-      .then((res) => res.json())
-      .then((res: CometResponse<Array<User>, CometError>) => {
+    apiUserQuery(userId)
+      .then((res) => {
         if (!res.success || (res.result).length == 0) {
           userReqStatus = 'error';
           return;
         }
-        user = (res.result as Array<User>)[0];
+        user = res.result[0];
         userReqStatus = 'finished';
       })
       .catch((err) => {

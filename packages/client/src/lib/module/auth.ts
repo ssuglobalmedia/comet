@@ -4,15 +4,6 @@ import type { User } from 'mirinae-comet';
 
 export const getAuthorization = () => getCookieValue('comet_session');
 
-export const fetchWithAuth = (resource: RequestInfo, init?: RequestInit) =>
-  fetch(resource, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${getAuthorization()}`,
-      ...init?.headers,
-    },
-  });
-
 export function isAccessible(user: User, group: string): boolean {
   const permissionLevel = {
     everyone: 0,

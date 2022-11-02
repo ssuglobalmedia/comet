@@ -9,6 +9,7 @@ import * as jwt from 'jsonwebtoken';
 import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { createResponse, JWT_SECRET } from '../../../common';
 import { issueToken } from '../data/token';
+import type { CallbackResponse, TokenInfo } from 'mirinae-comet';
 
 function requestBody(result: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -39,23 +40,21 @@ async function obtainId(result: string) {
 
 export const callbackHandler: APIGatewayProxyHandler = async (event) => {
   try {
-    const result = event?.queryStringParameters?.result;
-    if (result) {
-      console.log(result);
-      const id = await obtainId(result);
+    const token = event?.queryStringParameters?.result;
+    if (token) {
+      const id = await obtainId(token);
       const accessToken = jwt.sign({ aud: id }, JWT_SECRET, {
         expiresIn: 3600 * 1000 * 24,
       });
       const issued = await issueToken(id, accessToken);
       const left = Math.floor((issued.expires - Date.now()) / 1000);
-      const res = {
-        success: true,
+      const result: TokenInfo = {
         id,
-        access_token: accessToken,
-        token_type: 'Bearer',
-        expires_in: left,
+        accessToken: accessToken,
+        tokenType: 'Bearer',
+        expiresIn: left,
       };
-      return createResponse(200, { success: true, ...res });
+      return createResponse<CallbackResponse>(200, { success: true, result });
     }
     const e = new UnauthorizedError('Unauthorized');
     return responseAsCometError(e);

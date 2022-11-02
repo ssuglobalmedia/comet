@@ -1,5 +1,5 @@
 <script>
-  import ModuleDashboard from '../../../components/molcule/module/dashboard/ModuleDashboard.svelte';
+  import ModuleDashboard from '../../../lib/components/molcule/module/dashboard/ModuleDashboard.svelte';
   import { modules } from '$lib/modules';
   const filteredModules = { ...modules };
   delete filteredModules.dashboard;

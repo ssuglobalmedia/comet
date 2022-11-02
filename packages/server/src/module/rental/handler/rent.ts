@@ -10,20 +10,13 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { User } from 'mirinae-comet';
-
-type RentRequest = {
-  user: User;
-  goodsId: string;
-  until: string;
-  additionalInfo?: string;
-};
+import type { GoodsRentRequest, GoodsRentResponse } from 'mirinae-comet';
 
 export const rentalRentHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
-  let data: RentRequest;
+  let data: GoodsRentRequest;
   try {
-    data = JSON.parse(event.body) as RentRequest;
+    data = JSON.parse(event.body) as GoodsRentRequest;
   } catch {
     return responseAsCometError(new BadRequestError('Data body is malformed JSON'));
   }
@@ -34,7 +27,6 @@ export const rentalRentHandler: APIGatewayProxyHandler = async (event) => {
   try {
     payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
   } catch {
-    console.debug('malformed token');
     return responseAsCometError(new UnauthorizedError());
   }
   try {
@@ -47,7 +39,7 @@ export const rentalRentHandler: APIGatewayProxyHandler = async (event) => {
       new Date(data.until),
       data.additionalInfo,
     );
-    return createResponse(200, { success: res });
+    return createResponse<GoodsRentResponse>(200, { success: true, result: res });
   } catch (e) {
     console.error(e);
     return responseAsCometError(new InternalError());
