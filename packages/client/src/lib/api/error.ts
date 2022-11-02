@@ -1,5 +1,4 @@
-import type { APIGatewayProxyResult } from 'aws-lambda';
-import { createResponse } from '../common';
+import { z } from 'zod';
 
 export class CometError extends Error {
   isCometError: true;
@@ -57,36 +56,27 @@ export class InternalError extends CometError {
   }
 }
 
+export class BadResponseError extends CometError {
+  constructor(message?: string, additionalInfo?: Record<string, unknown>) {
+    super(500, 'BadResponse', message, additionalInfo);
+  }
+}
+
+export class FetchError extends CometError {
+  constructor(message?: string, additionalInfo?: Record<string, unknown>) {
+    super(500, 'FetchError', message, additionalInfo);
+  }
+}
+
+export const cometError = z
+  .object({
+    code: z.number().int(),
+    name: z.string(),
+    message: z.string().optional(),
+    additionalInfo: z.object({}).passthrough().optional(),
+  })
+  .passthrough();
+
 export function isCometError(error: unknown): error is CometError {
   return typeof error === 'object' && (error as CometError)?.isCometError;
-}
-
-export function errorResponse(error: CometError, overrideMessage?: string): APIGatewayProxyResult {
-  return createResponse(error.code, {
-    success: false,
-    error: {
-      code: error.code,
-      name: error.name,
-      message: overrideMessage ?? error.message,
-      ...error.additionalInfo,
-    },
-  });
-}
-
-export function responseAsCometError(
-  error: unknown,
-  fallback: CometError = new InternalError(),
-  additionalInfo: Record<string, unknown> = {},
-) {
-  if (isCometError(error)) {
-    if (additionalInfo)
-      error.additionalInfo = {
-        ...error.additionalInfo,
-        ...additionalInfo,
-      };
-    return errorResponse(error);
-  }
-  console.error(error);
-  if (additionalInfo) fallback.additionalInfo = { ...fallback.additionalInfo, ...additionalInfo };
-  return errorResponse(fallback);
 }

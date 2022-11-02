@@ -29,6 +29,7 @@ importers:
       eslint-config-prettier: ^8.5.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-svelte3: ^3.4.1
+      lodash.isequal: ^4.5.0
       postcss: ^8.4.18
       postcss-load-config: ^4.0.1
       prettier: ^2.7.1
@@ -43,13 +44,16 @@ importers:
       typescript: ^4.8.4
       vite: ^3.1.8
       xlsx: ^0.18.5
+      zod: ^3.19.1
     dependencies:
       '@types/mirinae-comet': link:../types
       carbon-icons-svelte: 10.45.1
       carbon-pictograms-svelte: 12.2.0
+      lodash.isequal: 4.5.0
       sheetjs: 2.0.0
       vite: 3.1.8_sass@1.55.0
       xlsx: 0.18.5
+      zod: 3.19.1
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.84
       '@sveltejs/adapter-static': 1.0.0-next.45
@@ -2755,6 +2759,10 @@ packages:
     resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
     dev: true
 
+  /lodash.isequal/4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    dev: false
+
   /lodash.isinteger/4.0.4:
     resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
     dev: true
@@ -4186,3 +4194,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod/3.19.1:
+    resolution: {integrity: sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==}
+    dev: false

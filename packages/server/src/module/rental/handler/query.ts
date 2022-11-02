@@ -10,6 +10,7 @@ import {
 } from '../../../util/error';
 import { queryGoods } from '../data/rental';
 import { assertAccessible } from '../../auth/util/permission';
+import type { GoodsQueryResponse } from 'mirinae-comet';
 
 export const rentalQueryHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -17,7 +18,7 @@ export const rentalQueryHandler: APIGatewayProxyHandler = async (event) => {
     const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
     await assertAccessible(id, token, 'certificated');
     const result = await queryGoods();
-    return createResponse(200, {
+    return createResponse<GoodsQueryResponse>(200, {
       success: true,
       result,
     });

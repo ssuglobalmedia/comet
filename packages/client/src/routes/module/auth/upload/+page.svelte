@@ -15,14 +15,14 @@
   import type { WorkBook } from 'xlsx';
   import { read, utils } from 'xlsx';
   import { NextFilled16, SendToBack16, Upload16 } from 'carbon-icons-svelte';
-  import StepTile from '../../../../components/molcule/StepTile.svelte';
-  import DataTransformer from '../../../../components/molcule/module/auth/DataTransformer.svelte';
-  import type { CometError, CometResponse, User } from '@types/mirinae-comet';
-  import { fetchWithAuth, groupDisplayName } from '$lib/module/auth';
+  import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
+  import DataTransformer from '../../../../lib/components/molcule/module/auth/DataTransformer.svelte';
+  import type { User } from '@types/mirinae-comet';
+  import { groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
-  import { variables } from '$lib/variables';
   import { getCurrentFullSemester } from '$lib/utils';
-  import PaginationKor from '../../../../components/atom/PaginationKor.svelte';
+  import PaginationKor from '../../../../lib/components/atom/PaginationKor.svelte';
+  import { apiUserBatchPut, apiUserQuery } from '$lib/api/module/auth';
 
   let files: Array<File> = [];
   let workbook: WorkBook = undefined;
@@ -60,7 +60,7 @@
   }
 
   function convertGroup(groupConversion, value) {
-    const defaults = Object.entries(groupConversion).filter(([key, value]) => value.defaults);
+    const defaults = Object.entries(groupConversion).filter(([, value]) => value.defaults);
     const defaultGroup = defaults.length ? defaults[0][0] : 'unregistered';
     const groups = Object.fromEntries(
       Object.entries(groupConversion)
@@ -87,9 +87,7 @@
         }),
       }));
       if (conversion.noOverwrite) {
-        const res = (await (
-          await fetchWithAuth(variables.baseUrl + '/api/module/auth/user/query')
-        ).json()) as CometResponse<Array<User>, CometError>;
+        const res = await apiUserQuery();
         if (res.success) {
           const originalUsers = res.result;
           convertedData = converted.filter((newUser) =>
@@ -106,15 +104,7 @@
   }
 
   $: if (browser && currentIndex === 3 && convertedData) {
-    fetchWithAuth(variables.baseUrl + '/api/module/auth/user/batch/put', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(convertedData),
-    })
-      .then((res) => res.json())
+    apiUserBatchPut(convertedData)
       .then((resJson) => {
         response = resJson;
         responseSuccess = true;
