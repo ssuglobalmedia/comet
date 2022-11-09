@@ -6,6 +6,7 @@ import { assertAccessible } from '../../auth/util/permission';
 import {
   BadRequestError,
   InternalError,
+  isCometError,
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
@@ -32,6 +33,7 @@ export const configUpdateHandler: APIGatewayProxyHandler = async (event) => {
     const res = await updateConfig(data);
     return createResponse(200, { success: res });
   } catch (e) {
+    if (isCometError(e)) return responseAsCometError(e);
     console.error(e);
     return responseAsCometError(new InternalError());
   }
