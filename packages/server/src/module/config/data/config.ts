@@ -73,7 +73,7 @@ export async function updateConfig(config: ConfigUpdateRequest): Promise<boolean
     };
     updateExp = 'SET rW = :rentalWebhook';
   }
-  if (config.rentalWebhook !== null) {
+  if (config.rentalWebhook == null) {
     removeExp = 'REMOVE rW';
   }
   if (config.logFormat) {
@@ -90,7 +90,7 @@ export async function updateConfig(config: ConfigUpdateRequest): Promise<boolean
       }
     });
   }
-
+  console.log(updateExp + `${removeExp ? ` ${removeExp}` : ''}`);
   const req: UpdateItemInput = {
     TableName,
     Key: {
