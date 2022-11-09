@@ -13,7 +13,7 @@ const config = z.object({
   logFormat: z.record(z.string(), z.string()).default({}).optional(),
 });
 
-export const apiConfigGet = async () => fetchApi<Config>('/module/config/get', config);
+export const apiConfigGet = async () => fetchApi<Config>('/module/config', config);
 
 export const apiConfigUpdate = async (data: ConfigUpdateRequest) =>
   fetchApi<void>('/module/config/update', z.any().optional(), {
