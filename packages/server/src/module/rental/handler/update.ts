@@ -10,7 +10,7 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { GoodsUpdateRequest } from 'mirinae-comet';
+import type { GoodsUpdateRequest, GoodsUpdateResponse } from 'mirinae-comet';
 
 export const rentalUpdateHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
@@ -27,14 +27,13 @@ export const rentalUpdateHandler: APIGatewayProxyHandler = async (event) => {
   try {
     payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
   } catch {
-    console.debug('malformed token');
     return responseAsCometError(new UnauthorizedError());
   }
   try {
     const id = payload.aud as string;
     await assertAccessible(id, token, 'executive');
     const res = await updateGoods(data);
-    return createResponse(200, { success: res });
+    return createResponse<GoodsUpdateResponse>(200, { success: true, result: res });
   } catch (e) {
     console.error(e);
     return responseAsCometError(new InternalError());

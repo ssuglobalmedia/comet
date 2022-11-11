@@ -5,6 +5,7 @@ import type { JwtPayload } from 'jsonwebtoken';
 import { queryUser } from '../../data/user';
 import { InternalError, isCometError, responseAsCometError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
+import type { UserQueryResponse } from 'mirinae-comet';
 
 export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
   const startsWith = event.queryStringParameters?.starts ?? '';
@@ -12,9 +13,8 @@ export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
   try {
     const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
     await assertAccessible(id, token, 'executive');
-    console.log(event);
     const result = await queryUser(startsWith);
-    return createResponse(200, {
+    return createResponse<UserQueryResponse>(200, {
       success: true,
       result,
     });

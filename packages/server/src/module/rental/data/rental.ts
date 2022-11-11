@@ -28,7 +28,7 @@ export const fromRentStatusDao = (dao: RentStatusDao): RentStatus => ({
 export const toRentStatusDao = (rs: RentStatus): RentStatusDao => ({
   uI: { S: rs.userId },
   uN: { S: rs.userName },
-  u: { S: rs.until.toISOString() },
+  u: { S: rs.until instanceof Date ? rs.until.toISOString() : rs.until },
   aI: { S: rs.additionalInfo },
   a: { BOOL: rs.announced ?? false },
 });

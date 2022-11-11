@@ -1,13 +1,8 @@
 <script lang="ts">
-  import type { ModuleDefinition } from '../../../../global';
+  import type { ModuleDefinition } from '../../../../../global';
   import { ClickableTile, Column, Grid, Row } from 'carbon-components-svelte';
   import { isAccessible, groupDisplayName } from '$lib/module/auth';
   import { userInfo } from '$lib/stores';
-  import Dashboard from 'carbon-pictograms-svelte/lib/Dashboard.svelte';
-  import UserAnalytics from 'carbon-pictograms-svelte/lib/UserAnalytics.svelte';
-  import SocialWork_01 from 'carbon-pictograms-svelte/lib/SocialWork_01.svelte';
-  import CalendarEvent from 'carbon-pictograms-svelte/lib/CalendarEvent.svelte';
-  import FileBackup from 'carbon-pictograms-svelte/lib/FileBackup.svelte';
 
   export let modules: Record<string, ModuleDefinition>;
 

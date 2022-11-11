@@ -2,7 +2,7 @@ import type { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 
 export const JWT_SECRET = process.env.JWT_SECRET ?? 'this-is-sample-secret-key';
 
-export function createResponse(statusCode: number, body: string | object): APIGatewayProxyResult {
+export function createResponse<T>(statusCode: number, body: string | T): APIGatewayProxyResult {
   const stringifyBody = typeof body === 'string' ? body : JSON.stringify(body);
   const res: APIGatewayProxyResult = {
     statusCode,

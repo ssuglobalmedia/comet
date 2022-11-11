@@ -113,6 +113,16 @@ Resources:
           Properties:
             Path: /api/module/log/query
             Method: options
+        ModuleConfigGet:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/config
+            Method: options
+        ModuleConfigUpdate:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/config/update
+            Method: options
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Metadata:
@@ -403,6 +413,46 @@ Resources:
           Properties:
             Path: /api/module/log/query
             Method: get
+  ModuleConfigGetFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.config.configGetHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        ConfigGetHandler:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/config
+            Method: get
+  ModuleConfigUpdateFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: handler.config.configUpdateHandler
+      Runtime: nodejs14.x
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Architectures:
+        - x86_64
+      Events:
+        ConfigUpdateHandler:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /api/module/config/update
+            Method: post
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: 'Retain'

@@ -1,6 +1,6 @@
 import type { GetItemInput } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
-import { UnauthorizedError } from '../../../util/error';
+import { ForbiddenError } from '../../../util/error';
 import type { User, UserDao } from 'mirinae-comet';
 import { fromUserDao } from '../data/user';
 
@@ -36,7 +36,7 @@ export async function assertAccessible(id: string, token: string, group: string)
     authRes.Item.accessToken?.S !== token ||
     (!isAccessible(authRes.Item.userGroup?.S, group) && id !== adminId)
   ) {
-    throw new UnauthorizedError('Unauthorized');
+    throw new ForbiddenError('Unauthorized');
   }
   return fromUserDao(authRes.Item as unknown as UserDao);
 }

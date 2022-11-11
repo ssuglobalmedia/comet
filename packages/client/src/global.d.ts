@@ -1,5 +1,9 @@
 /// <reference types="@sveltejs/kit" />
 
+import type { ErrorResponse } from '@types/mirinae-comet';
+// eslint-disable-next-line import/extensions
+import { BadResponseError, FetchError } from '$lib/api/error';
+
 interface ImportMetaEnv {
   VITE_BASE_URL: string;
 }
@@ -16,3 +20,5 @@ export type ModulePageDefinition = {
   accessibleGroup: string;
   pages?: Record<string, ModulePageDefinition>;
 };
+
+export type ClientResponse<T> = T | ErrorResponse<FetchError | BadResponseError>;

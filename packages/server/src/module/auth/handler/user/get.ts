@@ -10,13 +10,14 @@ import {
   UnauthorizedError,
 } from '../../../../util/error';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import type { UserGetResponse } from 'mirinae-comet';
 
 export const userGetHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');
   try {
     const id = (jwt.verify(token, JWT_SECRET) as JwtPayload).aud as string;
     const result = await getUser(id);
-    return createResponse(200, {
+    return createResponse<UserGetResponse>(200, {
       success: true,
       result,
     });

@@ -11,8 +11,6 @@ $ssu-black-100: #000000;
 @import '../../node_modules/carbon-components/scss/globals/scss/colors';
 @import '../../node_modules/carbon-components/scss/globals/scss/layout';
 
-@import 'spacing-utils';
-
 @import '../../node_modules/carbon-components/scss/globals/scss/theme';
 $soongsil--theme--white: map-merge(
   $carbon--theme--white,
