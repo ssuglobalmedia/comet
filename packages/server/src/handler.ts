@@ -12,6 +12,8 @@ import { rentalRentHandler } from './module/rental/handler/rent';
 import { rentalReturnHandler } from './module/rental/handler/return';
 import { rentalDeleteHandler } from './module/rental/handler/delete';
 import { logQueryHandler } from './module/log/handler/query';
+import { configUpdateHandler } from './module/config/handler/update';
+import { configGetHandler } from './module/config/handler/get';
 
 export const auth = {
   callbackHandler,
@@ -36,4 +38,9 @@ export const rental = {
 
 export const log = {
   logQueryHandler,
+};
+
+export const config = {
+  configGetHandler,
+  configUpdateHandler,
 };

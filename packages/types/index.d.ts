@@ -5,6 +5,7 @@ export * from './error';
 export * from './module/auth';
 export * from './module/log';
 export * from './module/rental';
+export * from './module/config';
 export type ModuleDao = {
   module: { S: string };
   dataId: { S: string };
