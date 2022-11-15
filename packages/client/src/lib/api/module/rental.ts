@@ -33,7 +33,7 @@ const goods = z.object({
 });
 
 export const apiGoodsAdd = async (goodsToAdd: Goods): Promise<ClientResponse<GoodsAddResponse>> =>
-  fetchApi<void>('/module/api/rental/add', z.any().optional(), {
+  fetchApi<void>('/module/rental/add', z.any().optional(), {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -45,7 +45,7 @@ export const apiGoodsAdd = async (goodsToAdd: Goods): Promise<ClientResponse<Goo
 export const apiGoodsDelete = async (
   goodsName: string,
 ): Promise<ClientResponse<GoodsDeleteResponse>> =>
-  fetchApi<string>('/module/api/rental/delete', z.string(), {
+  fetchApi<string>('/module/rental/delete', z.string(), {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -55,12 +55,12 @@ export const apiGoodsDelete = async (
   });
 
 export const apiGoodsQuery = async (): Promise<ClientResponse<GoodsQueryResponse>> =>
-  fetchApi<Goods[]>('/module/api/rental/query', z.array(goods));
+  fetchApi<Goods[]>('/module/rental/query', z.array(goods));
 
 export const apiGoodsRent = async (
   req: GoodsRentRequest,
 ): Promise<ClientResponse<GoodsRentResponse>> =>
-  fetchApi<boolean>('/module/api/rental/rent', z.boolean(), {
+  fetchApi<boolean>('/module/rental/rent', z.boolean(), {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -72,7 +72,7 @@ export const apiGoodsRent = async (
 export const apiGoodsReturn = async (
   req: GoodsReturnRequest,
 ): Promise<ClientResponse<GoodsReturnResponse>> =>
-  fetchApi<boolean>('/module/api/rental/return', z.boolean(), {
+  fetchApi<boolean>('/module/rental/return', z.boolean(), {
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -84,7 +84,7 @@ export const apiGoodsReturn = async (
 export const apiGoodsUpdate = async (
   req: GoodsUpdateRequest,
 ): Promise<ClientResponse<GoodsUpdateResponse>> =>
-  fetchApi<boolean>('/module/api/rental/update', z.boolean(), {
+  fetchApi<boolean>('/module/rental/update', z.boolean(), {
     method: 'POST',
     cache: 'no-cache',
     headers: {
