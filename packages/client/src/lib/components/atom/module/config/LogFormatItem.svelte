@@ -10,12 +10,12 @@
   let moduleName;
   let action;
   onMount(() => {
-    moduleName = moduleAction.split('.')?.[0];
-    action = moduleAction.split('.')?.[1];
+    moduleName = moduleAction.split('_')?.[0];
+    action = moduleAction.split('_')?.[1];
   });
 
   $: if(moduleName && action) {
-    moduleAction = `${moduleName}.${action}`;
+    moduleAction = `${moduleName}_${action}`;
   }
 
   $: {
