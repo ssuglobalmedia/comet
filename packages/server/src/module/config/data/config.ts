@@ -9,7 +9,7 @@ import dynamoDB, { TableName } from '../../../util/database';
 
 export function toConfigDao(config: Config): ConfigDao {
   const logFormatData = Object.fromEntries(
-    Object.entries(config.logFormat).map(([moduleAction, string]) => {
+    Object.entries(config.logFormat ?? {}).map(([moduleAction, string]) => {
       return [moduleAction, { S: string }];
     }),
   );
@@ -28,17 +28,20 @@ export function toConfigDao(config: Config): ConfigDao {
 
 export function fromConfigDao(dao: ConfigDao): Config {
   const logFormatData = Object.fromEntries(
-    Object.entries(dao.lF.M).map(([moduleAction, string]) => {
+    Object.entries(dao.lF?.M ?? {}).map(([moduleAction, string]) => {
       return [moduleAction, string.S];
     }),
   );
-  return {
-    rentalWebhook: {
-      url: dao.rW.M.u.S,
-      type: dao.rW.M.t.S,
-    },
+  const ret: Config = {
     logFormat: logFormatData,
   };
+  if (dao.rW?.M?.u?.S && dao.rW?.M?.t?.S) {
+    ret.rentalWebhook = {
+      url: dao.rW.M.u.S,
+      type: dao.rW.M.t.S,
+    };
+  }
+  return ret;
 }
 
 export async function getConfig(): Promise<Config> {
