@@ -80,18 +80,15 @@ export async function updateConfig(config: ConfigUpdateRequest): Promise<boolean
     removeExp = 'REMOVE rW';
   }
   if (config.logFormat) {
-    attributes[':logFormatMap'] = { M: {} };
-    updateExp += `${updateExp ? ',' : 'SET'} lF = if_not_exists(lF, :logFormatMap)`;
-    Object.entries(config.logFormat).forEach(([moduleAction, string]) => {
-      if (string) {
-        attributes[`:${moduleAction}`] = { S: string };
-        attributeNames[`#${moduleAction}`] = `${moduleAction}`;
-        updateExp += `${updateExp ? ',' : 'SET'} lF.#${moduleAction} = :${moduleAction}`;
-      } else {
-        attributeNames[`#${moduleAction}`] = `${moduleAction}`;
-        removeExp += `${removeExp ? ',' : 'REMOVE'} lF.#${moduleAction}`;
-      }
-    });
+    const convertedFormats = Object.fromEntries(
+      Object.entries(config.logFormat).map(([key, value]) => [key, { S: value }]),
+    );
+    attributes[':logFormatMap'] = {
+      M: {
+        ...convertedFormats,
+      },
+    };
+    updateExp += `${updateExp ? ',' : 'SET'} lF = :logFormatMap`;
   }
   console.log(updateExp + `${removeExp ? ` ${removeExp}` : ''}`);
   const req: UpdateItemInput = {
