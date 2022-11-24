@@ -27,6 +27,8 @@
   import { afterNavigate } from '$app/navigation';
   import { browser } from '$app/environment';
 
+  export const trailingSlash = 'always';
+
   let isMounted = false;
   let isSideNavOpen;
   let isAuthorized = false;
