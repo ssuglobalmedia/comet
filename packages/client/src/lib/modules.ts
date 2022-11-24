@@ -34,6 +34,10 @@ export const modules: Record<string, ModuleDefinition> = {
     accessibleGroup: 'certificated',
     title: '물품 대여',
     description: '배터리, 우산, 노트북 거치대 등 다양한 물품을 대여합니다.',
+    actions: {
+      rent: '대여',
+      return: '반납',
+    }
   },
   calendar: {
     module: 'calendar',

@@ -13,4 +13,4 @@ const log = z.object({
   data: z.string().optional(),
 });
 
-export const apiLogQuery = async () => fetchApi<Log[]>('/module/log/query', log);
+export const apiLogQuery = async () => fetchApi<Log[]>('/module/log/query', z.array(log));

@@ -12,6 +12,7 @@ interface ImportMetaEnv {
 export type ModuleDefinition = {
   module: string;
   iconComponent: unknown;
+  actions?: Record<string, string>;
 } & ModulePageDefinition;
 
 export type ModulePageDefinition = {
