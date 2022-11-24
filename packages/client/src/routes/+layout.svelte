@@ -2,7 +2,6 @@
   import "../app.postcss";
   import '../styles/app.scss';
   import { createEventDispatcher } from 'svelte';
-  export const trailingSlash = 'always';
 
   const dispatch = createEventDispatcher();
   $: if (typeof window !== 'undefined') {
