@@ -8,7 +8,7 @@ import type {
 } from '../index';
 
 export type Log = {
-  date: string;
+  date: Date | string;
   userId: string;
   userName: string;
   module: string;

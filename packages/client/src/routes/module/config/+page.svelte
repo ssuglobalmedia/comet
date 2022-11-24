@@ -8,7 +8,7 @@
     TextInputSkeleton,
   } from 'carbon-components-svelte';
   import { Add16, Save16 } from 'carbon-icons-svelte';
-  import LogFormatItem from '../../../components/atom/module/config/LogFormatItem.svelte';
+  import LogFormatItem from '../../../lib/components/atom/module/config/LogFormatItem.svelte';
   import { onMount } from 'svelte';
   import { apiConfigGet, apiConfigUpdate } from '$lib/api/module/config';
 
