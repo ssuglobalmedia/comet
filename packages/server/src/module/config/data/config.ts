@@ -18,6 +18,7 @@ export function toConfigDao(config: Config): ConfigDao {
       M: {
         u: { S: config.rentalWebhook.url },
         t: { S: config.rentalWebhook.type },
+        a: { SS: config.rentalWebhook.actions },
       },
     },
     lF: {
@@ -39,6 +40,7 @@ export function fromConfigDao(dao: ConfigDao): Config {
     ret.rentalWebhook = {
       url: dao.rW.M.u.S,
       type: dao.rW.M.t.S,
+      actions: dao.rW.M.a.SS,
     };
   }
   return ret;
@@ -72,6 +74,7 @@ export async function updateConfig(config: ConfigUpdateRequest): Promise<boolean
       M: {
         u: { S: config.rentalWebhook.url },
         t: { S: config.rentalWebhook.type },
+        a: { SS: config.rentalWebhook.actions },
       },
     };
     updateExp = 'SET rW = :rentalWebhook';

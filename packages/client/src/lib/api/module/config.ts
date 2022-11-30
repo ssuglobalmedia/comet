@@ -8,6 +8,7 @@ const config = z.object({
     .object({
       url: z.string(),
       type: z.enum(['teams']),
+      actions: z.array(z.string()).default([]),
     })
     .optional(),
   logFormat: z.record(z.string(), z.string()).default({}).optional(),

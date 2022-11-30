@@ -6,6 +6,7 @@ export interface Config {
   rentalWebhook?: {
     url: string;
     type: WebhookType;
+    actions: string[];
   };
   logFormat: {
     [moduleAction: string]: string;
@@ -19,6 +20,7 @@ export interface ConfigDao {
     M: {
       u: { S: string };
       t: { S: WebhookType };
+      a: { SS: string[] };
     };
   };
   lF: {
