@@ -1,5 +1,5 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
-
+// TODO: Update v2 aws sdk to v3
 export const JWT_SECRET = process.env.JWT_SECRET ?? 'this-is-sample-secret-key';
 
 export function createResponse<T>(statusCode: number, body: string | T): APIGatewayProxyResult {
