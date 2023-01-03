@@ -30,3 +30,28 @@ export type LogQueryResponse = CometResponse<
   Log[],
   InternalError | UnauthorizedError | ForbiddenError
 >;
+
+export type TeamsWebhookFact = {
+  name: string;
+  value: string;
+};
+
+export interface TeamsWebhookAction {
+  "@type": string;
+  name: string;
+}
+
+export interface TeamsWebhookActionOpenUri extends TeamsWebhookAction {
+  "@type": "OpenUri";
+  targets: { os: string; uri: string; }[];
+}
+
+export type WebhookMessage = {
+  userName: string;
+  module: string;
+  action: string;
+  date: Date;
+  target: string;
+  description: string;
+  openUri: { name: string; uri: string; };
+}
