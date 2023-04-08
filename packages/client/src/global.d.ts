@@ -1,6 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 
-import type { ErrorResponse } from '@types/mirinae-comet';
+import type { ErrorResponse } from '@types/globalmedia-comet';
 // eslint-disable-next-line import/extensions
 import { BadResponseError, FetchError } from '$lib/api/error';
 

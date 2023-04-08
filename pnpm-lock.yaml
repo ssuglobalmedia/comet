@@ -16,7 +16,7 @@ importers:
       '@tsconfig/svelte': ^3.0.0
       '@types/dompurify': ^2.4.0
       '@types/marked': ^4.0.7
-      '@types/mirinae-comet': link:../types
+      '@types/globalmedia-comet': link:../types
       '@typescript-eslint/eslint-plugin': 5.8.1
       '@typescript-eslint/parser': ^5.40.1
       autoprefixer: ^10.4.12
@@ -66,7 +66,7 @@ importers:
       '@tsconfig/svelte': 3.0.0
       '@types/dompurify': 2.4.0
       '@types/marked': 4.0.7
-      '@types/mirinae-comet': link:../types
+      '@types/globalmedia-comet': link:../types
       '@typescript-eslint/eslint-plugin': 5.8.1_ukgdydjtebaxmxfqp5v5ulh64y
       '@typescript-eslint/parser': 5.40.1_z4bbprzjrhnsfa24uvmcbu7f5q
       autoprefixer: 10.4.12_postcss@8.4.18
@@ -95,7 +95,7 @@ importers:
     specifiers:
       '@types/aws-lambda': ^8.10.104
       '@types/jsonwebtoken': ^8.5.9
-      '@types/mirinae-comet': link:..\types
+      '@types/globalmedia-comet': link:..\types
       '@typescript-eslint/eslint-plugin': ^5.38.0
       '@typescript-eslint/parser': ^5.38.0
       aws-sdk: ^2.1219.0
@@ -113,7 +113,7 @@ importers:
       tslib: ^2.4.0
       typescript: ^4.8.3
     dependencies:
-      '@types/mirinae-comet': link:../types
+      '@types/globalmedia-comet': link:../types
     devDependencies:
       '@types/aws-lambda': 8.10.104
       '@types/jsonwebtoken': 8.5.9

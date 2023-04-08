@@ -9,7 +9,7 @@ import type {
 } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
 import { NotFoundError, BadRequestError } from '../../../util/error';
-import type { User, UserDao, UserUpdateRequest } from 'mirinae-comet';
+import type { User, UserDao, UserUpdateRequest } from 'globalmedia-comet';
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';
 

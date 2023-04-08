@@ -14,7 +14,7 @@
     Tag,
     Toggle,
   } from 'carbon-components-svelte';
-  import type { CometError, CometResponse, Goods } from 'mirinae-comet';
+  import type { CometError, CometResponse, Goods } from 'globalmedia-comet';
   import { groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { Add16, Delete16, Edit16, Need16 } from 'carbon-icons-svelte';

@@ -9,7 +9,7 @@ import * as jwt from 'jsonwebtoken';
 import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { createResponse, JWT_SECRET } from '../../../common';
 import { issueToken } from '../data/token';
-import type { CallbackResponse, TokenInfo } from 'mirinae-comet';
+import type { CallbackResponse, TokenInfo } from 'globalmedia-comet';
 
 function requestBody(result: string): Promise<string> {
   return new Promise((resolve, reject) => {

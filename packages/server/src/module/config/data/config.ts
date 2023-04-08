@@ -1,4 +1,4 @@
-import type { Config, ConfigDao, ConfigUpdateRequest } from 'mirinae-comet';
+import type { Config, ConfigDao, ConfigUpdateRequest } from 'globalmedia-comet';
 import type {
   ExpressionAttributeNameMap,
   ExpressionAttributeValueMap,

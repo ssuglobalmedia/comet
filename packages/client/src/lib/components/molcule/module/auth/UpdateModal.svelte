@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from '@types/mirinae-comet';
+  import type { User } from '@types/globalmedia-comet';
   import {
     ComposedModal,
     ContentSwitcher,

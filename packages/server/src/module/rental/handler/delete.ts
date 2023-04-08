@@ -11,7 +11,7 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { GoodsDeleteRequest, GoodsDeleteResponse } from 'mirinae-comet';
+import type { GoodsDeleteRequest, GoodsDeleteResponse } from 'globalmedia-comet';
 
 export const rentalDeleteHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

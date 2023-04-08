@@ -10,7 +10,7 @@ import {
   UnauthorizedError,
 } from '../../../../util/error';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import type { UserGetResponse } from 'mirinae-comet';
+import type { UserGetResponse } from 'globalmedia-comet';
 
 export const userGetHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

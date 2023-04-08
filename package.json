@@ -1,5 +1,6 @@
 {
-  "name": "mirinae-comet",
+
+  "name": "globalmedia-comet",
   "version": "1.0.0",
   "description": "Combined Operation and Management Engaging Tools for SSU Globalmedia student union.",
   "private": true,
@@ -11,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EATSTEAK/mirinae-comet.git"
+    "url": "git+https://github.com/ssuglobalmedia/comet.git"
   },
   "workspaces": [
     "packages/*"
@@ -19,9 +20,9 @@
   "author": "EATSTEAK <me@eatsteak.dev>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EATSTEAK/mirinae-comet/issues"
+    "url": "https://github.com/ssuglobalmedia/comet/issues"
   },
-  "homepage": "https://github.com/EATSTEAK/mirinae-comet#readme",
+  "homepage": "https://github.com/ssuglobalmedia/comet#readme",
   "devDependencies": {
     "concurrently": "^7.4.0"
   }
