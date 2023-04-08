@@ -1,6 +1,7 @@
 {
+
   "name": "globalmedia-comet",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Combined Operation and Management Engaging Tools for SSU Globalmedia student union.",
   "private": true,
   "scripts": {
