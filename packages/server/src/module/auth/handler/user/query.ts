@@ -5,7 +5,7 @@ import type { JwtPayload } from 'jsonwebtoken';
 import { queryUser } from '../../data/user';
 import { InternalError, isCometError, responseAsCometError } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
-import type { UserQueryResponse } from 'mirinae-comet';
+import type { UserQueryResponse } from 'globalmedia-comet';
 
 export const userQueryHandler: APIGatewayProxyHandler = async (event) => {
   const startsWith = event.queryStringParameters?.starts ?? '';

@@ -5,7 +5,7 @@ import type {
   RentStatus,
   RentStatusDao,
   User,
-} from 'mirinae-comet';
+} from 'globalmedia-comet';
 
 import dynamoDB, { TableName } from '../../../util/database';
 import type {

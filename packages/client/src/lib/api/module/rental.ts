@@ -12,7 +12,7 @@ import type {
   GoodsReturnResponse,
   GoodsUpdateRequest,
   GoodsUpdateResponse,
-} from 'mirinae-comet';
+} from 'globalmedia-comet';
 import type { ClientResponse } from '../../../global';
 
 const rentStatus = z.object({

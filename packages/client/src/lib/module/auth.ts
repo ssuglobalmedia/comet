@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { getCookieValue } from '$lib/utils';
-import type { User } from 'mirinae-comet';
+import type { User } from 'globalmedia-comet';
 
 export const getAuthorization = () => getCookieValue('comet_session');
 

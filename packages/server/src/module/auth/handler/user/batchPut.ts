@@ -11,7 +11,7 @@ import {
 } from '../../../../util/error';
 import { assertAccessible } from '../../util/permission';
 import { batchPutUser } from '../../data/user';
-import type { User, UserBatchPutResponse } from 'mirinae-comet';
+import type { User, UserBatchPutResponse } from 'globalmedia-comet';
 
 export const userBatchPutHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

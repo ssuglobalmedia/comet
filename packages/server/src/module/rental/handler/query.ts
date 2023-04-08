@@ -10,7 +10,7 @@ import {
 } from '../../../util/error';
 import { queryGoods } from '../data/rental';
 import { assertAccessible } from '../../auth/util/permission';
-import type { GoodsQueryResponse } from 'mirinae-comet';
+import type { GoodsQueryResponse } from 'globalmedia-comet';
 
 export const rentalQueryHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

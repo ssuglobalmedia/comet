@@ -10,7 +10,7 @@ import {
 } from '../../../util/error';
 import { assertAccessible } from '../../auth/util/permission';
 import { queryLogs } from '../data/log';
-import type { LogQueryResponse } from 'mirinae-comet';
+import type { LogQueryResponse } from 'globalmedia-comet';
 
 export const logQueryHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

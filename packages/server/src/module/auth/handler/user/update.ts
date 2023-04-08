@@ -1,5 +1,5 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
-import type { User, UserUpdateResponse } from 'mirinae-comet';
+import type { User, UserUpdateResponse } from 'globalmedia-comet';
 import { createResponse, JWT_SECRET } from '../../../../common';
 import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';

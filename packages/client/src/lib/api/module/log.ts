@@ -1,4 +1,4 @@
-import type { Log } from 'mirinae-comet';
+import type { Log } from 'globalmedia-comet';
 // eslint-disable-next-line import/extensions
 import { dateSchema, fetchApi } from '$lib/api/common';
 import { z } from 'zod';

@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import type { Log } from 'mirinae-comet';
+  import type { Log } from 'globalmedia-comet';
   import { AccordionItem, Tag } from 'carbon-components-svelte';
   import { getModuleActionDisplay, logFieldDisplay } from '$lib/module/log';
   import { Categories16, Time16 } from 'carbon-icons-svelte';
