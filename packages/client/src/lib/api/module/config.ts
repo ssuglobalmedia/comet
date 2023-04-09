@@ -1,7 +1,7 @@
 import { z } from 'zod';
 // eslint-disable-next-line import/extensions
 import { fetchApi } from '$lib/api/common';
-import type { Config, ConfigUpdateRequest } from 'mirinae-comet';
+import type { Config, ConfigUpdateRequest } from 'globalmedia-comet';
 
 const config = z.object({
   rentalWebhook: z

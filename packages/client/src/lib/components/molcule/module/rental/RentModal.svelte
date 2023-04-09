@@ -15,7 +15,7 @@
     TextInput,
   } from 'carbon-components-svelte';
   import { groupDisplayName, isAccessible } from '$lib/module/auth';
-  import type { Goods, User } from '@types/mirinae-comet';
+  import type { Goods, User } from '@types/globalmedia-comet';
   import { createEventDispatcher } from 'svelte';
   import { apiGoodsRent } from '$lib/api/module/rental';
   import { apiUserQuery } from '$lib/api/module/auth';

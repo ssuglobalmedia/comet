@@ -1,6 +1,6 @@
 import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { createResponse, JWT_SECRET } from '../../../common';
-import type { Goods, GoodsAddResponse } from 'mirinae-comet';
+import type { Goods, GoodsAddResponse } from 'globalmedia-comet';
 import type { JwtPayload } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
 import { assertAccessible } from '../../auth/util/permission';

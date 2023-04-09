@@ -1,4 +1,4 @@
-import type { Log, LogDao } from 'mirinae-comet';
+import type { Log, LogDao } from 'globalmedia-comet';
 import type { PutItemInput, QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
 

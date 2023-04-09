@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Goods } from '@types/mirinae-comet';
+  import type { Goods } from '@types/globalmedia-comet';
   import {
     ComposedModal,
     Dropdown,

@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { Accordion, PaginationSkeleton, Tile } from 'carbon-components-svelte';
-  import type { Log } from 'mirinae-comet';
+  import type { Log } from 'globalmedia-comet';
   import { browser } from '$app/environment';
   import { apiLogQuery } from '$lib/api/module/log';
   import { apiConfigGet } from '$lib/api/module/config';

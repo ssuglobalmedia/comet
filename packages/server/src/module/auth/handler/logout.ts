@@ -4,7 +4,7 @@ import { revokeToken } from '../data/token';
 import { createResponse, JWT_SECRET } from '../../../common';
 import * as jwt from 'jsonwebtoken';
 import { responseAsCometError, UnauthorizedError } from '../../../util/error';
-import type { LogoutResponse } from 'mirinae-comet';
+import type { LogoutResponse } from 'globalmedia-comet';
 
 export const logoutHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

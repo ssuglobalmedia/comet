@@ -10,7 +10,7 @@ import type {
   UserQueryResponse,
   UserUpdateRequest,
   UserUpdateResponse,
-} from 'mirinae-comet';
+} from 'globalmedia-comet';
 import { z } from 'zod';
 // eslint-disable-next-line import/extensions
 import { fetchApi } from '$lib/api/common';

@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { readable } from 'svelte/store';
 import type { Readable } from 'svelte/store';
-import type { User } from 'mirinae-comet';
+import type { User } from 'globalmedia-comet';
 import { getAuthorization } from '$lib/module/auth';
 import { browser } from '$app/environment';
 import { apiUserGet } from '$lib/api/module/auth';

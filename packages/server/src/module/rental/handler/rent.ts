@@ -10,7 +10,7 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { GoodsRentRequest, GoodsRentResponse } from 'mirinae-comet';
+import type { GoodsRentRequest, GoodsRentResponse } from 'globalmedia-comet';
 
 export const rentalRentHandler: APIGatewayProxyHandler = async (event) => {
   const token = (event.headers.Authorization ?? '').replace('Bearer ', '');

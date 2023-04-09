@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "cross-env VITE_BASE_URL=http://localhost:3000 vite dev --port 5002 --host 0.0.0.0",
     "build": "vite build",
@@ -21,7 +21,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "@types/dompurify": "^2.4.0",
     "@types/marked": "^4.0.7",
-    "@types/mirinae-comet": "link:../types",
+    "@types/globalmedia-comet": "link:../types",
     "@typescript-eslint/eslint-plugin": "5.8.1",
     "@typescript-eslint/parser": "^5.40.1",
     "autoprefixer": "^10.4.12",

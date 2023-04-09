@@ -1,7 +1,7 @@
 import type { GetItemInput } from 'aws-sdk/clients/dynamodb';
 import dynamoDB, { TableName } from '../../../util/database';
 import { ForbiddenError } from '../../../util/error';
-import type { User, UserDao } from 'mirinae-comet';
+import type { User, UserDao } from 'globalmedia-comet';
 import { fromUserDao } from '../data/user';
 
 export const adminId = process.env.ADMIN_ID ?? '20211561';

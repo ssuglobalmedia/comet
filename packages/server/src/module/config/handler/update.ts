@@ -10,7 +10,7 @@ import {
   responseAsCometError,
   UnauthorizedError,
 } from '../../../util/error';
-import type { ConfigUpdateRequest } from 'mirinae-comet';
+import type { ConfigUpdateRequest } from 'globalmedia-comet';
 import { updateConfig } from '../data/config';
 
 export const configUpdateHandler: APIGatewayProxyHandler = async (event) => {

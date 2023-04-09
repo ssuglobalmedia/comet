@@ -2,6 +2,7 @@
   "name": "dependencies",
   "version": "0.0.1",
   "dependencies": {
+    "aws-sdk": "^2.1219.0",
     "jsonwebtoken": "^8.5.1"
   }
 }

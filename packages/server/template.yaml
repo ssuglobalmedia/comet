@@ -39,7 +39,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: common.localCorsHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Architectures:
         - x86_64
       Events:
@@ -126,19 +126,19 @@ Resources:
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Metadata:
-      BuildMethod: nodejs14.x
+      BuildMethod: nodejs18.x
     Properties:
       LayerName: 'dependencies'
       ContentUri: dependencies/
       CompatibleRuntimes:
-        - nodejs14.x
+        - nodejs18.x
   # Backend Lambda Resources
   ModuleAuthCallbackFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.callbackHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -158,7 +158,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.logoutHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -178,7 +178,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.user.userGetHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -198,7 +198,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.user.userQueryHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -218,7 +218,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.user.userUpdateHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -238,7 +238,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.user.userBatchPutHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -258,7 +258,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.auth.user.userBatchDeleteHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -278,7 +278,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.rental.rentalAddHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -298,7 +298,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.rental.rentalQueryHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -318,7 +318,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.rental.rentalUpdateHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -338,7 +338,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.rental.rentalDeleteHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -358,7 +358,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.rental.rentalRentHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -378,7 +378,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.rental.rentalReturnHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -398,7 +398,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.log.logQueryHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -418,7 +418,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.config.configGetHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:
@@ -438,7 +438,7 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: handler.config.configUpdateHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Layers:
         - !Ref DependenciesLayer
       Policies:

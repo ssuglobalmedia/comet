@@ -17,7 +17,7 @@
   import { NextFilled16, SendToBack16, Upload16 } from 'carbon-icons-svelte';
   import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
   import DataTransformer from '../../../../lib/components/molcule/module/auth/DataTransformer.svelte';
-  import type { User } from '@types/mirinae-comet';
+  import type { User } from '@types/globalmedia-comet';
   import { groupDisplayName } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import { getCurrentFullSemester } from '$lib/utils';

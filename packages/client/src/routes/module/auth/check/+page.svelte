@@ -16,7 +16,7 @@
     CheckmarkFilled16,
   } from 'carbon-icons-svelte';
   import StepTile from '../../../../lib/components/molcule/StepTile.svelte';
-  import type { User } from '@types/mirinae-comet';
+  import type { User } from '@types/globalmedia-comet';
   import { isAccessible } from '$lib/module/auth';
   import { browser } from '$app/environment';
   import RuleDefiner from '../../../../lib/components/molcule/module/auth/RuleDefiner.svelte';

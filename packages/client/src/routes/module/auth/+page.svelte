@@ -22,7 +22,7 @@
   import { browser } from '$app/environment';
   import { userInfo } from '$lib/stores';
   import { groupDisplayName } from '$lib/module/auth';
-  import type { User } from 'mirinae-comet';
+  import type { User } from 'globalmedia-comet';
   import { Checkmark16, Delete16, Edit16 } from 'carbon-icons-svelte';
   import UpdateModal from '../../../lib/components/molcule/module/auth/UpdateModal.svelte';
   import BatchUpdateModal from '../../../lib/components/molcule/module/auth/BatchUpdateModal.svelte';
